@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "ShopLen",
+    "searchPlaceholder": "Tim kiem san pham...",
+    "account": "Tai khoan",
+    "cart": "Gio hang",
+    "menu": {
+      "home": "Trang chu",
+      "shop": "Cua hang",
+      "about": "Gioi thieu"
+    },
+    "switchToVietnamese": "VI",
+    "switchToEnglish": "EN"
+  },
+  "home": {
+    "welcome": "Chao mung den voi ShopLen"
+  }
+}

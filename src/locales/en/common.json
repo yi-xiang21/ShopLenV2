@@ -1,0 +1,18 @@
+{
+  "header": {
+    "title": "ShopLen",
+    "searchPlaceholder": "Search products...",
+    "account": "Account",
+    "cart": "Cart",
+    "menu": {
+      "home": "Home",
+      "shop": "Shop",
+      "about": "About"
+    },
+    "switchToVietnamese": "VI",
+    "switchToEnglish": "EN"
+  },
+  "home": {
+    "welcome": "Welcome to ShopLen"
+  }
+}
