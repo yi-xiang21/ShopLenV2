@@ -90,3 +90,33 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+@keyframes authBounceIn {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    transform: translateY(-10px) scale(1.01);
+  }
+  65% {
+    transform: translateY(3px) scale(0.995);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes authBounceOut {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  32% {
+    transform: translateY(-9px) scale(1.012);
+  }
+  62% {
+    transform: translateY(4px) scale(0.994);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}

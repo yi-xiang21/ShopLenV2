@@ -1,11 +1,20 @@
-
+import { useState } from "react";
+import AuthLayout, { type AuthMode } from "../layout/AuthLayout.tsx";
+import LoginForm from "../component/LoginForm";
+import RegisterForm from "../component/RegisterForm";
 
 const LoginAndRegister = () => {
-  return (
-    <div>
-      <h1>Login page</h1>
-    </div>
-  )
-}
+  const [mode, setMode] = useState<AuthMode>("login");
 
-export default LoginAndRegister
+  return (
+    <AuthLayout mode={mode}>
+      {mode === "login" ? (
+        <LoginForm onSwitch={() => setMode("register")} />
+      ) : (
+        <RegisterForm onSwitch={() => setMode("login")} />
+      )}
+    </AuthLayout>
+  );
+};
+
+export default LoginAndRegister;
