@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Sora:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400;1,600&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -14,8 +14,8 @@
   --shadow:
     rgba(255, 107, 61, 0.14) 0 10px 24px -14px, rgba(32, 16, 90, 0.08) 0 8px 18px -10px;
 
-  --sans: 'Plus Jakarta Sans', 'Nunito Sans', 'Segoe UI', sans-serif;
-  --heading: 'Sora', 'Plus Jakarta Sans', sans-serif;
+  --sans: 'Poppins', 'Segoe UI', sans-serif;
+  --heading: 'Poppins', 'Segoe UI', sans-serif;
   --mono: 'JetBrains Mono', 'Consolas', monospace;
 
   font: 17px/150% var(--sans);
@@ -46,11 +46,11 @@
 body {
   margin: 0;
   background: #ffffff;
+  font-family: var(--sans);
 }
 
 h1,
 h2 {
-  font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
 }
@@ -79,7 +79,6 @@ p {
 
 code,
 .counter {
-  font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
   color: var(--text-h);
