@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FaBars, FaRegUser, FaShoppingCart, FaTimes } from 'react-icons/fa'
 import { FiSearch } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
 import logo from '../assets/Logo.png'
 import HeaderDesktopMenu from './HeaderDesktopMenu'
 import HeaderMobileMenu from './HeaderMobileMenu'
@@ -122,15 +123,15 @@ const Header = () => {
         </div>
 
         <div className='flex items-center gap-2'>
-          <a
+          <Link
             aria-label='Tai khoan'
             className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
             type='button'
-            href='/login'
+            to='/login'
           >
             <FaRegUser aria-hidden='true' className='h-5 w-5' />
             
-          </a>
+          </Link>
           <button
             aria-label='Gio hang'
             className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
