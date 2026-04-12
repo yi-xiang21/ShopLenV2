@@ -1,8 +1,9 @@
 import type { ActiveMenuKey, HeaderMenuItemData } from './Header'
 import MenuMulti from './MenuMulti'
+import { Link } from 'react-router-dom'
 
 type HeaderDesktopMenuProps = {
-  menuItems: Array<{ key: ActiveMenuKey; label: string }>
+  menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }>
   activeMenu: ActiveMenuKey
   setActiveMenu: (key: ActiveMenuKey) => void
   categoryData: HeaderMenuItemData[]
@@ -34,20 +35,19 @@ const HeaderDesktopMenu = ({
 
           return (
             <li key={item.key} className='relative px-7 py-3'>
-              <a
+              <Link
                 className={`block transition-all duration-200 md:inline ${
                   isActive
                     ? '-translate-y-0.5 text-amber-800 italic'
                     : 'hover:-translate-y-0.5 hover:text-amber-800 hover:italic'
                 }`}
-                href='#'
-                onClick={(event) => {
-                  event.preventDefault()
+                to={item.link}
+                onClick={() => {
                   setActiveMenu(item.key)
                 }}
               >
                 {item.label}
-              </a>
+              </Link>
               {isActive ? (
                 <span className='absolute bottom-0 left-0 right-0 h-1 rounded-full bg-black' />
               ) : null}

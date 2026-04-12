@@ -1,8 +1,14 @@
+import type {  RegisterProps } from "../pages/LoginAndRegister";
+
 type Props = {
+  setFromRegister: React.Dispatch<React.SetStateAction<RegisterProps>>;
+  formRegister: RegisterProps;
+  onRegister: () => void;
   onSwitch: () => void;
+
 };
 
-const RegisterForm = ({ onSwitch }: Props) => {
+const RegisterForm = ({ setFromRegister, formRegister, onRegister,  onSwitch }: Props) => {
   return (
     <div className="space-y-4">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-500 pb-3">Đăng ký ngay</p>
@@ -13,26 +19,35 @@ const RegisterForm = ({ onSwitch }: Props) => {
         type="text"
         placeholder="Username"
         className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+        value={formRegister.username}
+        onChange={(e) => setFromRegister({...formRegister, username: e.target.value})}
       />
       <input
         type="email"
         placeholder="Email"
         className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+        value={formRegister.email}
+        onChange={(e) => setFromRegister({...formRegister, email: e.target.value})}
       />
       <input
         type="number"
         placeholder="Phone"
         className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+        value={formRegister.phone_number}
+        onChange={(e) => setFromRegister({...formRegister, phone_number: e.target.value})}
       />
       <input
         type="password"
         placeholder="Password"
         className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+        value={formRegister.password}
+        onChange={(e) => setFromRegister({...formRegister, password: e.target.value})}
       />
 
       <button
         type="button"
         className="w-full rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 transition hover:brightness-105"
+        onClick={onRegister}
       >
         Đăng ký
       </button>

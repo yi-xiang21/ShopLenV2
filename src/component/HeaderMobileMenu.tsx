@@ -1,9 +1,10 @@
 import type { ActiveMenuKey, HeaderMenuItemData } from './Header'
 import MenuMulti from './MenuMulti'
+import { Link } from 'react-router-dom'
 
 type HeaderMobileMenuProps = {
   isOpen: boolean
-  menuItems: Array<{ key: ActiveMenuKey; label: string }>
+  menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }>
   activeMenu: ActiveMenuKey
   setActiveMenu: (key: ActiveMenuKey) => void
   categoryData: HeaderMenuItemData[]
@@ -44,21 +45,20 @@ const HeaderMobileMenu = ({
 
           return (
             <li key={item.key}>
-              <a
+              <Link
                 className={`block rounded-lg px-3 py-2.5 transition ${
                   isActive
                     ? 'border-l-2 border-[#ee4d2d] bg-[#fff1ee] text-[#ee4d2d]'
                     : 'hover:bg-orange-50 hover:text-[#ee4d2d]'
                 }`}
-                href='#'
-                onClick={(event) => {
-                  event.preventDefault()
+                to={item.link}
+                onClick={() => {
                   setActiveMenu(item.key)
                   onCloseMenu()
                 }}
               >
                 {item.label}
-              </a>
+              </Link>
             </li>
           )
         })}

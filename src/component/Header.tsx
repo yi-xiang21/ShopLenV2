@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import logo from '../assets/Logo.png'
 import HeaderDesktopMenu from './HeaderDesktopMenu'
 import HeaderMobileMenu from './HeaderMobileMenu'
+import { useAuth } from '../context/AuthContext'
 
 
 export type ActiveMenuKey = 'home' | 'shop' | 'about' | 'categories' | 'workshop'
@@ -18,13 +19,15 @@ export type HeaderMenuItemData = {
 const Header = () => {
   const [activeMenu, setActiveMenu] = useState<ActiveMenuKey>('home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { isAuthenticated } = useAuth()
+  const userRoute = isAuthenticated ? '/profile' : '/login'
 
-  const menuItems: Array<{ key: ActiveMenuKey; label: string }> = [
-    { key: 'home', label: 'Trang chủ' },
-    { key: 'shop', label: 'Cửa hàng' },
-    { key: 'about', label: 'Giới thiệu' },
-    { key: 'categories', label: 'Danh mục' },
-    { key: 'workshop', label: 'workshop' },
+  const menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }> = [
+    { key: 'home', label: 'Trang chủ', link: '/' },
+    { key: 'shop', label: 'Cửa hàng', link: '/shop' },
+    { key: 'about', label: 'Giới thiệu', link: '/about' },
+    { key: 'categories', label: 'Danh mục', link: '/categories' },
+    { key: 'workshop', label: 'workshop', link: '/workshop' },
   ]
 
   const [categoryData] = useState<HeaderMenuItemData[]>([
@@ -127,7 +130,7 @@ const Header = () => {
             aria-label='Tai khoan'
             className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
             type='button'
-            to='/login'
+            to={userRoute}
           >
             <FaRegUser aria-hidden='true' className='h-5 w-5' />
             

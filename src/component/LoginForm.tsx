@@ -1,8 +1,13 @@
+import type { LoginProps } from "../pages/LoginAndRegister";
+
 type Props = {
+  formLogin: LoginProps;
+  setFromLogin: React.Dispatch<React.SetStateAction<LoginProps>>;
+  onLogin: () => void;
   onSwitch: () => void;
 };
 
-const LoginForm = ({ onSwitch }: Props) => {
+const LoginForm = ({ formLogin, setFromLogin, onLogin, onSwitch }: Props) => {
   return (
     <div className="space-y-4">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-500 pb-4">Chào quay trở lại</p>
@@ -12,16 +17,21 @@ const LoginForm = ({ onSwitch }: Props) => {
         type="text"
         placeholder="Username"
         className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+        value={formLogin.email}
+        onChange={(e) => setFromLogin({ ...formLogin, email: e.target.value })}
       />
       <input
         type="password"
         placeholder="Password"
         className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
+        value={formLogin.password}
+        onChange={(e) => setFromLogin({ ...formLogin, password: e.target.value })}
       />
       
 
       <button
         type="button"
+        onClick={onLogin}
         className="w-full rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 transition hover:brightness-105"
       >
         Đăng nhập
