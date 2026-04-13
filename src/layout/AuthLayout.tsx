@@ -25,8 +25,8 @@ const AuthLayout = ({ mode, children }: Props) => {
           <div className="relative hidden md:order-1 md:block h-160">
             <img src={imageSrc} alt="Auth visual" className="h-full w-full object-cover" />
           </div>
-          <div className="flex items-center justify-center bg-white/85 p-6 md:order-2 md:p-10">
-            <div >{children}</div>
+          <div className="flex items-center justify-center bg-white/85 p-6 md:order-2 ">
+            <div className="w-full max-w-md">{children}</div>
           </div>
         </div>
       </div>

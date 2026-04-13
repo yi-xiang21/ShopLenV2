@@ -8,6 +8,7 @@ import { Account } from './pages/Admin/Account'
 import LoginRegister from './pages/LoginAndRegister'
 import ProfileUser from './pages/ProfileUser'
 import { AuthProvider } from './context/AuthContext'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path='login' element={<LoginRegister />} />
             <Route path='profile' element={<ProfileUser />} />
+            <Route path='reset-password' element={<ResetPassword />} />
 
           </Route>
 

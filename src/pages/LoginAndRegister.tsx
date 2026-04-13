@@ -68,7 +68,6 @@ const LoginAndRegister = () => {
       if(response.data) {
         const message = response.data?.message || "Đăng ký thành công, mời bạn đăng nhập";
         setApiMessage(message);
-
         setMode("login");
       }
     } catch (error) {
