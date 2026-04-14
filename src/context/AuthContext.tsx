@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 type AuthContextType = {
   authData: string | null
+  accessToken: string | null
   isAuthenticated: boolean
   login: (token: unknown) => void
   logout: () => void
@@ -48,14 +49,38 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setAuthData(null)
   }
 
+  const accessToken = useMemo(() => {
+    if (!authData) {
+      return null
+    }
+
+    try {
+      const parsed = JSON.parse(authData) as unknown
+
+      if (typeof parsed === 'string') {
+        return parsed
+      }
+
+      if (parsed && typeof parsed === 'object' && 'token' in parsed) {
+        const token = (parsed as { token?: unknown }).token
+        return typeof token === 'string' ? token : null
+      }
+
+      return null
+    } catch {
+      return authData
+    }
+  }, [authData])
+
   const value = useMemo(() => {
     return {
       authData,
+      accessToken,
       isAuthenticated: Boolean(authData),
       login,
       logout,
     }
-  }, [authData])
+  }, [accessToken, authData])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
