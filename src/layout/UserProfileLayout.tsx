@@ -39,7 +39,7 @@ const UserProfileLayout = () => {
           </nav>
         </aside>
 
-        <main className='min-h-[520px] rounded-3xl border border-amber-100 bg-white p-5 shadow-[0_18px_50px_rgba(38,24,92,0.08)] sm:p-6 lg:p-8'>
+        <main className=' rounded-3xl border border-amber-100 bg-white p-5 shadow-[0_18px_50px_rgba(38,24,92,0.08)] sm:p-6 lg:p-8'>
           <Outlet />
         </main>
       </div>
