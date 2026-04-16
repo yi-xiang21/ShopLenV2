@@ -13,6 +13,9 @@ export const API_CONFIG = {
     LOGOUT: 'api/auth/logout',
     PROFILE: 'api/auth/me',
     FORGOT_PASSWORD: 'api/auth/forgot-password',
+    VERIFY_OTP: 'api/auth/verify-reset-otp',
+    RESET_PASSWORD:'api/auth/reset-password',
+    CHANGE_PASSWORD: 'api/users/change-password',
   },
 } as const;
 

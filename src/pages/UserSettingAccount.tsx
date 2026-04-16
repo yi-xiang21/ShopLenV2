@@ -38,8 +38,14 @@ const UserSettingAccount = () => {
         >
           Logout
         </button>
+        <button onClick={() => navigate("/profile/change-password")} className='inline-flex items-center justify-center rounded-2xl bg-[#ff6b3d] px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#f95d2d]'>
+            Đổi mật khẩu
+        </button>
+
       </div>
+      
     </section>
+    
   )
 }
 

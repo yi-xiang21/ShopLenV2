@@ -14,6 +14,7 @@ import UserOrderTracking from './pages/UserOrderTracking'
 import PurchaseHistoryPage from './pages/PurchaseHistory'
 import WorkshopPage from './pages/UserWorkshop'
 import AccountSettingsPage from './pages/UserSettingAccount'
+import ChangePassword from './pages/ChangePassword'
 
 function App() {
   return (
@@ -29,7 +30,9 @@ function App() {
               <Route path='purchase-history' element={<PurchaseHistoryPage />} />
               <Route path='workshop' element={<WorkshopPage />} />
               <Route path='account' element={<AccountSettingsPage />} />
+              <Route path='change-password' element={<ChangePassword />} />
             </Route>
+            
             <Route path='reset-password' element={<ResetPassword />} />
 
           </Route>

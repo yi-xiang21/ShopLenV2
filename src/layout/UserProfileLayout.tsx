@@ -14,7 +14,7 @@ const UserProfileLayout = () => {
       <div className='mx-auto flex w-full max-w-7xl flex-col gap-6 lg:grid lg:grid-cols-[280px_minmax(0,1fr)]'>
         <aside className='rounded-3xl border border-amber-100 bg-white/90 p-4 shadow-[0_18px_50px_rgba(38,24,92,0.08)] backdrop-blur sm:p-5 lg:sticky lg:top-6 lg:self-start'>
 
-          <nav aria-label='Menu hồ sơ người dùng'>
+          <nav >
             <ul className='space-y-2'>
               {menuItems.map((item) => (
                 <li key={item.label}>
