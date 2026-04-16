@@ -21,11 +21,11 @@ const ProfileUser = () => {
     phone_number: '',
     address: '',
   })
-  const [updateProfile, setUpdateProfile] = useState(false)
+  // const [updateProfile, setUpdateProfile] = useState(false)
 
   const handleUpdateProfile = async () => {
     //call api sua doi thong tin nguoi dung
-    setUpdateProfile(false)
+    // setUpdateProfile(false)
   }
 
   useEffect(() => {
@@ -73,7 +73,6 @@ const ProfileUser = () => {
     fetchDataUser();
   }, [accessToken]);
 
-  console.log("Profile form state:", updateProfile)
 
 
   return (
