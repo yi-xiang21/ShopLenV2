@@ -1,6 +1,6 @@
 
 import './App.css'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AdminLayout from './layout/AdminLayout'
 import UserLayout from './layout/UserLayout'
 import UserProfileLayout from './layout/UserProfileLayout'
@@ -38,8 +38,7 @@ function App() {
           </Route>
 
           <Route path='/admin' element={<AdminLayout />}>
-            <Route index element={<Navigate to='account' replace />} />
-            <Route path='account' element={<Account />} />
+            <Route index element ={<Account />} />
           </Route>
         </Routes>
       </BrowserRouter>

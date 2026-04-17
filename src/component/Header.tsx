@@ -16,11 +16,26 @@ export type HeaderMenuItemData = {
   children?: HeaderMenuItemData[]
 }
 
+
 const Header = () => {
   const [activeMenu, setActiveMenu] = useState<ActiveMenuKey>('home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { isAuthenticated } = useAuth()
-  const userRoute = isAuthenticated ? '/profile' : '/login'
+  const { authData, isAuthenticated } = useAuth()
+
+  const role = (() => {
+    if (!authData) {
+      return null
+    }
+
+    try {
+      const parsed = JSON.parse(authData) as { role?: unknown }
+      return typeof parsed.role === 'string' ? parsed.role.toLowerCase() : null
+    } catch {
+      return null
+    }
+  })()
+
+  const userRoute = !isAuthenticated ? '/login' : role === 'admin' ? '/admin' : '/profile'
 
   const menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }> = [
     { key: 'home', label: 'Trang chủ', link: '/' },
@@ -137,11 +152,15 @@ const Header = () => {
           </Link>
           <button
             aria-label='Gio hang'
-            className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
+            className='relative rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
             type='button'
           >
             <FaShoppingCart aria-hidden='true' className='h-5 w-5' />
+              <span className='absolute -right-1 -top-1 inline-flex min-h-4 min-w-3 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold leading-none text-white'>
+                10
+              </span>
           </button>
+          
         </div>
       </div>
 

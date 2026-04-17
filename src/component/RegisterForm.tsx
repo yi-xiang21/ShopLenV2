@@ -56,7 +56,7 @@ const RegisterForm = ({ setFromRegister, formRegister, onRegister,  onSwitch }: 
 
       <button
         type="button"
-        className=" cursor-pointer transition duration-150 hover:scale-[1.02] active:scale-95 w-full rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 transition hover:brightness-105"
+        className=" cursor-pointer duration-150 hover:scale-[1.02] active:scale-95 w-full rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 transition hover:brightness-105"
         onClick={onRegister}
       >
         Đăng ký

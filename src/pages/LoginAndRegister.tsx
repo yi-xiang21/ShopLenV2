@@ -43,7 +43,7 @@ const LoginAndRegister = () => {
     try {
       const response = await axios.post(loginUrl, formLogin);
       const message = response.data?.message || "Đăng nhập thành công";
-     
+      console.log("Login success:", response.data);
       login(response.data.token);
       setApiMessage(message);
       navigate("/");
