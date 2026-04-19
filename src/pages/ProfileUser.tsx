@@ -44,17 +44,16 @@ const ProfileUser = () => {
             Authorization: `Bearer ${accessToken}`
           }
         });
-
-        const rawUser = response.data?.user ?? response.data?.data ?? response.data
+        const rawUser = response.data
           setProfileForm({
-            username: rawUser?.username ?? rawUser?.name ?? '',
-            email: rawUser?.email ?? '',
-            phone_number: rawUser?.phone_number ?? rawUser?.phone ?? '',
-            address: rawUser?.address ?? '',
+            username: rawUser.username,
+            email: rawUser.email,
+            phone_number: rawUser.phone_number,
+            address: rawUser.address,
           })
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          setErrorMessage(error.response?.data?.message || error.message || 'Lấy thông tin người dùng thất bại')
+          setErrorMessage(error.response?.data?.message || 'Lấy thông tin người dùng thất bại')
           console.error("Profile fetch failed:", error.response?.data || error.message);
           return;
         }

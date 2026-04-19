@@ -152,15 +152,12 @@ const LoginAndRegister = () => {
     try {
       const response = await axios.post(registerUrl, formRegister);
       if(response.data) {
-        const message = response.data?.message || "Đăng ký thành công, mời bạn đăng nhập";
-        setApiMessage(message);
+        setApiMessage(response.data?.message);
         setMode("login");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message || error.message || "Đăng ký thất bại";
-        setApiMessage(message);
+        setApiMessage(error.response?.data?.message);
         console.error("Register failed:", error.response?.data || error.message);
         return;
       }

@@ -3,9 +3,10 @@ type Props = {
   email: string;
   setEmail: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: () => void;
+  loading: boolean;
 };
 
-const ResetPasswordForm = ({ email, setEmail, onSubmit }: Props) => {
+const ResetPasswordForm = ({ email, setEmail, onSubmit, loading }: Props) => {
     
   return (
     <div className="space-y-4">
@@ -31,9 +32,10 @@ const ResetPasswordForm = ({ email, setEmail, onSubmit }: Props) => {
 
         <button
           type="submit"
+          disabled={loading}
           className="w-full cursor-pointer transition duration-150 hover:scale-[1.02] active:scale-95 rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 hover:brightness-105 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Gửi mã otp
+          {loading ? "Đang gửi..." : "Gửi mã otp"}
         </button>
       </form>
 

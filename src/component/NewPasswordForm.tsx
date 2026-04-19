@@ -8,6 +8,7 @@ type Props = {
     confirmPassword: string;
     setConfirmPassword: (password: string) => void;
     onSubmitNewPassword: () => void;
+  loading: boolean;
 };
 
 const NewPasswordForm = ({
@@ -18,6 +19,7 @@ const NewPasswordForm = ({
     confirmPassword,
     setConfirmPassword,
     onSubmitNewPassword,
+    loading,
 }: Props) => {
 
   return (
@@ -78,9 +80,10 @@ const NewPasswordForm = ({
 
         <button
           type="submit"
+          disabled={loading}
           className="w-full cursor-pointer transition duration-150 hover:scale-[1.02] active:scale-95 rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 hover:brightness-105 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Đặt lại mật khẩu
+          {loading ? "Đang xử lý..." : "Đặt lại mật khẩu"}
         </button>
       </form>
     </div>
