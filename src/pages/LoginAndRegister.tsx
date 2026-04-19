@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AuthLayout, { type AuthMode } from "../layout/AuthLayout.tsx";
 import LoginForm from "../component/LoginForm";
 import RegisterForm from "../component/RegisterForm";
@@ -21,6 +21,7 @@ export interface RegisterProps {
 }
 const LoginAndRegister = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [mode, setMode] = useState<AuthMode>("login");
   const [formLogin, setFormLogin] = useState<LoginProps>({
@@ -35,6 +36,49 @@ const LoginAndRegister = () => {
     role: "customer", 
   });
   const [apiMessage, setApiMessage] = useState<string>("");
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const token = searchParams.get("token");
+    const role = searchParams.get("role") || undefined;
+    const error = searchParams.get("error");
+    const message = searchParams.get("message");
+
+    const isPopup = window.opener && window.opener !== window;
+
+    if (error) {
+      setApiMessage(message || "Đăng nhập Google thất bại");
+      if (isPopup) {
+        window.opener?.postMessage({ type: 'google_auth_error', error, message }, '*');
+      } else {
+        navigate("/login", { replace: true });
+      }
+      return;
+    }
+
+    if (!token) {
+      if (isPopup && window.opener) {
+        window.addEventListener('message', (event) => {
+          if (event.data?.type === 'close_popup') {
+            window.close();
+          }
+        });
+      }
+      return;
+    }
+
+    if (isPopup && window.opener) {
+      window.opener.postMessage({ type: 'google_auth_success', token, role }, '*');
+      window.addEventListener('message', (event) => {
+        if (event.data?.type === 'popup_close') {
+          window.close();
+        }
+      });
+    } else {
+      login(token, role);
+      navigate("/", { replace: true });
+    }
+  }, [location.search, login, navigate]);
 
   const handleLogin = async () => {
     const loginUrl = getApiUrl(API_CONFIG.ENDPOINTS.LOGIN);
@@ -57,6 +101,49 @@ const LoginAndRegister = () => {
       setApiMessage("Đăng nhập thất bại");
       console.error("Login failed:", error);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    const googleLoginUrl = getApiUrl(API_CONFIG.ENDPOINTS.GOOGLE_LOGIN);
+    const popupWidth = 520;
+    const popupHeight = 680;
+    const left = Math.max((window.screen.width - popupWidth) / 2, 0);
+    const top = Math.max((window.screen.height - popupHeight) / 2, 0);
+    const popupFeatures = [
+      `width=${popupWidth}`,
+      `height=${popupHeight}`,
+      `left=${Math.round(left)}`,
+      `top=${Math.round(top)}`,
+      'resizable=yes',
+      'scrollbars=yes',
+      'status=no',
+      'toolbar=no',
+      'menubar=no',
+      'location=yes',
+    ].join(',');
+
+    const popup = window.open(googleLoginUrl, 'google_oauth_popup', popupFeatures);
+
+    if (!popup) {
+      window.location.href = googleLoginUrl;
+      return;
+    }
+
+    popup.focus();
+
+    const messageHandler = (event: MessageEvent) => {
+      if (event.data?.type === 'google_auth_success') {
+        login(event.data.token, event.data.role);
+        popup.postMessage({ type: 'popup_close' }, '*');
+        window.removeEventListener('message', messageHandler);
+        navigate("/");
+      } else if (event.data?.type === 'google_auth_error') {
+        setApiMessage(event.data.message || "Đăng nhập Google thất bại");
+        window.removeEventListener('message', messageHandler);
+      }
+    };
+
+    window.addEventListener('message', messageHandler);
   };
   
   const handleRegister = async () => {
@@ -90,6 +177,7 @@ const LoginAndRegister = () => {
           formLogin={formLogin}
           setFromLogin={setFormLogin}
           onLogin={handleLogin}
+          onGoogleLogin={handleGoogleLogin}
           onSwitch={() => setMode("register")}
         />
       ) : (

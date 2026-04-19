@@ -4,10 +4,11 @@ type Props = {
   formLogin: LoginProps;
   setFromLogin: React.Dispatch<React.SetStateAction<LoginProps>>;
   onLogin: () => void;
+  onGoogleLogin: () => void;
   onSwitch: () => void;
 };
 
-const LoginForm = ({ formLogin, setFromLogin, onLogin, onSwitch }: Props) => {
+const LoginForm = ({ formLogin, setFromLogin, onLogin, onGoogleLogin, onSwitch }: Props) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="w-full flex flex-col gap-5">
@@ -50,6 +51,14 @@ const LoginForm = ({ formLogin, setFromLogin, onLogin, onSwitch }: Props) => {
         className="w-full cursor-pointer duration-150 hover:scale-[1.02] active:scale-95 rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40  transition hover:brightness-105 "
       >
         Đăng nhập
+      </button>
+
+      <button
+        type="button"
+        onClick={onGoogleLogin}
+        className="w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-4 font-semibold text-slate-700 shadow-sm transition hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700"
+      >
+        Đăng nhập với Google
       </button>
 
       <p className="text-sm text-slate-600">

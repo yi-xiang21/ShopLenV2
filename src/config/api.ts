@@ -1,7 +1,7 @@
 // Lấy base URL từ env (Vite)
-const API_BASE_URL: string =
-  import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '' : 'https://be-shoplen.onrender.com');
-// const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+// const API_BASE_URL: string =
+  // import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '' : 'https://be-shoplen.onrender.com');
+const API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
 // Định nghĩa endpoints (readonly để tránh bị sửa ngoài ý muốn)
 export const API_CONFIG = {
@@ -11,6 +11,7 @@ export const API_CONFIG = {
     LOGIN: 'api/auth/login',
     REGISTER: 'api/auth/register',
     LOGOUT: 'api/auth/logout',
+    GOOGLE_LOGIN: 'api/auth/google',
     PROFILE: 'api/auth/me',
     FORGOT_PASSWORD: 'api/auth/forgot-password',
     VERIFY_OTP: 'api/auth/verify-reset-otp',
