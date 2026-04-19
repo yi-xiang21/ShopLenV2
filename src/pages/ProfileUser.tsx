@@ -2,7 +2,6 @@ import { API_CONFIG, getApiUrl } from '../config/api';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from 'react-router-dom';
 type ProfileFormState = {
   username: string
   email: string
@@ -12,7 +11,6 @@ type ProfileFormState = {
 
 
 const ProfileUser = () => {
-  const navigation = useNavigate()
   const { accessToken } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -48,17 +46,12 @@ const ProfileUser = () => {
         });
 
         const rawUser = response.data?.user ?? response.data?.data ?? response.data
-        if(rawUser.role === 'admin') {
-            navigation('/admin'); 
-        }
-        else {
           setProfileForm({
             username: rawUser?.username ?? rawUser?.name ?? '',
             email: rawUser?.email ?? '',
             phone_number: rawUser?.phone_number ?? rawUser?.phone ?? '',
             address: rawUser?.address ?? '',
           })
-        }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           setErrorMessage(error.response?.data?.message || error.message || 'Lấy thông tin người dùng thất bại')

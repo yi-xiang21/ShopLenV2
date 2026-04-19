@@ -20,20 +20,7 @@ export type HeaderMenuItemData = {
 const Header = () => {
   const [activeMenu, setActiveMenu] = useState<ActiveMenuKey>('home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { authData, isAuthenticated } = useAuth()
-
-  const role = (() => {
-    if (!authData) {
-      return null
-    }
-
-    try {
-      const parsed = JSON.parse(authData) as { role?: unknown }
-      return typeof parsed.role === 'string' ? parsed.role.toLowerCase() : null
-    } catch {
-      return null
-    }
-  })()
+  const { isAuthenticated, role } = useAuth()
 
   const userRoute = !isAuthenticated ? '/login' : role === 'admin' ? '/admin' : '/profile'
 
