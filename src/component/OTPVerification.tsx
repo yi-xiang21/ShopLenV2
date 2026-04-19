@@ -2,10 +2,19 @@ type Props = {
   otp: string;
   setOtp: React.Dispatch<React.SetStateAction<string>>;
   onSubmit: () => void;
-    requestOTP: () => void;
+  requestOTP: () => void;
+  loading: boolean;
+  resendLoading: boolean;
 };
 
-const OTPVerification = ({ otp, setOtp, onSubmit, requestOTP }: Props) => {
+const OTPVerification = ({
+  otp,
+  setOtp,
+  onSubmit,
+  requestOTP,
+  loading,
+  resendLoading,
+}: Props) => {
   return (
     <div className="space-y-4">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-500 pb-4">Xác minh OTP</p>
@@ -31,16 +40,22 @@ const OTPVerification = ({ otp, setOtp, onSubmit, requestOTP }: Props) => {
 
         <button
           type="submit"
+          disabled={loading || resendLoading}
           className="w-full cursor-pointer transition duration-150 hover:scale-[1.02] active:scale-95 rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 hover:brightness-105 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          Xác minh
+          {loading ? "Đang xác minh..." : "Xác minh"}
         </button>
       </form>
 
       <p className="text-sm text-slate-600 text-center">
         Không nhận được mã?{" "}
-        <button type="button" className="font-semibold text-orange-600 underline underline-offset-4" onClick={requestOTP}>
-          Gửi lại
+        <button
+          type="button"
+          disabled={loading || resendLoading}
+          className="font-semibold text-orange-600 underline underline-offset-4 disabled:opacity-60 disabled:cursor-not-allowed"
+          onClick={requestOTP}
+        >
+          {resendLoading ? "Đang gửi lại..." : "Gửi lại"}
         </button>
       </p>
     </div>
