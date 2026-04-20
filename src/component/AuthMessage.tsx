@@ -39,11 +39,9 @@ const AuthMessage = ({ message }: AuthMessageProps) => {
 
   return (
     <div
-      aria-live='polite'
       className={`mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 transition-opacity duration-1000 ${
         isFadingOut ? 'opacity-0' : 'opacity-100'
       }`}
-      role='status'
     >
       {message}
     </div>

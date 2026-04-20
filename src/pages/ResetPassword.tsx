@@ -1,12 +1,10 @@
-import { useState } from "react";
 import ResetPasswordLayout from "../layout/ResetPasswordLayout";
-import ResetPasswordForm from "../component/ResetPasswordForm";
-import OTPVerification from "../component/OTPVerification";
+import { useState } from "react";
+import ResetPassForm from "../component/ResetPassForm";
 import { getApiUrl } from "../config/api";
 import { API_CONFIG } from "../config/api";
 import axios from "axios";
 import AuthMessage from "../component/AuthMessage";
-import NewPasswordForm from "../component/NewPasswordForm";
 import { useNavigate } from "react-router-dom";
 
 type Step = "email" | "otp" | "password";
@@ -142,38 +140,24 @@ const ResetPassword = () => {
   return (
     <ResetPasswordLayout>
       <AuthMessage message={apiMessage} />
-      {step === "email" && (
-        <ResetPasswordForm
-          email={email}
-          setEmail={setEmail}
-          onSubmit={handleEmailSubmit}
-          loading={isSendingOtp}
-        />
-      )}
-
-      {step === "otp" && (
-        <OTPVerification
-          otp={otp}
-          setOtp={setOtp}
-          onSubmit={handleOtpSubmit}
-          requestOTP={handleEmailSubmit}
-          loading={isVerifyingOtp}
-          resendLoading={isSendingOtp}
-        />
-      )}
-
-      {step === "password" && (
-        <NewPasswordForm
-          showPassword={showPassword}
-          setShowPassword={setShowPassword}
-          confirmPassword={confirmPassword}
-          setConfirmPassword={setConfirmPassword}
-          newPassword={newPassword}
-          setNewPassword={setNewPassword}
-          onSubmitNewPassword={handleResetPasswordSubmit}
-          loading={isResettingPassword}
-        />
-      )}
+      <ResetPassForm
+        step={step}
+        email={email}
+        setEmail={setEmail}
+        otp={otp}
+        setOtp={setOtp}
+        newPassword={newPassword}
+        setNewPassword={setNewPassword}
+        confirmPassword={confirmPassword}
+        setConfirmPassword={setConfirmPassword}
+        showPassword={showPassword}
+        setShowPassword={setShowPassword}
+        onSubmit={step === "email" ? handleEmailSubmit : step === "otp" ? handleOtpSubmit : handleResetPasswordSubmit}
+        onResendOtp={handleEmailSubmit}
+        loading={step === "email" ? isSendingOtp : step === "otp" ? isVerifyingOtp : false}
+        resendLoading={isSendingOtp}
+        resetLoading={isResettingPassword}
+      />
     </ResetPasswordLayout>
   );
 };
