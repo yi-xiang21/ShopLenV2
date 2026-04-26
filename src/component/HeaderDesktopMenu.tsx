@@ -16,7 +16,7 @@ const HeaderDesktopMenu = ({
   categoryData,
 }: HeaderDesktopMenuProps) => {
   return (
-    <nav className='hidden bg-rose-300 md:block'>
+    <nav className='hidden bg-white md:block'>
       <ul className='mx-auto grid w-full max-w-6xl grid-cols-3 px-4 py-2 text-center text-xs font-semibold tracking-wider text-gray-700 md:flex md:justify-start md:gap-8 md:px-4 md:py-3 md:text-sm'>
         {menuItems.map((item) => {
           const isActive = activeMenu === item.key

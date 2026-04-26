@@ -20,7 +20,7 @@ const footerSections = [
 
 const Footer = () => {
   return (
-    <footer className='mt-12 bg-[#e7dde4] px-6 py-14 text-left text-[#2e2742] md:px-10'>
+    <footer className='bg-[#e7dde4] px-6 py-14 text-left text-[#2e2742] md:px-10'>
       <div className='mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-4 md:gap-12'>
         <section className='space-y-4'>
           <h3 className='text-lg font-semibold tracking-tight text-[#e6417d] md:text-2xl'>PeaceChill</h3>
