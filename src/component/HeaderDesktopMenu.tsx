@@ -48,9 +48,6 @@ const HeaderDesktopMenu = ({
               >
                 {item.label}
               </Link>
-              {isActive ? (
-                <span className='absolute bottom-0 left-0 right-0 h-1 rounded-full bg-black' />
-              ) : null}
             </li>
           )
         })}

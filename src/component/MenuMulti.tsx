@@ -159,9 +159,6 @@ const MenuMulti: React.FC<MenuMultiProps> = ({
           className={`h-4 w-4 transition-transform duration-200 ${showDropdown ? "rotate-180" : ""}`}
         />
       </button>
-      {isActive && variant === "desktop" && (
-        <span className="absolute bottom-0 left-0 right-0 h-1 rounded-full bg-black" />
-      )}
 
       {showDropdown && (
         <div

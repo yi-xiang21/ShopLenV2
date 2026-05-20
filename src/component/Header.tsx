@@ -146,6 +146,7 @@ const Header = () => {
             >
               <FaHeart aria-hidden='true' className='h-5 w-5' />
             </Link>
+            {/* thay bang antdesign badge */}
             <button
               aria-label='Gio hang'
               className='relative rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
