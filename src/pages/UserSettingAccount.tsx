@@ -6,12 +6,23 @@ import { API_CONFIG, getApiUrl } from '../config/api';
 
 const UserSettingAccount = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { accessToken, logout } = useAuth();
 
   const handleLogout = async () => {
     const logoutUrl = getApiUrl(API_CONFIG.ENDPOINTS.LOGOUT);
+
+    if (!accessToken) {
+      logout();
+      navigate('/login');
+      return;
+    }
+
     try {
-      const response = await axios.post(logoutUrl);
+      const response = await axios.post(logoutUrl, {}, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       logout();
       console.log("Logout success:", response.data);
       navigate("/login");
