@@ -1,8 +1,8 @@
 
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
-import { API_CONFIG, getApiUrl } from '../config/api';
+import { API_CONFIG, getApiUrl } from '../../config/api';
 
 const UserSettingAccount = () => {
   const navigate = useNavigate();

@@ -142,6 +142,7 @@ const Header = () => {
               aria-label='yeu thich'
               className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
               type='button'
+              // sua lai thanh route yeu thich sau khi lam xong chuc nang
               to={userRoute}
             >
               <FaHeart aria-hidden='true' className='h-5 w-5' />

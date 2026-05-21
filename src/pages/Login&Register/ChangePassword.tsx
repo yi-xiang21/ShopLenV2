@@ -1,11 +1,11 @@
 
 import { useState } from "react";
-import { getApiUrl } from "../config/api";
-import { API_CONFIG } from "../config/api";
+import { getApiUrl } from "../../config/api";
+import { API_CONFIG } from "../../config/api";
 import axios from "axios";
-import AuthMessage from "../component/AuthMessage";
+import AuthMessage from "../../component/AuthMessage";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
