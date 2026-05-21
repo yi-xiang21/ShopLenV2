@@ -1,10 +1,10 @@
-import ResetPasswordLayout from "../layout/ResetPasswordLayout";
+import ResetPasswordLayout from "../../layout/ResetPasswordLayout";
 import { useState } from "react";
-import ResetPassForm from "../component/ResetPassForm";
-import { getApiUrl } from "../config/api";
-import { API_CONFIG } from "../config/api";
+import ResetPassForm from "../../component/ResetPassForm";
+import { getApiUrl } from "../../config/api";
+import { API_CONFIG } from "../../config/api";
 import axios from "axios";
-import AuthMessage from "../component/AuthMessage";
+import AuthMessage from "../../component/AuthMessage";
 import { useNavigate } from "react-router-dom";
 
 type Step = "email" | "otp" | "password";

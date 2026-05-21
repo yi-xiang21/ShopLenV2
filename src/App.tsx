@@ -5,16 +5,17 @@ import AdminLayout from './layout/AdminLayout'
 import UserLayout from './layout/UserLayout'
 import UserProfileLayout from './layout/UserProfileLayout'
 import HomePage from './pages/HomePage'
-import { Account } from './pages/Admin/Account'
-import LoginRegister from './pages/LoginAndRegister'
-import ProfileUser from './pages/ProfileUser'
+import { AdminSetting } from './pages/Admin/AdminSetting'
+import LoginRegister from './pages/Login&Register/LoginAndRegister'
+import ProfileUser from './pages/UserProfile/ProfileUser'
 import { AuthProvider } from './context/AuthContext'
-import ResetPassword from './pages/ResetPassword'
-import UserOrderTracking from './pages/UserOrderTracking'
-import PurchaseHistoryPage from './pages/PurchaseHistory'
-import WorkshopPage from './pages/UserWorkshop'
-import AccountSettingsPage from './pages/UserSettingAccount'
-import ChangePassword from './pages/ChangePassword'
+import ResetPassword from './pages/Login&Register/ResetPassword'
+import UserOrderTracking from './pages/UserProfile/UserOrderTracking'
+import PurchaseHistoryPage from './pages/UserProfile/PurchaseHistory'
+import WorkshopPage from './pages/UserProfile/UserWorkshop'
+import AccountSettingsPage from './pages/UserProfile/UserSettingAccount'
+import ChangePassword from './pages/Login&Register/ChangePassword'
+import AdminManagerAccount from './pages/Admin/AdminManagerAccount'
 
 function App() {
   return (
@@ -38,7 +39,8 @@ function App() {
           </Route>
 
           <Route path='/admin' element={<AdminLayout />}>
-            <Route index element ={<Account />} />
+            <Route index element={<AdminManagerAccount />} />
+            <Route path='Manager-Setting' element ={<AdminSetting />} />
           </Route>
         </Routes>
       </BrowserRouter>

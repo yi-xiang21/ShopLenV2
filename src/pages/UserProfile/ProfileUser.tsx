@@ -1,7 +1,7 @@
-import { API_CONFIG, getApiUrl } from '../config/api';
+import { API_CONFIG, getApiUrl } from '../../config/api';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 type ProfileFormState = {
   username: string
   email: string

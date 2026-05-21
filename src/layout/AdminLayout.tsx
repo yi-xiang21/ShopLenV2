@@ -1,10 +1,11 @@
 import { Outlet } from 'react-router-dom'
+import Sildebar from '../component/Sildebar'
 
 const AdminLayout = () => {
 	return (
-		<div>
-			<h2 className='bg-slate-800 p-4 text-white'>Trang quan tri</h2>
-			<main className='p-4'>
+		<div className='flex h-full min-h-screen '>
+			<Sildebar />
+			<main className='p-4 flex-1'>
 				<Outlet />
 			</main>
 		</div>

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthLayout, { type AuthMode } from "../layout/AuthLayout.tsx";
-import AuthForm, { type AuthFormData } from "../component/AuthForm";
-import AuthMessage from "../component/AuthMessage";
-import { API_CONFIG, getApiUrl } from "../config/api";
-import { useAuth } from "../context/AuthContext";
+import AuthLayout, { type AuthMode } from "../../layout/AuthLayout.tsx";
+import AuthForm, { type AuthFormData } from "../../component/AuthForm.tsx";
+import AuthMessage from "../../component/AuthMessage.tsx";
+import { API_CONFIG, getApiUrl } from "../../config/api.ts";
+import { useAuth } from "../../context/AuthContext.tsx";
 
 export interface LoginProps {
   email: string;
