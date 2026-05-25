@@ -16,6 +16,7 @@ import WorkshopPage from './pages/UserProfile/UserWorkshop'
 import AccountSettingsPage from './pages/UserProfile/UserSettingAccount'
 import ChangePassword from './pages/Login&Register/ChangePassword'
 import AdminManagerAccount from './pages/Admin/AdminManagerAccount'
+import AdminManagerCategory from './pages/Admin/managerCatelogy/AdminManagerCatelogries'
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
 
           <Route path='/admin' element={<AdminLayout />}>
             <Route index element={<AdminManagerAccount />} />
+            <Route path='Manager-Category' element={<AdminManagerCategory />} />
             <Route path='Manager-Setting' element ={<AdminSetting />} />
           </Route>
         </Routes>

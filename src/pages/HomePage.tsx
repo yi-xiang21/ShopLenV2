@@ -1,4 +1,4 @@
-import { motion } from 'motion/react'
+
 import ParallaxSection from '../component/ParallaxSection'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules'
@@ -14,12 +14,8 @@ const HomePage = () => {
 
   return (
     <div >
-      <motion.section
+      <div
         className='w-full h-65 overflow-hidden snap-start snap-always md:h-full'
-        initial={{ opacity: 0, y: 70 }}
-        viewport={{ amount: 0.35, once: false }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
       >
         <Swiper
           modules={[Navigation, Pagination, Autoplay, EffectFade]}
@@ -42,16 +38,15 @@ const HomePage = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-      </motion.section>
-      <ParallaxSection
-        image={null}
-      >
-        <div>
-          <h2>Welcome to Our Store</h2>
-          <p>Discover the best products at unbeatable prices.</p>
-        </div>
-      </ParallaxSection>
+      </div>
+      <section className='h-200 flex flex-col justify-center items-center bg-red-300' >
 
+          <h2 >Welcome to Our Store</h2>
+          <p>Discover the best products at unbeatable prices.</p>
+          <div className='mt-4 bg-amber-800 h-150 w-250 ' >
+
+          </div>
+      </section>
       <ParallaxSection
         image={section1}
       >
