@@ -6,6 +6,7 @@ import logo from '../assets/Logo.png'
 import HeaderDesktopMenu from './HeaderDesktopMenu'
 import HeaderMobileMenu from './HeaderMobileMenu'
 import { useAuth } from '../context/AuthContext'
+import Badge from 'antd/es/badge/Badge'
 
 
 export type ActiveMenuKey = 'home' | 'shop' | 'about' | 'workshop'
@@ -33,7 +34,7 @@ const Header = () => {
 
   return (
     <>
-      <div className='sticky top-0 z-50 bg-white shadow-sm'>
+      <div className='sticky top-0 z-50 bg-white shadow-sm '>
         <div className='mx-auto flex w-full max-w-6xl items-center gap-3 px-1 py-1'>
           <button
             className='rounded-md p-2 text-gray-700 hover:bg-rose-200 md:hidden'
@@ -93,16 +94,16 @@ const Header = () => {
               className='relative rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
               type='button'
             >
-              <FaShoppingCart aria-hidden='true' className='h-5 w-5' />
-              <span className='absolute -right-1 -top-1 inline-flex min-h-4 min-w-3 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-bold leading-none text-white'>
-                10
-              </span>
+              {/* sua lai thanh route gio hang sau khi lam xong chuc nang */}
+              <Badge count={5}>
+                <FaShoppingCart aria-hidden='true' className='h-5 w-5' />
+              </Badge>
             </button>
           </div>
         </div>
       </div>
 
-      <header className='bg-white shadow-sm'>
+      <header className='bg-white shadow-sm h-auto'>
       <div className='bg-white'>
         <HeaderDesktopMenu
           activeMenu={activeMenu}

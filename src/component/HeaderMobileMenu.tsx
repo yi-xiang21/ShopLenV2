@@ -22,7 +22,7 @@ const HeaderMobileMenu = ({
 
   return (
     <div className='border-t border-orange-200 bg-white px-4 py-3 shadow-sm md:hidden'>
-      <ul className='space-y-2 text-left text-sm font-semibold text-gray-700'>
+      <ul className='text-left text-sm font-semibold text-gray-700 '>
         {menuItems.map((item) => { 
           const isActive = activeMenu === item.key
 
