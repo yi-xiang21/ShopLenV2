@@ -1,5 +1,4 @@
-import type { ActiveMenuKey, HeaderMenuItemData } from './Header'
-import MenuMulti from './MenuMulti'
+import type { ActiveMenuKey } from './Header'
 import { Link } from 'react-router-dom'
 
 type HeaderMobileMenuProps = {
@@ -7,7 +6,6 @@ type HeaderMobileMenuProps = {
   menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }>
   activeMenu: ActiveMenuKey
   setActiveMenu: (key: ActiveMenuKey) => void
-  categoryData: HeaderMenuItemData[]
   onCloseMenu: () => void
 }
 
@@ -16,7 +14,6 @@ const HeaderMobileMenu = ({
   menuItems,
   activeMenu,
   setActiveMenu,
-  categoryData,
   onCloseMenu,
 }: HeaderMobileMenuProps) => {
   if (!isOpen) {
@@ -28,20 +25,6 @@ const HeaderMobileMenu = ({
       <ul className='space-y-2 text-left text-sm font-semibold text-gray-700'>
         {menuItems.map((item) => { 
           const isActive = activeMenu === item.key
-
-          if (item.key === 'categories') {
-            return (
-              <li key={item.key}>
-                <MenuMulti
-                  data={categoryData}
-                  isActive={isActive}
-                  label={item.label}
-                  setActiveMenu={setActiveMenu}
-                  variant='mobile'
-                />
-              </li>
-            )
-          }
 
           return (
             <li key={item.key}>

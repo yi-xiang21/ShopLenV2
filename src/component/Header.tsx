@@ -8,13 +8,7 @@ import HeaderMobileMenu from './HeaderMobileMenu'
 import { useAuth } from '../context/AuthContext'
 
 
-export type ActiveMenuKey = 'home' | 'shop' | 'about' | 'categories' | 'workshop'
-
-export type HeaderMenuItemData = {
-  id: number
-  name: string
-  children?: HeaderMenuItemData[]
-}
+export type ActiveMenuKey = 'home' | 'shop' | 'about' | 'workshop'
 
 
 const Header = () => {
@@ -29,63 +23,9 @@ const Header = () => {
     { key: 'home', label: 'Trang chủ', link: '/' },
     { key: 'shop', label: 'Cửa hàng', link: '/shop' },
     { key: 'about', label: 'Giới thiệu', link: '/about' },
-    { key: 'categories', label: 'Danh mục', link: '/categories' },
     { key: 'workshop', label: 'workshop', link: '/workshop' },
   ]
 
-  const [categoryData] = useState<HeaderMenuItemData[]>([
-    {
-      id: 1,
-      name: 'Len',
-      children: [
-        {
-          id: 11,
-          name: 'Nam',
-          children: [
-            { id: 111, name: 'Ao thun' },
-            {
-              id: 112,
-              name: 'Quan',
-              children: [
-                { id: 1121, name: 'Quan jean' },
-                { id: 1122, name: 'Quan tay' },
-              ],
-            },
-          ],
-        },
-        {
-          id: 12,
-          name: 'Nu',
-          children: [
-            { id: 121, name: 'Vay dam' },
-            { id: 122, name: 'Ao kieu' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Công cụ',
-      children: [
-        {
-          id: 21,
-          name: 'Tui xach',
-          children: [
-            { id: 211, name: 'Tui deo cheo' },
-            { id: 212, name: 'Tui tote' },
-          ],
-        },
-        {
-          id: 22,
-          name: 'Trang suc',
-          children: [
-            { id: 221, name: 'Day chuyen' },
-            { id: 222, name: 'Bong tai' },
-          ],
-        },
-      ],
-    },
-  ])
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false)
@@ -166,7 +106,6 @@ const Header = () => {
       <div className='bg-white'>
         <HeaderDesktopMenu
           activeMenu={activeMenu}
-          categoryData={categoryData}
           menuItems={menuItems}
           setActiveMenu={setActiveMenu}
         />
@@ -174,7 +113,6 @@ const Header = () => {
 
       <HeaderMobileMenu
         activeMenu={activeMenu}
-        categoryData={categoryData}
         isOpen={isMobileMenuOpen}
         menuItems={menuItems}
         onCloseMenu={closeMobileMenu}
