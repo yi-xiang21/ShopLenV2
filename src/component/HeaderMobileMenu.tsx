@@ -21,7 +21,7 @@ const HeaderMobileMenu = ({
   }
 
   return (
-    <div className='border-t border-orange-200 bg-white px-4 py-3 shadow-sm md:hidden'>
+    <div className='bg-white px-4 py-3 shadow-sm md:hidden'>
       <ul className='text-left text-sm font-semibold text-gray-700 '>
         {menuItems.map((item) => { 
           const isActive = activeMenu === item.key
@@ -31,7 +31,7 @@ const HeaderMobileMenu = ({
               <Link
                 className={`block rounded-lg px-3 py-2.5 transition ${
                   isActive
-                    ? 'border-l-2 border-[#ee4d2d] bg-[#fff1ee] text-[#ee4d2d]'
+                    ? 'border-l-2 border-[#4d342f] bg-[#fff1ee] text-[#ee4d2d]'
                     : 'hover:bg-orange-50 hover:text-[#ee4d2d]'
                 }`}
                 to={item.link}

@@ -13,7 +13,7 @@ const HeaderDesktopMenu = ({
   setActiveMenu,
 }: HeaderDesktopMenuProps) => {
   return (
-      <ul className='flex items-center justify-center gap-20 text-xl font-semibold text-gray-700 mb-0! '>
+      <ul className='items-center justify-center gap-20 text-xl font-semibold text-gray-700 mb-0! md:flex hidden'>
         {menuItems.map((item) => {
           const isActive = activeMenu === item.key
           return (

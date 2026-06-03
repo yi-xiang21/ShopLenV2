@@ -7,13 +7,14 @@ import HomeBanner2 from '../assets/HomeBanner2.png'
 import section1 from '../assets/section1.jpg'
 import section2 from '../assets/section2.jpg'
 import { useRef, useState } from 'react'
-import CurvedItem from '../component/CurvedSrollItems'
+import CurvedItem from '../component/CurvedScrollItems'
+import Catelogy from '../component/CardCatelogy'
+import type { Category } from '../pages/Admin/managerCatelogy/type/catelogy'
 export interface Item {
   id: number;
   name: string;
   content: string;
 }
-
 const items: Item[] = [
   { id: 1, name: 'Item 1' ,content:"Nội dung chi tiết của Item 1: abcsdsds"},
   { id: 2, name: 'Item 2' ,content:"Nội dung chi tiết của Item 2: def"},
@@ -23,6 +24,68 @@ const items: Item[] = [
   { id: 6, name: 'Item 6' ,content:"Nội dung chi tiết của Item 6: pqr"},
   {id: 7, name: 'Item 7' ,content:"Nội dung chi tiết của Item 7: stu"},
 ];
+
+// Dữ liệu giả lập cho các danh mục sau nay thay bang tan stack api 
+const Data: Category[] = [
+  {
+    categoryId: 1,
+    categoryName: 'Điện thoại',
+    categoryDescription: 'Các loại điện thoại thông minh từ các thương hiệu hàng đầu.',
+    categorySlug: 'dien-thoai',
+    categoryImage: HomeBanner1,
+    childCategories: [],
+  },
+  {
+    categoryId: 2,
+    categoryName: 'Laptop',
+    categoryDescription: 'Các loại laptop phục vụ cho công việc và giải trí.',
+    categorySlug: 'laptop',
+    categoryImage: HomeBanner2,
+    childCategories: [],
+  },
+  {
+    categoryId: 3,
+    categoryName: 'Phụ kiện',
+    categoryDescription: 'Các loại phụ kiện điện tử như tai nghe, sạc, ốp lưng.',
+    categorySlug: 'phu-kien',
+    categoryImage: HomeBanner1,
+    childCategories: [],
+  },
+  {
+    categoryId: 2,
+    categoryName: 'Laptop',
+    categoryDescription: 'Các loại laptop phục vụ cho công việc và giải trí.',
+    categorySlug: 'laptop',
+    categoryImage: HomeBanner1,
+    childCategories: [],
+  },
+  {
+    categoryId: 3,
+    categoryName: 'Phụ kiện',
+    categoryDescription: 'Các loại phụ kiện điện tử như tai nghe, sạc, ốp lưng.',
+    categorySlug: 'phu-kien',
+    categoryImage:HomeBanner1,
+    childCategories: [],
+  },
+  {
+    categoryId: 2,
+    categoryName: 'Laptop',
+    categoryDescription: 'Các loại laptop phục vụ cho công việc và giải trí.',
+    categorySlug: 'laptop',
+    categoryImage: HomeBanner1,
+    childCategories: [],
+  },
+  {
+    categoryId: 3,
+    categoryName: 'Phụ kiện',
+    categoryDescription: 'Các loại phụ kiện điện tử như tai nghe, sạc, ốp lưng.',
+    categorySlug: 'phu-kien',
+    categoryImage: HomeBanner1,
+    childCategories: [],
+  },
+  
+]
+
 
 const HomePage = () => {
   const bannerImages = [HomeBanner1, HomeBanner2]
@@ -60,12 +123,13 @@ const HomePage = () => {
           ))}
         </Swiper>
       </div>
-       <section className='h-200 flex flex-col justify-center items-center bg-red-300' >
-
-          <h2 >Welcome to Our Store</h2>
-          <p>Discover the best products at unbeatable prices.</p>
-          <div className='mt-4 bg-amber-800 h-150 w-250 ' >
-
+       <section className='h-150 flex flex-col justify-center items-center md:h-200' >
+          <h1 className=''>Các Danh Mục Của Chúng Tôi</h1>
+          <p>khám phá các sản phẩm với cách danh mục bạn muốn.</p>
+          <div className='mt-2 h-100 w-100 overflow-x-auto overflow-y-hidden flex items-center justify-start gap-8 md:w-400 md:h-150 no-scrollbar'>
+            {Data.map((item) => (
+              <Catelogy key={item.categoryId} Data={item} />
+            ))}
           </div>
       </section>
        <section

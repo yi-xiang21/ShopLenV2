@@ -47,12 +47,14 @@ const AdminManagerCatelogries = () => {
       categoryName: 'Điện thoại',
         categoryDescription: 'Các loại điện thoại thông minh',
         categorySlug: 'dien-thoai',
+        categoryImage: 'https://example.com/dien-thoai.jpg',
         childCategories: [
           {
             categoryId: 2,
             categoryName: 'Điện thoại Android',
             categoryDescription: 'Các loại điện thoại chạy hệ điều hành Android',
             categorySlug: 'dien-thoai-android',
+            categoryImage: 'https://example.com/dien-thoai-android.jpg',
             childCategories: [],
           },
             {
@@ -60,6 +62,7 @@ const AdminManagerCatelogries = () => {
                 categoryName: 'Điện thoại iOS',
                 categoryDescription: 'Các loại điện thoại chạy hệ điều hành iOS',
                 categorySlug: 'dien-thoai-ios',
+                categoryImage: 'https://example.com/dien-thoai-ios.jpg',
                 childCategories: [],
             },
         ],
