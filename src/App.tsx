@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AdminLayout from './layout/AdminLayout'
 import UserLayout from './layout/UserLayout'
 import UserProfileLayout from './layout/UserProfileLayout'
-import HomePage from './pages/HomePage'
+import HomePage from './pages/Home'
 import { AdminSetting } from './pages/Admin/AdminSetting'
 import LoginRegister from './pages/Login&Register/LoginAndRegister'
 import ProfileUser from './pages/UserProfile/ProfileUser'
@@ -17,6 +17,7 @@ import AccountSettingsPage from './pages/UserProfile/UserSettingAccount'
 import ChangePassword from './pages/Login&Register/ChangePassword'
 import AdminManagerAccount from './pages/Admin/AdminManagerAccount'
 import AdminManagerCategory from './pages/Admin/managerCatelogy/AdminManagerCatelogries'
+import AboutUs from './pages/About'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Routes>
           <Route path='/' element={<UserLayout />}>
             <Route index element={<HomePage />} />
+            <Route path='about' element={<AboutUs />} />
             <Route path='login' element={<LoginRegister />} />
             <Route path='profile' element={<UserProfileLayout />}>
               <Route index element={<ProfileUser />} />

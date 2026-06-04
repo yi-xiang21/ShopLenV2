@@ -1,13 +1,13 @@
 import { useRef, type RefObject } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import type { Item } from '../pages/HomePage';
+import type { Item } from '../pages/Home';
 
 //test 3d
 
 interface CurvedItemProps {
   item: Item;
   index: number;
-  containerRef: RefObject<HTMLDivElement | null>;
+  containerRef: RefObject<HTMLElement | null>;
   setActiveIndex: (index: number) => void; 
 }
 
@@ -53,6 +53,9 @@ const CurvedItem = ({ item, index, containerRef, setActiveIndex }:CurvedItemProp
         position: 'relative',
         zIndex: 10 - index,
         padding: '0px',
+        backgroundImage: `url(${item.img})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
       <h3 className="text-xl font-bold text-amber-900 h-90 flex items-center justify-center">

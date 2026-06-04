@@ -20,7 +20,7 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
       group-hover:translate-y-0
     "
       >
-        <h1>{Data.categoryName}</h1>  
+        <h1 className="text-black!">{Data.categoryName}</h1>  
       </div>
 
       <div
@@ -33,7 +33,7 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
       group-hover:translate-y-0
     "
       >
-        <h1>{Data.categoryName}</h1>
+        <h1 className="text-black!">{Data.categoryName}</h1>
 
         <p>{Data.categoryDescription}</p>
       </div>

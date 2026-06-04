@@ -56,11 +56,97 @@
 }
 h1{
   font-family: "Playfair Display", serif;
-  font-size: 25px;
+  font-size: 35px;
+  color: #f5015e;
 }
-
 p{
   font-family: "Inter", sans-serif;
-  font-size: 15px;
+  font-size: 18px;
 
+}
+
+
+
+.button_user {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 999px;
+
+  background: linear-gradient(
+    135deg,
+    #e8cfc1,
+    #d8b4a0
+  );
+
+  color: #4f3b31;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  box-shadow:
+    0 8px 20px rgba(216, 180, 160, 0.25);
+
+  position: relative;
+  overflow: hidden;
+}
+.button_user:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 14px 28px rgba(216, 180, 160, 0.35);
+
+  background: linear-gradient(
+    135deg,
+    #edd8cd,
+    #ddb9a7
+  );
+}
+.button_user:active {
+  transform: translateY(0);
+}
+.button_user::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -120%;
+
+  width: 60%;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.45),
+    transparent
+  );
+
+  transition: .6s;
+}
+
+.button_user:hover::before {
+  left: 130%;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 25px;
+  }
+  p {
+    font-size: 14px;
+  }
+  .button_user {
+    padding: 8px 20px;
+    font-size: 10px;
+  }
+  .button_user::before {
+    width: 40%;
+  }
+  .button_user:hover::before {
+    left: 110%;
+  }
 }
