@@ -1,13 +1,16 @@
 
 
-import {  useState } from 'react';
+import {  useState,useEffect } from 'react';
 
 import type { user } from '@/pages/UserProfile/types/user-type';
+import { userApi } from '@/pages/UserProfile/api/user-api';
+import { useAppSelector } from '@/app/redux/hooks';
 
 const ProfileUser = () => {
 
+  const { error, loading,user } = useAppSelector((state) => state.auth);
 
-  const [profileForm, setProfileForm] = useState<user>({
+  const [profileForm, setProfileForm] = useState<user>( user || {
   user_id: '',
   username: '',
   email: '',
@@ -15,10 +18,21 @@ const ProfileUser = () => {
   role: '',
   first_name: '',
   last_name: '',
-})
-
-
-
+});
+  useEffect(() => {
+    if (!user?.user_id) {
+      return;
+    }
+    const fetchProfile = async () => {
+      try {
+        const response = await userApi.getProfile();
+        setProfileForm(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+      }
+    };
+    fetchProfile();
+  }, [user?.user_id, user]);
 
   return (
     <section className='space-y-6'>
@@ -30,15 +44,15 @@ const ProfileUser = () => {
       <div className=' p-5'>
         <div className='rounded-2xl border border-amber-100 bg-[#8fbbbb55] p-5'>
 
-          {/* {isLoading ? (
+          {loading ? (
             <p className='mt-3 text-sm text-[#675f80]'>Đang tải dữ liệu người dùng...</p>
           ) : null}
 
-          {errorMessage ? (
+          {error ? (
             <p className='mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700'>
-              {errorMessage}
+              {error}
             </p>
-          ) : null} */}
+          ) : null}
 
           <div className='mt-4 grid gap-3'>
               <div className='space-y-3'>
@@ -72,7 +86,24 @@ const ProfileUser = () => {
                   />
                 </label>
 
-                
+                <label className='text-sm text-[#4b4464]'>
+                  Họ và tên đệm
+                  <input
+                    type='text'
+                    value={profileForm.first_name}
+                    onChange={(e) => setProfileForm({...profileForm, first_name: e.target.value})}
+                    className='mt-1 w-full rounded-xl border border-amber-100 bg-white px-3 py-2 text-sm outline-none'
+                  />
+                </label>
+                <label className='text-sm text-[#4b4464]'>
+                  Tên
+                  <input
+                    type='text'
+                    value={profileForm.last_name}
+                    onChange={(e) => setProfileForm({...profileForm, last_name: e.target.value})}
+                    className='mt-1 w-full rounded-xl border border-amber-100 bg-white px-3 py-2 text-sm outline-none'
+                  />
+                </label>    
               </div>
             
           </div>

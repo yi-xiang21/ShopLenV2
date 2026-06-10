@@ -12,8 +12,8 @@ const authApi = {
   register: async (payload: RegisterPayload) => {
     return callAPI.post(API_CONFIG.ENDPOINTS.REGISTER, payload);
   },
-  getGoogleLoginUrl: async () => {
-    return callAPI.get(API_CONFIG.ENDPOINTS.GOOGLE_LOGIN);
+  getGoogleLoginUrl: () => {
+    return `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.GOOGLE_LOGIN}`;
   },
   logout: async () => {
     const req = callAPI.post(API_CONFIG.ENDPOINTS.LOGOUT);

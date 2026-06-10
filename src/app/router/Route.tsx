@@ -31,6 +31,10 @@ export const routes = createBrowserRouter([
                 path: '/about',
                 element: <AboutUs />,
             },
+            {
+                path: '/reset-password',
+                element: <ResetPassword />,
+            },
         ],
     },
     {
@@ -86,10 +90,6 @@ export const routes = createBrowserRouter([
                                 element: <ChangePassword />,
                             },
                         ],
-                    },
-                    {
-                        path: 'reset-password',
-                        element: <ResetPassword />,
                     },
                 ],
             },

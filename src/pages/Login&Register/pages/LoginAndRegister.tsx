@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import AuthLayout, { type AuthMode } from "../../../layout/AuthLayout.tsx";
 import AuthForm, { type AuthFormData } from "../../../component/AuthForm.tsx";
 import AuthMessage from "../../../component/AuthMessage.tsx";
 import type { LoginPayload, RegisterPayload } from "../types/auth-type.ts";
 import {authApi} from "../api/auth-api.ts";
-import { useAppDispatch } from '@/app/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import { loginThunk, registerThunk } from "../store/auth-thunk.ts";
+
+
 const createLoginPayload = (formData: AuthFormData): LoginPayload => ({
   email: formData.email.trim(),
   password: formData.password,
@@ -22,6 +23,7 @@ const createRegisterPayload = (formData: AuthFormData): RegisterPayload => ({
 });
 
 const LoginAndRegister = () => {
+  const authError = useAppSelector((state) => state.auth.error);
   const navigate = useNavigate();
   const location = useLocation();
   const [mode, setMode] = useState<AuthMode>("login");
@@ -32,9 +34,10 @@ const LoginAndRegister = () => {
     phone_number: "",
     role: "customer", 
   });
-  const [apiMessage, setApiMessage] = useState<string>("");
+  const [googleAuthMessage, setGoogleAuthMessage] = useState<string>("");
 
   const dispatch = useAppDispatch();
+  const message = googleAuthMessage || authError || "";
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -42,7 +45,7 @@ const LoginAndRegister = () => {
     const role = searchParams.get("role") || undefined;
     const error = searchParams.get("error");
     const message = searchParams.get("message");
-
+    console.log("Google OAuth callback params:", { token, role, error, message });
     const isPopup = window.opener && window.opener !== window;
 
     if (error) {
@@ -78,33 +81,22 @@ const LoginAndRegister = () => {
   }, [location.search, navigate]);
 
   const handleLogin = async () => {
-    setApiMessage("");
+    setGoogleAuthMessage("");
     const loginPayload = createLoginPayload(formData);
 
     try {
-      
-       await dispatch(
+      await dispatch(
         loginThunk({
           ...loginPayload,
         }),
       ).unwrap();
-      setApiMessage('Đăng nhập thành công',);
       navigate("/");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message || error.message || "Đăng nhập thất bại";
-        setApiMessage(message);
-        console.error("Login failed:", error.response?.data || error.message);
-        return;
-      }
-      setApiMessage("Đăng nhập thất bại");
       console.error("Login failed:", error);
     }
   };
 
   const handleGoogleLogin = () => {
-    const googleLoginUrl = authApi.getGoogleLoginUrl();
     const popupWidth = 520;
     const popupHeight = 680;
     const left = Math.max((window.screen.width - popupWidth) / 2, 0);
@@ -122,10 +114,10 @@ const LoginAndRegister = () => {
       'location=yes',
     ].join(',');
 
-    const popup = window.open(googleLoginUrl, 'google_oauth_popup', popupFeatures);
+    const popup = window.open(authApi.getGoogleLoginUrl(), 'google_oauth_popup', popupFeatures);
 
     if (!popup) {
-      window.location.href = googleLoginUrl;
+      window.location.href = authApi.getGoogleLoginUrl();
       return;
     }
 
@@ -137,7 +129,7 @@ const LoginAndRegister = () => {
         window.removeEventListener('message', messageHandler);
         navigate("/");
       } else if (event.data?.type === 'google_auth_error') {
-        setApiMessage(event.data.message || "Đăng nhập Google thất bại");
+        setGoogleAuthMessage(event.data.message || "Đăng nhập Google thất bại");
         window.removeEventListener('message', messageHandler);
       }
     };
@@ -146,29 +138,22 @@ const LoginAndRegister = () => {
   };
   
   const handleRegister = async () => {
-    setApiMessage("");
+    setGoogleAuthMessage("");
     try {
       await dispatch(
         registerThunk({
           ...createRegisterPayload(formData),
         }),
       ).unwrap();
-        setApiMessage("Đăng ký thành công");
-        setMode("login");
+      setMode("login");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setApiMessage(error.response?.data?.message);
-        console.error("Register failed:", error.response?.data || error.message);
-        return;
-      }
-      setApiMessage("Đăng ký thất bại");
       console.error("Register failed:", error);
     }
   };
 
   return (
     <AuthLayout mode={mode}>
-      <AuthMessage message={apiMessage} />
+      <AuthMessage message={message} />
       <AuthForm
         mode={mode}
         formData={formData}

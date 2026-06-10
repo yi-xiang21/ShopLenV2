@@ -6,7 +6,7 @@ import { API_CONFIG } from "../../../config/api";
 import axios from "axios";
 import AuthMessage from "../../../component/AuthMessage";
 import { useNavigate } from "react-router-dom";
-
+import { callAPI } from "@/share/lib/axios";
 type Step = "email" | "otp" | "password";
 
 const ResetPassword = () => {
@@ -25,8 +25,6 @@ const ResetPassword = () => {
 
   const handleResetPasswordSubmit = () => {
     if (isResettingPassword) return;
-
-    const resetPasswordUrl = getApiUrl(API_CONFIG.ENDPOINTS.RESET_PASSWORD);
     setIsResettingPassword(true);
     setApiMessage("");
     const normalizedPassword = newPassword.trim();
@@ -47,11 +45,10 @@ const ResetPassword = () => {
     }
 
     setIsResettingPassword(true);
-    axios
-      .post(resetPasswordUrl, {
-        identifier: email,
-        new_password: normalizedPassword,
-        reset_session_token: resetToken,
+    callAPI.post(API_CONFIG.ENDPOINTS.RESET_PASSWORD, {
+          email: email,
+          new_password: normalizedPassword,
+          reset_session_token: resetToken,
       })
       .then((response) => {
         setApiMessage(response.data?.message);
@@ -60,7 +57,7 @@ const ResetPassword = () => {
         setOtp("");
         setResetToken("");
         setNewPassword("");
-        navigate("/login");
+        navigate("/auth/login");
       })
       .catch((error) => {
         if (axios.isAxiosError(error)) {
@@ -77,8 +74,6 @@ const ResetPassword = () => {
 
   const handleOtpSubmit = () => {
     if (isVerifyingOtp) return;
-
-    const verifyOtpUrl = getApiUrl(API_CONFIG.ENDPOINTS.VERIFY_OTP);
     setIsVerifyingOtp(true);
     setApiMessage("");
     const normalizedOtp = otp.trim();
@@ -87,8 +82,10 @@ const ResetPassword = () => {
       setIsVerifyingOtp(false);
       return;
     }
-    axios
-      .post(verifyOtpUrl, { identifier: email, otp: normalizedOtp })
+    callAPI.post(API_CONFIG.ENDPOINTS.VERIFY_OTP, {
+        email: email,
+        otp: normalizedOtp
+    })
       .then((response) => {
         setResetToken(response.data?.reset_session_token || "");
         setApiMessage(response.data?.message);
@@ -108,7 +105,6 @@ const ResetPassword = () => {
   };
 
   const handleEmailSubmit = async () => {
-    const forgotPasswordUrl = getApiUrl(API_CONFIG.ENDPOINTS.FORGOT_PASSWORD);
     if (isSendingOtp) return;
 
     setIsSendingOtp(true);
@@ -121,10 +117,10 @@ const ResetPassword = () => {
       return;
     }
     try {
-      const response = await axios.post(forgotPasswordUrl, {
-        identifier: normalizedEmail,
+      const response = await callAPI.post(API_CONFIG.ENDPOINTS.FORGOT_PASSWORD, {
+        email: normalizedEmail
       });
-      setApiMessage( response.data?.message);
+      setApiMessage(response.data?.message);
       setStep("otp");
     } catch (error) {
       if (axios.isAxiosError(error)) {

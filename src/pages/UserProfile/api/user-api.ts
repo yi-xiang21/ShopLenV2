@@ -5,7 +5,7 @@ export const userApi = {
   getAll: async () => {
     return callAPI.get(API_CONFIG.ENDPOINTS.GETALL_USERS);
   },
-  get: async () => {
+  getProfile: async () => {
     return callAPI.get(API_CONFIG.ENDPOINTS.PROFILE);
   }
 }

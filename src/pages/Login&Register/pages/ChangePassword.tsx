@@ -4,7 +4,7 @@ import { API_CONFIG } from "../../../config/api";
 import axios from "axios";
 import AuthMessage from "../../../component/AuthMessage";
 import { useNavigate } from "react-router-dom";
-
+import { callAPI } from "@/share/lib/axios";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
@@ -17,7 +17,6 @@ const ChangePassword = () => {
   const [apiMessage, setApiMessage] = useState<string>("");
 
   const handleChangePasswordSubmit = () => {
-    const changePasswordUrl = API_CONFIG.ENDPOINTS.CHANGE_PASSWORD;
     const normalizedNewPassword = newPassword.trim();
     const normalizedCurrentPassword = currentPassword.trim();
 
@@ -36,7 +35,7 @@ const ChangePassword = () => {
       return;
     }
 
-    axios.post(changePasswordUrl, { 
+    callAPI.post(API_CONFIG.ENDPOINTS.CHANGE_PASSWORD, { 
       currentPassword: normalizedCurrentPassword,
       newPassword: normalizedNewPassword,
       confirmPassword: confirmPassword.trim(),

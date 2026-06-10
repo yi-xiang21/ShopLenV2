@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import type { AuthMode } from "../layout/AuthLayout.tsx";
 
 export interface AuthFormData {
@@ -79,9 +80,9 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
 
       {isLogin && (
         <div className="text-sm mb-2 p-0 text-left">
-          <a href="/reset-password" className="font-semibold text-orange-600 underline underline-offset-4">
+          <Link to="/reset-password" className="font-semibold text-orange-600 underline underline-offset-4">
             Quên mật khẩu?
-          </a>
+          </Link>
         </div>
       )}
 

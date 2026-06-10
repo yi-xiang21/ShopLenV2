@@ -32,8 +32,8 @@ export const registerThunk = createAsyncThunk(
 
 export const getMeThunk = createAsyncThunk('/api/auth/me', async (_, thunkAPI) => {
   try {
-    const { get } = userApi;
-    const res = await get();
+    const { getProfile } = userApi;
+    const res = await getProfile();
 
     return res.data;
   } catch (error: unknown) {

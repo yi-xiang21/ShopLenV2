@@ -92,7 +92,6 @@ callAPI.interceptors.response.use(
           },
         );
 
-        // backend returns { access_token, refresh_token }
         const accessToken = response.data?.access_token || response.data?.data?.access_token;
         const newRefreshToken = response.data?.refresh_token || response.data?.data?.refresh_token;
 

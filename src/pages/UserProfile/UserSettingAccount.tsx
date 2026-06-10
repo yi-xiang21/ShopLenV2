@@ -1,35 +1,22 @@
 
 import { useNavigate } from 'react-router-dom';
-
-
+import { useAppDispatch } from '@/app/redux/hooks';
+import { authApi } from '@/pages/Login&Register/api/auth-api';
+import { logout } from '@/pages/Login&Register/store/auth-slice';
 const UserSettingAccount = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  // const handleLogout = async () => {
-
-  //   if (!accessToken) {
-  //     logout();
-  //     navigate('/login');
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await axios.post(logoutUrl, {}, {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     });
-  //     logout();
-  //     console.log("Logout success:", response.data);
-  //     navigate("/login");
-  //   } catch (error) {
-  //     if (axios.isAxiosError(error)) {
-  //       console.error("Logout failed:", error.response?.data || error.message);
-  //       return;
-  //     }
-  //     console.error("Logout failed:", error);
-  //   }
-  // };
+  const handleLogout = async () => {
+    try {
+      await authApi.logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+    finally {
+      dispatch(logout());
+    }
+  };
   return (
     <section className='space-y-6'>
 
@@ -40,12 +27,12 @@ const UserSettingAccount = () => {
         </div>
 
         <button
-          // onClick={handleLogout}
+          onClick={() => handleLogout()}
           className='inline-flex items-center justify-center rounded-2xl bg-[#ff6b3d] px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#f95d2d]'
         >
           Logout
         </button>
-        <button onClick={() => navigate("/profile/change-password")} className='inline-flex items-center justify-center rounded-2xl bg-[#ff6b3d] px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#f95d2d]'>
+        <button onClick={() => navigate('../change-password')} className='inline-flex items-center justify-center rounded-2xl bg-[#ff6b3d] px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#f95d2d]'>
             Đổi mật khẩu
         </button>
 
