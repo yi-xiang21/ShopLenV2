@@ -58,8 +58,10 @@ callAPI.interceptors.response.use(
         return new Promise((resolve, reject) => {
           failedQueue.push({
             resolve: (token) => {
-              originalRequest.headers.Authorization =
-                `Bearer ${token}`;
+              originalRequest.headers = {
+                ...originalRequest.headers,
+                authorization: `Bearer ${token}`,
+              };
 
               resolve(
                 callAPI(originalRequest),
@@ -81,9 +83,9 @@ callAPI.interceptors.response.use(
           throw new Error('Refresh token not found');
         }
 
-
-        const response = await callAPI.post(
-          API_CONFIG.ENDPOINTS.REFRESH_TOKEN,
+        // Use plain axios instance to avoid adding expired Authorization header
+        const response = await axios.post(
+          `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.REFRESH_TOKEN}`,
           {
             // backend expects snake_case field name
             refresh_token: refreshToken,
@@ -103,8 +105,15 @@ callAPI.interceptors.response.use(
 
         processQueue(null, accessToken);
 
-        originalRequest.headers.Authorization =
-          `Bearer ${accessToken}`;
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          authorization: `Bearer ${accessToken}`,
+        };
+
+        console.log('✓ Retrying original request:', originalRequest.url, {
+          requestHeaders: originalRequest.headers,
+          localStorageAccessToken: localStorage.getItem('accessToken'),
+        });
 
         return callAPI(originalRequest);
       } catch (refreshError) {
