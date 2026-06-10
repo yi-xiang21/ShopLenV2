@@ -2,23 +2,26 @@ import { useState } from 'react'
 import { FaBars, FaRegUser, FaShoppingCart, FaTimes ,FaHeart } from 'react-icons/fa'
 import { FiSearch } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
-import logo from '../assets/Logo.png'
-import HeaderDesktopMenu from './HeaderDesktopMenu'
-import HeaderMobileMenu from './HeaderMobileMenu'
-import { useAuth } from '../context/AuthContext'
+import logo from '@/assets/Logo.png'
+import HeaderDesktopMenu from '@/component/HeaderDesktopMenu'
+import HeaderMobileMenu from '@/component/HeaderMobileMenu'
 import Badge from 'antd/es/badge/Badge'
+import { useAppSelector } from '@/app/redux/hooks'
 
 
 export type ActiveMenuKey = 'home' | 'shop' | 'about' | 'workshop'
 
 
 const Header = () => {
+   const { user } = useAppSelector((state) => state.auth);
+   const router = () =>{ 
+    if (!user) return '/auth/login';
+
+    return user.role === 'admin' ? '/admin' : '/profile';
+  }
   const [activeMenu, setActiveMenu] = useState<ActiveMenuKey>('home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const { isAuthenticated, role } = useAuth()
 
-
-  const userRoute = !isAuthenticated ? '/login' : role === 'admin' ? '/admin' : '/profile'
 
   const menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }> = [
     { key: 'home', label: 'Trang chủ', link: '/' },
@@ -75,7 +78,7 @@ const Header = () => {
               aria-label='Tai khoan'
               className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
               type='button'
-              to={userRoute}
+              to={router()}
             >
               <FaRegUser aria-hidden='true' className='h-5 w-5' />
             </Link>
@@ -84,7 +87,7 @@ const Header = () => {
               className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
               type='button'
               // sua lai thanh route yeu thich sau khi lam xong chuc nang
-              to={userRoute}
+              to={""}
             >
               <FaHeart aria-hidden='true' className='h-5 w-5' />
             </Link>

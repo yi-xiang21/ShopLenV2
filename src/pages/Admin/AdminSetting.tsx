@@ -1,36 +1,23 @@
 
-import {useNavigate} from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
-import { API_CONFIG, getApiUrl } from '../../config/api';
+import { authApi } from '@/pages/Login&Register/api/auth-api';
+import { useAppDispatch } from '@/app/redux/hooks';
+import { logout } from '@/pages/Login&Register/store/auth-slice';
+
 export const AdminSetting = () => {
-  const navigate = useNavigate();
-   const { accessToken, logout } = useAuth();
+  const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
-    const logoutUrl = getApiUrl(API_CONFIG.ENDPOINTS.LOGOUT);
-
-    if (!accessToken) {
-      logout();
-      navigate('/login');
-      return;
-    }
-
     try {
-      const response = await axios.post(logoutUrl, {}, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      logout();
-      console.log("Logout success:", response.data);
-      navigate("/login");
+      await authApi.logout();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Logout failed:", error.response?.data || error.message);
-        return;
+      } else {
+        console.error("Logout failed:", error);
       }
-      console.error("Logout failed:", error);
+    } finally {
+      dispatch(logout());
     }
   };
 
@@ -38,13 +25,12 @@ export const AdminSetting = () => {
     <section>
       <h3 className='text-2xl font-semibold mb-4'>Quản lý tài khoản</h3>
       <p className='mb-6 text-gray-700'>Chào mừng đến với trang quản lý tài khoản của bạn. Tại đây, bạn có thể xem và chỉnh sửa thông tin cá nhân, quản lý đơn hàng và thiết lập bảo mật cho tài khoản của mình.</p>
-      <button>
-        <button
-          onClick={handleLogout}
-          className='inline-flex items-center justify-center rounded-2xl bg-[#ff6b3d] px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#f95d2d]'
-        >
-          Logout
-        </button>
+      <button
+        type='button'
+        onClick={handleLogout}
+        className='inline-flex items-center justify-center rounded-2xl bg-[#ff6b3d] px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#f95d2d]'
+      >
+        Logout
       </button>
     </section>
   )

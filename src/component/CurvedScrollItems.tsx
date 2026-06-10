@@ -1,6 +1,6 @@
 import { useRef, type RefObject } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
-import type { Item } from '../pages/Home';
+import type { Item } from '@/pages/Home';
 
 //test 3d
 

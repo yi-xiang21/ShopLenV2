@@ -1,30 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthLayout, { type AuthMode } from "../../layout/AuthLayout.tsx";
-import AuthForm, { type AuthFormData } from "../../component/AuthForm.tsx";
-import AuthMessage from "../../component/AuthMessage.tsx";
-import { API_CONFIG, getApiUrl } from "../../config/api.ts";
-import { useAuth } from "../../context/AuthContext.tsx";
-
-export interface LoginProps {
-  email: string;
-  password: string;
-}
-export interface RegisterProps {
-  email: string;
-  password: string;
-  phone_number?: string;
-  username?: string;
-  role?: string;
-}
-
-const createLoginPayload = (formData: AuthFormData): LoginProps => ({
+import AuthLayout, { type AuthMode } from "../../../layout/AuthLayout.tsx";
+import AuthForm, { type AuthFormData } from "../../../component/AuthForm.tsx";
+import AuthMessage from "../../../component/AuthMessage.tsx";
+import type { LoginPayload, RegisterPayload } from "../types/auth-type.ts";
+import {authApi} from "../api/auth-api.ts";
+import { useAppDispatch } from '@/app/redux/hooks';
+import { loginThunk, registerThunk } from "../store/auth-thunk.ts";
+const createLoginPayload = (formData: AuthFormData): LoginPayload => ({
   email: formData.email.trim(),
   password: formData.password,
 });
 
-const createRegisterPayload = (formData: AuthFormData): RegisterProps => ({
+const createRegisterPayload = (formData: AuthFormData): RegisterPayload => ({
   email: formData.email.trim(),
   username: formData.username.trim(),
   password: formData.password,
@@ -35,7 +24,6 @@ const createRegisterPayload = (formData: AuthFormData): RegisterProps => ({
 const LoginAndRegister = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
   const [mode, setMode] = useState<AuthMode>("login");
   const [formData, setFormData] = useState<AuthFormData>({
     email: "",
@@ -45,6 +33,8 @@ const LoginAndRegister = () => {
     role: "customer", 
   });
   const [apiMessage, setApiMessage] = useState<string>("");
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -83,21 +73,22 @@ const LoginAndRegister = () => {
         }
       });
     } else {
-      login(token, role);
       navigate("/", { replace: true });
     }
-  }, [location.search, login, navigate]);
+  }, [location.search, navigate]);
 
   const handleLogin = async () => {
-    const loginUrl = getApiUrl(API_CONFIG.ENDPOINTS.LOGIN);
     setApiMessage("");
     const loginPayload = createLoginPayload(formData);
 
     try {
-      const response = await axios.post(loginUrl, loginPayload);
-      const message = response.data?.message || "Đăng nhập thành công";
-      login(response.data.token, response.data.user.role);
-      setApiMessage(message);
+      
+       await dispatch(
+        loginThunk({
+          ...loginPayload,
+        }),
+      ).unwrap();
+      setApiMessage('Đăng nhập thành công',);
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -113,7 +104,7 @@ const LoginAndRegister = () => {
   };
 
   const handleGoogleLogin = () => {
-    const googleLoginUrl = getApiUrl(API_CONFIG.ENDPOINTS.GOOGLE_LOGIN);
+    const googleLoginUrl = authApi.getGoogleLoginUrl();
     const popupWidth = 520;
     const popupHeight = 680;
     const left = Math.max((window.screen.width - popupWidth) / 2, 0);
@@ -142,7 +133,6 @@ const LoginAndRegister = () => {
 
     const messageHandler = (event: MessageEvent) => {
       if (event.data?.type === 'google_auth_success') {
-        login(event.data.token, event.data.role);
         popup.postMessage({ type: 'popup_close' }, '*');
         window.removeEventListener('message', messageHandler);
         navigate("/");
@@ -156,15 +146,15 @@ const LoginAndRegister = () => {
   };
   
   const handleRegister = async () => {
-    const registerUrl = getApiUrl(API_CONFIG.ENDPOINTS.REGISTER);
     setApiMessage("");
-    const registerPayload = createRegisterPayload(formData);
     try {
-      const response = await axios.post(registerUrl, registerPayload);
-      if (response.data) {
-        setApiMessage(response.data?.message);
+      await dispatch(
+        registerThunk({
+          ...createRegisterPayload(formData),
+        }),
+      ).unwrap();
+        setApiMessage("Đăng ký thành công");
         setMode("login");
-      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setApiMessage(error.response?.data?.message);

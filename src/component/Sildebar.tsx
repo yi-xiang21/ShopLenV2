@@ -14,7 +14,7 @@ const menuItems = [
     { name: 'Quản lý danh mục', link: '/admin/Manager-Category' },
     { name: 'Quản lý workshop', link: '' },
     { name: 'Quay về trang chủ', link: '/' },
-    { name: 'Cài đặt', link: '/admin/Manager-Setting' }
+    { name: 'Cài đặt', link: '/admin/setting' }
 ]
 
 const Sildebar = ({ isOpen = false, toggleSidebar }: SidebarProps) => {

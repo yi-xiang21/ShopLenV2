@@ -1,15 +1,13 @@
 
 import { useState } from "react";
-import { getApiUrl } from "../../config/api";
-import { API_CONFIG } from "../../config/api";
+import { API_CONFIG } from "../../../config/api";
 import axios from "axios";
-import AuthMessage from "../../component/AuthMessage";
+import AuthMessage from "../../../component/AuthMessage";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+
 
 const ChangePassword = () => {
   const navigate = useNavigate();
-  const { accessToken } = useAuth();
   const [newPassword, setNewPassword] = useState<string>("");
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -19,7 +17,7 @@ const ChangePassword = () => {
   const [apiMessage, setApiMessage] = useState<string>("");
 
   const handleChangePasswordSubmit = () => {
-    const changePasswordUrl = getApiUrl(API_CONFIG.ENDPOINTS.CHANGE_PASSWORD);
+    const changePasswordUrl = API_CONFIG.ENDPOINTS.CHANGE_PASSWORD;
     const normalizedNewPassword = newPassword.trim();
     const normalizedCurrentPassword = currentPassword.trim();
 
@@ -37,10 +35,6 @@ const ChangePassword = () => {
       setApiMessage("Mật khẩu mới phải có ít nhất 6 ký tự");
       return;
     }
-    if (!accessToken) {
-      setApiMessage("Bạn chưa đăng nhập hoặc phiên đăng nhập đã hết hạn");
-      return;
-    }
 
     axios.post(changePasswordUrl, { 
       currentPassword: normalizedCurrentPassword,
@@ -48,10 +42,7 @@ const ChangePassword = () => {
       confirmPassword: confirmPassword.trim(),
     },
   {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
+
   })
       .then((response) => {
         console.log("Password changed successfully:", response.data);

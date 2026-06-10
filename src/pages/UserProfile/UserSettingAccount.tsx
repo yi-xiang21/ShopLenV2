@@ -1,39 +1,35 @@
 
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import axios from 'axios';
-import { API_CONFIG, getApiUrl } from '../../config/api';
+
 
 const UserSettingAccount = () => {
   const navigate = useNavigate();
-  const { accessToken, logout } = useAuth();
 
-  const handleLogout = async () => {
-    const logoutUrl = getApiUrl(API_CONFIG.ENDPOINTS.LOGOUT);
+  // const handleLogout = async () => {
 
-    if (!accessToken) {
-      logout();
-      navigate('/login');
-      return;
-    }
+  //   if (!accessToken) {
+  //     logout();
+  //     navigate('/login');
+  //     return;
+  //   }
 
-    try {
-      const response = await axios.post(logoutUrl, {}, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      logout();
-      console.log("Logout success:", response.data);
-      navigate("/login");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Logout failed:", error.response?.data || error.message);
-        return;
-      }
-      console.error("Logout failed:", error);
-    }
-  };
+  //   try {
+  //     const response = await axios.post(logoutUrl, {}, {
+  //       headers: {
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     });
+  //     logout();
+  //     console.log("Logout success:", response.data);
+  //     navigate("/login");
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error)) {
+  //       console.error("Logout failed:", error.response?.data || error.message);
+  //       return;
+  //     }
+  //     console.error("Logout failed:", error);
+  //   }
+  // };
   return (
     <section className='space-y-6'>
 
@@ -44,7 +40,7 @@ const UserSettingAccount = () => {
         </div>
 
         <button
-          onClick={handleLogout}
+          // onClick={handleLogout}
           className='inline-flex items-center justify-center rounded-2xl bg-[#ff6b3d] px-5 py-3 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#f95d2d]'
         >
           Logout

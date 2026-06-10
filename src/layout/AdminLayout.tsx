@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import Sildebar from '../component/Sildebar'
+import Sildebar from '@/component/Sildebar'
 import { useState } from 'react'
 const AdminLayout = () => {
 	const [isSidebarOpen, setIsSidebarOpen] = useState(false);
