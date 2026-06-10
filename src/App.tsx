@@ -16,7 +16,7 @@ import WorkshopPage from './pages/UserProfile/UserWorkshop'
 import AccountSettingsPage from './pages/UserProfile/UserSettingAccount'
 import ChangePassword from './pages/Login&Register/ChangePassword'
 import AdminManagerAccount from './pages/Admin/AdminManagerAccount'
-import AdminManagerCategory from './pages/Admin/managerCatelogy/AdminManagerCatelogries'
+import AdminManagerCategory from './pages/Admin/managerCatelogy/pages/AdminManagerCatelogries'
 import AboutUs from './pages/About'
 
 function App() {

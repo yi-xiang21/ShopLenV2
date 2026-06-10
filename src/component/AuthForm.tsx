@@ -23,7 +23,7 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
   const isLogin = mode === "login";
 
   return (
-    <div className="w-full flex flex-col gap-5">
+    <div className="w-full flex flex-col gap-5 text-center">
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-500 pb-4">
         {isLogin ? "Chào quay trở lại" : "Đăng ký ngay"}
       </p>
@@ -103,9 +103,9 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
         </button>
       )}
 
-      <p className="text-sm text-slate-600">
+      <p className="text-sm text-center">
         {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}{" "}
-        <button type="button" onClick={onSwitch} className="cursor-pointer font-semibold text-orange-600 underline underline-offset-4">
+        <button type="button" onClick={onSwitch} className="cursor-pointer underline font-semibold text-orange-600">
           {isLogin ? "Đăng ký" : "Đăng nhập"}
         </button>
       </p>

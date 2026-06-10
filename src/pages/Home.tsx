@@ -52,15 +52,8 @@ const Data: Category[] = [
     categorySlug: "phu-kien",
     categoryImage: HomeBanner1,
     childCategories: [],
-  },
-  {
-    categoryId: 4,
-    categoryName: "Laptop",
-    categoryDescription: "Các loại laptop phục vụ cho công việc và giải trí.",
-    categorySlug: "laptop",
-    categoryImage: HomeBanner1,
-    childCategories: [],
-  },
+  }
+  
 ];
 
 const HomePage = () => {
@@ -172,7 +165,7 @@ const HomePage = () => {
       <section className="h-140 flex flex-col justify-center items-center md:h-180">
         <h1>Các Danh Mục Của Chúng Tôi</h1>
         <p>khám phá các sản phẩm với cách danh mục bạn muốn.</p>
-        <div className="h-100 w-100 overflow-x-auto overflow-y-hidden flex items-center justify-start gap-8 md:w-400 md:h-120 no-scrollbar">
+        <div className="h-100 w-full overflow-x-auto overflow-y-hidden flex items-center p-10 justify-start gap-8 md:w-full md:h-120 no-scrollbar">
           {Data.map((item) => (
             <Catelogy key={item.categoryId} Data={item} />
           ))}

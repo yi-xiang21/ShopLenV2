@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Table, Input, Button } from 'antd';
 import type { TableProps } from 'antd/es/table';
-import type { Category } from './type/catelogy';
+import type { Category } from '../type/catelogy';
 
 const columns: TableProps<Category>['columns'] = [
 {
