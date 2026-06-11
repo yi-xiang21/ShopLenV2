@@ -5,11 +5,14 @@ export const API_CONFIG = {
   BASE_URL: API_BASE_URL,
 
   ENDPOINTS: {
+    //auth
     LOGIN: '/api/auth/login',
     REGISTER: '/api/auth/register',
     LOGOUT: '/api/auth/logout',
     GOOGLE_LOGIN: '/api/auth/google',
+    //user
     PROFILE: '/api/auth/me',
+    UPDATE_PROFILE: '/api/users/user/me',
 
     GETALL_USERS: '/api/users',
 

@@ -34,6 +34,23 @@ const ProfileUser = () => {
     fetchProfile();
   }, [user?.user_id, user]);
 
+  const handleUpdateProfile = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('username', profileForm.username);
+      formData.append('email', profileForm.email);
+      formData.append('phone_number', profileForm.phone_number);
+      formData.append('first_name', profileForm.first_name);
+      formData.append('last_name', profileForm.last_name);
+      await userApi.updateProfile(formData);
+      alert('Cập nhật thông tin thành công!');
+    }
+    catch (error) {
+      console.error('Failed to update profile:', error);
+      alert('Cập nhật thông tin thất bại. Vui lòng thử lại.');
+    }
+  }
+
   return (
     <section className='space-y-6'>
       <div>
@@ -107,8 +124,8 @@ const ProfileUser = () => {
               </div>
             
           </div>
-          <div>
-            <button  className='mt-5 rounded-xl bg-[#ffb488] px-4 py-2 text-sm font-medium text-white hover:bg-[#ff9a5c]'>
+          <div className='flex justify-end mt-5'  >
+            <button onClick={handleUpdateProfile} className='mt-5 rounded-xl bg-[#ffb488] px-4 py-2 text-sm font-medium text-white hover:bg-[#ff9a5c]' >
               Cập nhật thông tin
             </button>
           </div>
