@@ -6,7 +6,7 @@ import AuthMessage from "../../../component/AuthMessage.tsx";
 import type { LoginPayload, RegisterPayload } from "../types/auth-type.ts";
 import {authApi} from "../api/auth-api.ts";
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
-import { loginThunk, registerThunk } from "../store/auth-thunk.ts";
+import { loginThunk, registerThunk, getMeThunk } from "../store/auth-thunk.ts";
 
 
 const createLoginPayload = (formData: AuthFormData): LoginPayload => ({
@@ -40,47 +40,57 @@ const LoginAndRegister = () => {
   const message = googleAuthMessage || authError || "";
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const token = searchParams.get("access_token");
-    const refreshToken = searchParams.get("refresh_token");
-    const role = searchParams.get("role") || undefined;
-    const userId = searchParams.get("user_id") || undefined;
-    const error = searchParams.get("error");
-    const message = searchParams.get("message");
-    console.log("Google OAuth callback params:", { token, refreshToken, role, userId, error, message });
-    const isPopup = window.opener && window.opener !== window;
+    const handleCallback = async () => {
+      const searchParams = new URLSearchParams(location.search);
+      const token = searchParams.get("access_token");
+      const refreshToken = searchParams.get("refresh_token");
+      const role = searchParams.get("role") || undefined;
+      const userId = searchParams.get("user_id") || undefined;
+      const error = searchParams.get("error");
+      const message = searchParams.get("message");
+      console.log("Google OAuth callback params:", { token, refreshToken, role, userId, error, message });
+      const isPopup = window.opener && window.opener !== window;
 
-    if (error) {
-      if (isPopup) {
-        window.opener?.postMessage({ type: 'google_auth_error', error, message }, '*');
-      } else {
-        navigate("/login", { replace: true });
+      if (error) {
+        if (isPopup) {
+          window.opener?.postMessage({ type: 'google_auth_error', error, message }, '*');
+        } else {
+          navigate("/login", { replace: true });
+        }
+        return;
       }
-      return;
-    }
 
-    if (!token) {
+      if (!token) {
+        if (isPopup && window.opener) {
+          window.addEventListener('message', (event) => {
+            if (event.data?.type === 'close_popup') {
+              window.close();
+            }
+          });
+        }
+        return;
+      }
+
+      localStorage.setItem('accessToken', token);
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
+
       if (isPopup && window.opener) {
+        window.opener.postMessage({ type: 'google_auth_success', token, refreshToken, role }, '*');
         window.addEventListener('message', (event) => {
-          if (event.data?.type === 'close_popup') {
+          if (event.data?.type === 'popup_close') {
             window.close();
           }
         });
+      } else {
+        await dispatch(getMeThunk());
+        navigate("/", { replace: true });
       }
-      return;
-    }
+    };
 
-    if (isPopup && window.opener) {
-      window.opener.postMessage({ type: 'google_auth_success', token, role }, '*');
-      window.addEventListener('message', (event) => {
-        if (event.data?.type === 'popup_close') {
-          window.close();
-        }
-      });
-    } else {
-      navigate("/", { replace: true });
-    }
-  }, [location.search, navigate]);
+    void handleCallback();
+  }, [location.search, navigate, dispatch]);
 
   const handleLogin = async () => {
     setGoogleAuthMessage("");
@@ -125,10 +135,26 @@ const LoginAndRegister = () => {
 
     popup.focus();
 
-    const messageHandler = (event: MessageEvent) => {
+    const messageHandler = async (event: MessageEvent) => {
       if (event.data?.type === 'google_auth_success') {
+        const { token: accessToken, refreshToken } = event.data;
+
+        if (accessToken) {
+          localStorage.setItem('accessToken', accessToken);
+        }
+        if (refreshToken) {
+          localStorage.setItem('refreshToken', refreshToken);
+        }
+
         popup.postMessage({ type: 'popup_close' }, '*');
         window.removeEventListener('message', messageHandler);
+
+        try {
+          await dispatch(getMeThunk()).unwrap();
+        } catch (error) {
+          console.warn('Unable to refresh user after Google login:', error);
+        }
+
         navigate("/");
       } else if (event.data?.type === 'google_auth_error') {
         setGoogleAuthMessage(event.data.message || "Đăng nhập Google thất bại");
