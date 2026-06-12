@@ -41,11 +41,13 @@ const LoginAndRegister = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const token = searchParams.get("token");
+    const token = searchParams.get("access_token");
+    const refreshToken = searchParams.get("refresh_token");
     const role = searchParams.get("role") || undefined;
+    const userId = searchParams.get("user_id") || undefined;
     const error = searchParams.get("error");
     const message = searchParams.get("message");
-    console.log("Google OAuth callback params:", { token, role, error, message });
+    console.log("Google OAuth callback params:", { token, refreshToken, role, userId, error, message });
     const isPopup = window.opener && window.opener !== window;
 
     if (error) {

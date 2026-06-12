@@ -14,7 +14,15 @@ export const API_CONFIG = {
     PROFILE: '/api/auth/me',
     UPDATE_PROFILE: '/api/users/user/me',
 
+    //admin
     GETALL_USERS: '/api/users',
+    
+    //admin category
+    GET_CATEGORIES: '/api/categories',
+    GET_CATEGORY: (id: string) => `/api/categories/${id}`,
+    CREATE_CATEGORY: '/api/categories',
+    UPDATE_CATEGORY: (id: string) => `/api/categories/${id}`,
+    DELETE_CATEGORY: (id: string) => `/api/categories/${id}`,
 
     FORGOT_PASSWORD: '/api/auth/forgot-password',
     VERIFY_OTP: '/api/auth/verify-reset-otp',
