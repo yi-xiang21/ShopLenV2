@@ -28,7 +28,7 @@ export const categoryFields: FormField<CategoryFormValues>[] = [
 
     label: 'URL hình ảnh',
     type: FormFieldType.ImageUpload,
-  },
+  }
 
   
 ];

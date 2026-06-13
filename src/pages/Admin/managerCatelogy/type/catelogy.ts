@@ -15,6 +15,6 @@ export interface categoryChildren
 export interface CategoryFormValues {
   category_name: string;
   description?: string;
-  image_url?: string;
-  children?: categoryChildren[];
+  image_url?: string | null;
+  children: categoryChildren[];
 }
