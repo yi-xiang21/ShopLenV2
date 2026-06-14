@@ -1,6 +1,7 @@
 import type { FormField } from '@/share/types/form-field';
 import { FormFieldType } from '@/share/types/type-form-field';
 import { Input, Select } from 'antd';
+import SelectFetchCustom from '@/share/ComponentCustom/select/SelectFetchCustom';
 
 type DynamicFormProps<T extends object> = {
   fields: FormField<T>[];
@@ -13,7 +14,7 @@ const DynamicForm = <T extends object>({
   fields,
   values,
   onChange,
-  disabled = false, // Mặc định là false
+  disabled = false, 
 }: DynamicFormProps<T>) => {
   const renderField = (field: FormField<T>) => {
     const key = field.key;
@@ -26,13 +27,14 @@ const DynamicForm = <T extends object>({
                 placeholder={field.placeholder}
                 value={String(value ?? '')}
                 onChange={(e) => onChange(key, e.target.value)}
-                disabled={disabled} // Thêm disabled
+                disabled={disabled}
             />
         );
 
     case FormFieldType.ImageUpload:
         return (
-            <input
+          <div>
+            <input className="w-full p-2 border border-gray-300 rounded"
                 type="file"
                 onChange={(e) => {
                   const file = e.target.files?.[0];
@@ -44,6 +46,10 @@ const DynamicForm = <T extends object>({
                 }}
                 disabled={disabled}
             />
+            {value && typeof value === 'string' && (
+              <img src={value} alt="Preview" className="mt-2 max-h-40 object-contain" />
+            )}
+          </div>
         );
 
       case FormFieldType.TextArea:
@@ -52,7 +58,7 @@ const DynamicForm = <T extends object>({
             placeholder={field.placeholder}
             value={String(value ?? '')}
             onChange={(e) => onChange(key, e.target.value)}
-            disabled={disabled} // Thêm disabled
+            disabled={disabled}
           />
         );
 
@@ -64,7 +70,67 @@ const DynamicForm = <T extends object>({
             options={field.options}
             onChange={(value) => onChange(key, value)}
             allowClear
+            disabled={disabled} 
+          />
+        );
+
+      case FormFieldType.SelectFetch:
+        return (
+          <SelectFetchCustom
+            placeholder={field.placeholder}
+            value={value}
+            onChange={(value) => onChange(key, value)}
+            fetchOptions={field.fetchOptions}
+            disabled={disabled}
+          />
+        );
+
+      case FormFieldType.InputNumber:
+        return (
+          <Input
+            type="number"
+            placeholder={field.placeholder}
+            value={value !== undefined ? String(value) : ''}
+            onChange={(e) => onChange(key, Number(e.target.value))}
             disabled={disabled} // Thêm disabled
+          />
+        );
+      case FormFieldType.InputPassword:
+        return (
+          <Input.Password
+            placeholder={field.placeholder}
+            value={String(value ?? '')}
+            onChange={(e) => onChange(key, e.target.value)}
+            disabled={disabled}
+          />
+        );
+      case FormFieldType.TimePicker:
+        return (
+          <Input  
+            type="time"
+            placeholder={field.placeholder}
+            value={String(value ?? '')}
+            onChange={(e) => onChange(key, e.target.value)}
+            disabled={disabled} 
+          />
+        );
+      case FormFieldType.DatePicker:
+        return (
+          <Input
+            type="date"
+            placeholder={field.placeholder}
+            value={String(value ?? '')}
+            onChange={(e) => onChange(key, e.target.value)}
+            disabled={disabled} 
+          />
+        );
+      case FormFieldType.Checkbox:
+        return (
+          <input
+            type="checkbox" 
+            checked={Boolean(value)}
+            onChange={(e) => onChange(key, e.target.checked)}
+            disabled={disabled} 
           />
         );
 

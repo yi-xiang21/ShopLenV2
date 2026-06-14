@@ -15,4 +15,5 @@ export interface FormField<T> {
     label: string;
     value: string | number;
   }[];
+  fetchOptions?: () => Promise<{ label: string; value: string | number }[]>;
 }

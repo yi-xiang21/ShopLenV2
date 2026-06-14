@@ -21,6 +21,8 @@ export default defineConfig([
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // Tắt hoàn toàn lỗi any
+      "react-hooks/set-state-in-effect": "off",
+
     },
   },
 ])

@@ -1,4 +1,4 @@
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { Modal, Button } from 'antd';
 import DynamicForm from '@/component/DynamicForm';
 import ChildTabs from '@/component/ChildTabs'; // Import component vừa tạo
@@ -13,11 +13,11 @@ interface FormModalProps<T extends object> {
   fields: FormField<any>[];
   initialValues: T;
   onSubmit: (values: T) => void;
-  
-  // PROPS ĐIỀU KHIỂN CẤP CON (Đúng ý tưởng của bạn)
-  hasChildren?: boolean;             // Bật/Tắt tính năng có cấp con
-  childFields?: FormField<any>[];    // Form của cấp con (Nếu ko truyền, lấy form Cha)
-  nestedLimit?: number;              // Số lượng cấp lồng nhau bên trong con (Mặc định 0)
+  loading?: boolean;  
+
+  hasChildren?: boolean;             
+  childFields?: FormField<any>[];   
+  nestedLimit?: number;             
 }
 
 const FormModal = <T extends object>({
@@ -28,45 +28,45 @@ const FormModal = <T extends object>({
   fields,
   initialValues,
   onSubmit,
+  loading ,
   hasChildren = false,
   childFields,
   nestedLimit = 0,
 }: FormModalProps<T>) => {
   const [formData, setFormData] = useState<any>(initialValues);
 
-  // Lưu lại giá trị initialValues trước đó để so sánh
-  const [prevInitialValues, setPrevInitialValues] = useState<T>(initialValues);
-
-  // Nếu dữ liệu truyền vào thay đổi, ta cập nhật lại state formData
-  if (initialValues !== prevInitialValues) {
-    setPrevInitialValues(initialValues);
-    setFormData(initialValues);
-  }
+  
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(initialValues);
+    }
+  }, [isOpen, initialValues]);
 
   const isViewMode = mode === FormModalMode.VIEW;
   const activeChildFields = childFields || fields;
 
-  // Xử lý thay đổi form Cha
+  
   const handleParentChange = (key: string, value: unknown) => {
     setFormData((prev: any) => ({ ...prev, [key]: value }));
   };
 
-  // Xử lý khi cụm Tab con trả về mảng mới
   const handleChildrenArrayChange = (newChildrenArray: any[]) => {
     setFormData((prev: any) => ({ ...prev, children: newChildrenArray }));
   };
 
   return (
+    
     <Modal
       title={title}
       open={isOpen}
       onCancel={onClose}
       destroyOnClose
-      width={hasChildren ? 900 : 520} // Tự động nới rộng nếu có Tab con
+      centered
+      width={hasChildren ? 900 : 520} 
       footer={[
         <Button key="cancel" onClick={onClose}>{isViewMode ? 'Đóng' : 'Hủy'}</Button>,
         !isViewMode && (
-          <Button key="submit" type="primary" onClick={() => onSubmit(formData)}>
+          <Button key="submit" type="primary" onClick={() => onSubmit(formData)} loading={loading}> 
             {hasChildren ? 'Lưu toàn bộ' : 'Lưu lại'}
           </Button>
         ),
@@ -74,7 +74,6 @@ const FormModal = <T extends object>({
     >
       <div className="mt-4 max-h-[75vh] overflow-y-auto p-1 flex flex-col">
         
-        {/* 1. KHU VỰC FORM CHA CHÍNH */}
         <div className={hasChildren ? "bg-white p-4 border border-blue-200 rounded-md" : ""}>
           {hasChildren && <h3 className="text-lg font-bold text-blue-600 mb-4">Thông tin gốc</h3>}
           <DynamicForm
@@ -85,7 +84,7 @@ const FormModal = <T extends object>({
           />
         </div>
 
-        {/* 2. KHU VỰC TABS CON (Chỉ hiển thị nếu hasChildren = true) */}
+        
         {hasChildren && (
           <ChildTabs
             dataList={formData.children || []}

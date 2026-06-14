@@ -12,6 +12,8 @@ export const categoryFields: FormField<CategoryFormValues>[] = [
 
     type: FormFieldType.Input,
 
+    placeholder: 'Nhập tên danh mục',
+
     required: true,
   },
 
@@ -20,6 +22,8 @@ export const categoryFields: FormField<CategoryFormValues>[] = [
 
     label: 'Mô tả',
 
+    placeholder: 'Nhập mô tả',
+
     type: FormFieldType.TextArea,
   },
 
@@ -27,6 +31,9 @@ export const categoryFields: FormField<CategoryFormValues>[] = [
     key: 'image_url',
 
     label: 'URL hình ảnh',
+
+    placeholder: 'Nhập URL hình ảnh',
+    
     type: FormFieldType.ImageUpload,
   }
 

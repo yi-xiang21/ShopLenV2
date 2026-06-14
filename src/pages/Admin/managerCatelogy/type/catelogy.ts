@@ -8,11 +8,13 @@ export interface Category {
 }
 export interface categoryChildren 
 {
+  id?: string | number,
   category_name: string,
   description: string,
   children: categoryChildren[],
 }
 export interface CategoryFormValues {
+  id?: string | number;
   category_name: string;
   description?: string;
   image_url?: string | null;
