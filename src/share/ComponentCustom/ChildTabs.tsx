@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs, Button } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import DynamicForm from '@/component/DynamicForm';
+import DynamicForm from '@/share/ComponentCustom/DynamicForm';
 import type { FormField } from '@/share/types/form-field';
 
 interface ChildTabsProps {
@@ -108,7 +108,7 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
           }))}
         />
       ) : (
-        <p className="text-gray-400 italic text-sm">Chưa có dữ liệu nào. Bấm nút thêm để bắt đầu.</p>
+        <p className="text-gray-400 italic text-sm"> Bấm nút thêm để bắt đầu.</p>
       )}
     </div>
   );

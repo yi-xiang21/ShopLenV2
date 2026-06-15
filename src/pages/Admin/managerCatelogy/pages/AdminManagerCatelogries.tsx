@@ -13,7 +13,7 @@ import {
   FormModalMode,
   type FormModalModeType,
 } from "@/share/types/type-form-mode";
-import FormModal from "@/component/ModelForm";
+import FormModal from "@/share/ComponentCustom/ModelForm";
 import { categoryApi } from "@/pages/Admin/managerCatelogy/api/cate_api";
 import { childCategoryFields } from "../constants/catrgoryChildrenField";
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
@@ -44,24 +44,34 @@ const AdminManagerCatelogries = () => {
     mode: modalMode,
     loading,
     selectedRecord: selectedCategory,
+    currentPage,
+    pageSize,
+    total,
     openCreate,
     openView,
     openEdit,
     close,
+    setCurrentPage,
+    setPageSize,
+    setTotal,
     setLoading,
   } = useFormModal<CategoryFormValues>();
 
-  const fetchCategories = async () => {
+  const fetchCategories = async (page: number, limit: number) => {
     try {
-      const response = await categoryApi.getAll();
+      const response = await categoryApi.getAll(
+        page,
+        limit
+      );
       setCategories(response.data?.data?.categories ?? []);
+      setTotal(response.data?.data?.pagination?.total_items ?? 0);
     } catch (error) {
       console.error(error);
     }
   };
   useEffect(() => {
-    void fetchCategories();
-  }, []);
+    void fetchCategories(currentPage, pageSize);
+  }, [currentPage, pageSize]);  
 
   const handleAction = async (mode: FormModalModeType, record?: Category) => {
     if (mode === FormModalMode.CREATE) {
@@ -141,7 +151,7 @@ const AdminManagerCatelogries = () => {
         });
       }
 
-      await fetchCategories();
+      await fetchCategories(currentPage, pageSize);
       close();
     } catch (error) {
         let message = "trung ten danh muc con";
@@ -170,7 +180,7 @@ const AdminManagerCatelogries = () => {
       try {
         setLoading(true);
         await categoryApi.delete(id);
-        await fetchCategories();
+        await fetchCategories(currentPage, pageSize);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
@@ -290,7 +300,18 @@ const AdminManagerCatelogries = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="mb-4"
         />
-        <Table columns={columns} dataSource={filteredCategories} rowKey="id" />
+        <Table columns={columns} dataSource={filteredCategories} rowKey="id" pagination={
+          {
+            current: currentPage,
+            pageSize: pageSize,
+            total: total,
+            showSizeChanger: true,
+            onChange: (page, pageSize) => {
+              setCurrentPage(page);
+              setPageSize(pageSize);
+            },
+          }
+        } />
       </div>
 
       <FormModal<CategoryFormValues>

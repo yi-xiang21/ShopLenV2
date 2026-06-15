@@ -3,8 +3,8 @@ import { callAPI } from "@/share/lib/axios";
 import type { CategoryFormValues } from "../type/catelogy";
 
 export const categoryApi = {
-    getAll: async () => {
-        return callAPI.get(API_CONFIG.ENDPOINTS.GET_CATEGORIES);
+    getAll: async (page :number, limit: number) => {
+        return callAPI.get(API_CONFIG.ENDPOINTS.GET_CATEGORIES, { params: { page, limit } });
     },
     getById: async (id: string) => {
         return callAPI.get(API_CONFIG.ENDPOINTS.GET_CATEGORY(id));

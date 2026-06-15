@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Modal, Button } from "antd";
-import DynamicForm from "@/component/DynamicForm";
-import ChildTabs from "@/component/ChildTabs"; // Import component vừa tạo
+import DynamicForm from "@/share/ComponentCustom/DynamicForm";
+import ChildTabs from "@/share/ComponentCustom/ChildTabs"; // Import component vừa tạo
 import type { FormField } from "@/share/types/form-field";
 import {
   FormModalMode,
   type FormModalModeType,
 } from "@/share/types/type-form-mode";
-import validateForm from "@/component/validateForm";
+import validateForm from "@/share/ComponentCustom/validateForm";
 
 interface FormModalProps<T extends object> {
   isOpen: boolean;

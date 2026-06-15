@@ -7,6 +7,9 @@ export const useFormModal = <T>() => {
   const [mode, setMode] = useState<FormModalModeType>(FormModalMode.CREATE);
   const [selectedRecord, setSelectedRecord] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [total, setTotal] = useState(0);
 
 
   const openCreate = () => {
@@ -36,12 +39,18 @@ export const useFormModal = <T>() => {
     mode,
     loading,
     selectedRecord,
+    currentPage,
+    pageSize,
+    total,
 
     openCreate,
     openView,
     openEdit,
     close,
     setLoading,
+    setCurrentPage,
+    setPageSize,
+    setTotal,
  
 
     setSelectedRecord,
