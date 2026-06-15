@@ -100,6 +100,7 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
                     currentDepth={currentDepth + 1}
                     isViewMode={isViewMode}
                     tabNamePrefix={`Con của ${tabNamePrefix}`}
+                    
                   />
                 )}
               </div>

@@ -5,8 +5,8 @@ interface CardCatelogyProps {
 }
 const CardCatelogy = ({ Data }: CardCatelogyProps) => {
   return (
-    <a className="group relative overflow-hidden rounded-2xl shrink-0 shadow-lg h-80 w-70  md:h-100 md:w-90" href={`/category/${Data.categorySlug}`}>
-      <img src={Data.categoryImage} className="h-full w-full object-cover" />
+    <a className="group relative overflow-hidden rounded-2xl shrink-0 shadow-lg h-80 w-70  md:h-100 md:w-90" href={`/category/${Data.slug}`}>
+      <img src={Data.image_url} className="h-full w-full object-cover" />
 
       <div
         className="
@@ -20,7 +20,7 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
       group-hover:translate-y-0
     "
       >
-        <h1 className="text-black!">{Data.categoryName}</h1>  
+        <h1 className="text-black!">{Data.category_name}</h1>  
       </div>
 
       <div
@@ -33,9 +33,9 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
       group-hover:translate-y-0
     "
       >
-        <h1 className="text-black!">{Data.categoryName}</h1>
+        <h1 className="text-black!">{Data.category_name}</h1>
 
-        <p>{Data.categoryDescription}</p>
+        <p>{Data.description}</p>
       </div>
     </a>
   );

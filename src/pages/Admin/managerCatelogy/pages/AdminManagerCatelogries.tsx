@@ -17,6 +17,7 @@ import FormModal from "@/component/ModelForm";
 import { categoryApi } from "@/pages/Admin/managerCatelogy/api/cate_api";
 import { childCategoryFields } from "../constants/catrgoryChildrenField";
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
+import axios from "axios";
 
 const { Search } = Input;
 
@@ -73,6 +74,7 @@ const AdminManagerCatelogries = () => {
       try {
         const response = await categoryApi.getById(record.id);
         const data = response.data;
+        console.log("Fetched category details:", data);
 
         setEditingId(data.id);
 
@@ -105,7 +107,7 @@ const AdminManagerCatelogries = () => {
           key: Date.now().toString(),
           type: "error",
           title: "Thất bại",
-          message: "Không thể lấy thông tin chi tiết của danh mục này!",
+          message: "Không thể lấy thông tin danh mục này!",
         });
       }
     }
@@ -142,12 +144,18 @@ const AdminManagerCatelogries = () => {
       await fetchCategories();
       close();
     } catch (error) {
-      console.error("Error submitting form:", error);
+        let message = "trung ten danh muc con";
+        if (axios.isAxiosError(error)) {
+          message =
+            error.response?.data?.message ??
+            error.message;
+        }
       setNotifyData({
         key: Date.now().toString(),
         type: "error",
         title: "Thất bại",
         message:
+          message ||
           modalMode === FormModalMode.CREATE
             ? "Không thể tạo danh mục mới!"
             : "Không thể cập nhật danh mục này!",
@@ -170,12 +178,17 @@ const AdminManagerCatelogries = () => {
           message: "Xóa danh mục thành công!",
         });
       } catch (error) {
-        console.error("Error deleting category:", error);
+          let message = "khong thể xóa danh mục này!";
+          if (axios.isAxiosError(error)) {
+            message =
+              error.response?.data?.message ??
+              error.message;
+          }
         setNotifyData({
           key: Date.now().toString(),
           type: "warning",
           title: "Lỗi xóa danh mục",
-          message: "Đã xảy ra sự cố khi xóa danh mục khỏi hệ thống.",
+          message: message,
         });
       } finally {
         setLoading(false);

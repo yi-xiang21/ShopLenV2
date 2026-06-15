@@ -28,33 +28,26 @@ const items: Item[] = [
 // Dữ liệu giả lập cho các danh mục sau nay thay bang tan stack api
 const Data: Category[] = [
   {
-    categoryId: 1,
-    categoryName: "Điện thoại",
-    categoryDescription:
+    id: "1",
+    category_name: "Điện thoại",
+    description:
       "Các loại điện thoại thông minh từ các thương hiệu hàng đầu.",
-    categorySlug: "dien-thoai",
-    categoryImage: HomeBanner1,
-    childCategories: [],
+    slug: "dien-thoai",
+    image_url: HomeBanner1,
+    children: [],
   },
   {
-    categoryId: 2,
-    categoryName: "Laptop",
-    categoryDescription: "Các loại laptop phục vụ cho công việc và giải trí.",
-    categorySlug: "laptop",
-    categoryImage: HomeBanner2,
-    childCategories: [],
-  },
-  {
-    categoryId: 3,
-    categoryName: "Phụ kiện",
-    categoryDescription:
-      "Các loại phụ kiện điện tử như tai nghe, sạc, ốp lưng.",
-    categorySlug: "phu-kien",
-    categoryImage: HomeBanner1,
-    childCategories: [],
+    id: "2",
+    category_name: "Laptop",
+    description: "Các loại laptop phục vụ cho công việc và giải trí.",
+    slug: "laptop",
+    image_url: HomeBanner2,
+    children: [],
   }
   
 ];
+
+  
 
 const HomePage = () => {
   const bannerImages = [HomeBanner1, HomeBanner2];
@@ -167,7 +160,7 @@ const HomePage = () => {
         <p>khám phá các sản phẩm với cách danh mục bạn muốn.</p>
         <div className="h-100 w-full overflow-x-auto overflow-y-hidden flex items-center p-10 justify-start gap-8 md:w-full md:h-120 no-scrollbar">
           {Data.map((item) => (
-            <Catelogy key={item.categoryId} Data={item} />
+            <Catelogy key={item.id} Data={item} />
           ))}
         </div>
       </section>

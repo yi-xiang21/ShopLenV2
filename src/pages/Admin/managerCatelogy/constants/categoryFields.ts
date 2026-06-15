@@ -6,16 +6,24 @@ import type { CategoryFormValues } from '@/pages/Admin/managerCatelogy/type/cate
 
 export const categoryFields: FormField<CategoryFormValues>[] = [
   {
-    key: 'category_name',
+      key: 'category_name',
 
-    label: 'Tên danh mục',
+      label: 'Tên danh mục',
 
-    type: FormFieldType.Input,
+      type: FormFieldType.Input,
 
-    placeholder: 'Nhập tên danh mục',
+      placeholder: 'Nhập tên danh mục',
 
-    required: true,
-  },
+      rules: [
+        {
+          required: true,
+          validator: (formdata:CategoryFormValues) => {
+          return !!formdata.category_name?.trim();
+          },
+          message: 'Tên danh mục không được để trống hoặc chỉ chứa khoảng trắng.',
+        }
+      ]
+    },
 
   {
     key: 'description',
@@ -25,6 +33,7 @@ export const categoryFields: FormField<CategoryFormValues>[] = [
     placeholder: 'Nhập mô tả',
 
     type: FormFieldType.TextArea,
+    
   },
 
   {
@@ -35,6 +44,16 @@ export const categoryFields: FormField<CategoryFormValues>[] = [
     placeholder: 'Nhập URL hình ảnh',
     
     type: FormFieldType.ImageUpload,
+      rules: [
+        {
+          required: true,
+          validator: (formdata: CategoryFormValues) => {
+            return !!formdata.image_url?.trim();
+          },
+          message: 'Hình ảnh là bắt buộc.',
+        }
+      ]
+
   }
 
   

@@ -1,20 +1,22 @@
-import type { FormField } from '@/share/types/form-field';
-import { FormFieldType } from '@/share/types/type-form-field';
-import { Input, Select } from 'antd';
-import SelectFetchCustom from '@/share/ComponentCustom/select/SelectFetchCustom';
+import type { FormField } from "@/share/types/form-field";
+import { FormFieldType } from "@/share/types/type-form-field";
+import { Input, Select } from "antd";
+import SelectFetchCustom from "@/share/ComponentCustom/select/SelectFetchCustom";
 
 type DynamicFormProps<T extends object> = {
   fields: FormField<T>[];
   values: T;
   onChange: (key: keyof T, value: unknown) => void;
-  disabled?: boolean; 
+  disabled?: boolean;
+  error?: Record<string, string> ;
 };
 
 const DynamicForm = <T extends object>({
   fields,
   values,
   onChange,
-  disabled = false, 
+  error,
+  disabled = false,
 }: DynamicFormProps<T>) => {
   const renderField = (field: FormField<T>) => {
     const key = field.key;
@@ -23,31 +25,36 @@ const DynamicForm = <T extends object>({
     switch (field.type) {
       case FormFieldType.Input:
         return (
-            <Input
-                placeholder={field.placeholder}
-                value={String(value ?? '')}
-                onChange={(e) => onChange(key, e.target.value)}
-                disabled={disabled}
-            />
+          <Input
+            placeholder={field.placeholder}
+            value={String(value ?? "")}
+            onChange={(e) => onChange(key, e.target.value)}
+            disabled={disabled}
+          />
         );
 
-    case FormFieldType.ImageUpload:
+      case FormFieldType.ImageUpload:
         return (
           <div>
-            <input className="w-full p-2 border border-gray-300 rounded"
-                type="file"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = () => onChange(key, reader.result);
-                    reader.readAsDataURL(file);
-                  }
-                }}
-                disabled={disabled}
+            <input
+              className="w-full p-2 border border-gray-300 rounded"
+              type="file"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = () => onChange(key, reader.result);
+                  reader.readAsDataURL(file);
+                }
+              }}
+              disabled={disabled}
             />
-            {value && typeof value === 'string' && (
-              <img src={value} alt="Preview" className="mt-2 max-h-40 object-contain" />
+            {value && typeof value === "string" && (
+              <img
+                src={value}
+                alt="Preview"
+                className="mt-2 max-h-40 object-contain"
+              />
             )}
           </div>
         );
@@ -56,7 +63,7 @@ const DynamicForm = <T extends object>({
         return (
           <Input.TextArea
             placeholder={field.placeholder}
-            value={String(value ?? '')}
+            value={String(value ?? "")}
             onChange={(e) => onChange(key, e.target.value)}
             disabled={disabled}
           />
@@ -70,7 +77,7 @@ const DynamicForm = <T extends object>({
             options={field.options}
             onChange={(value) => onChange(key, value)}
             allowClear
-            disabled={disabled} 
+            disabled={disabled}
           />
         );
 
@@ -90,7 +97,7 @@ const DynamicForm = <T extends object>({
           <Input
             type="number"
             placeholder={field.placeholder}
-            value={value !== undefined ? String(value) : ''}
+            value={value !== undefined ? String(value) : ""}
             onChange={(e) => onChange(key, Number(e.target.value))}
             disabled={disabled} // Thêm disabled
           />
@@ -99,19 +106,19 @@ const DynamicForm = <T extends object>({
         return (
           <Input.Password
             placeholder={field.placeholder}
-            value={String(value ?? '')}
+            value={String(value ?? "")}
             onChange={(e) => onChange(key, e.target.value)}
             disabled={disabled}
           />
         );
       case FormFieldType.TimePicker:
         return (
-          <Input  
+          <Input
             type="time"
             placeholder={field.placeholder}
-            value={String(value ?? '')}
+            value={String(value ?? "")}
             onChange={(e) => onChange(key, e.target.value)}
-            disabled={disabled} 
+            disabled={disabled}
           />
         );
       case FormFieldType.DatePicker:
@@ -119,18 +126,18 @@ const DynamicForm = <T extends object>({
           <Input
             type="date"
             placeholder={field.placeholder}
-            value={String(value ?? '')}
+            value={String(value ?? "")}
             onChange={(e) => onChange(key, e.target.value)}
-            disabled={disabled} 
+            disabled={disabled}
           />
         );
       case FormFieldType.Checkbox:
         return (
           <input
-            type="checkbox" 
+            type="checkbox"
             checked={Boolean(value)}
             onChange={(e) => onChange(key, e.target.checked)}
-            disabled={disabled} 
+            disabled={disabled}
           />
         );
 
@@ -140,14 +147,16 @@ const DynamicForm = <T extends object>({
   };
 
   return (
-    <div className='flex flex-col gap-4'>
+    <div className="flex flex-col gap-4">
       {fields.map((field) => (
-        <div key={String(field.key)} className='flex flex-col gap-1'>
-          <label className='font-medium'>
-            {field.label}
-            {field.required && <span className='text-red-500 ml-1'>*</span>}
-          </label>
+        <div key={String(field.key)} className="flex flex-col gap-1">
+          <label className="font-medium">{field.label}</label>
           {renderField(field)}
+          {error && error[String(field.key)] && (
+            <span className="text-red-500 text-sm">
+              {error[String(field.key)]}
+            </span>
+          )}
         </div>
       ))}
     </div>

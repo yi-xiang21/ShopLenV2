@@ -9,7 +9,7 @@ interface NotificationProps {
 }
 
 const Notification = ({ type, title, message }: NotificationProps) => {
-  // Trạng thái hiển thị (mặc định là true khi được gọi ra)
+
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -22,17 +22,17 @@ const Notification = ({ type, title, message }: NotificationProps) => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Nếu đã quá 5 giây (isVisible = false), không render gì cả
+
   if (!isVisible) return null;
 
-  // Cấu hình màu theo type
+
   const colors = {
     success: 'bg-green-50 border-green-500 text-green-700',
     error: 'bg-red-50 border-red-500 text-red-700',
     warning: 'bg-yellow-50 border-yellow-500 text-yellow-700',
     info: 'bg-blue-50 border-blue-500 text-blue-700',
   };
-  console.log('Rendering Notification:', { type, title, message });
+
   return (
     <div className="fixed top-5 right-5 z-50 ">
       

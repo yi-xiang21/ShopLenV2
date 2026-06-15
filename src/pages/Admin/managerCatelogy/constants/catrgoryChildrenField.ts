@@ -4,6 +4,14 @@ import { FormFieldType } from "@/share/types/type-form-field";
 
 
 export const childCategoryFields: FormField<categoryChildren>[] = [
-  { key: 'category_name', label: 'Tên danh mục con', type: FormFieldType.Input, required: true },
+  { key: 'category_name', label: 'Tên danh mục con', type: FormFieldType.Input, rules: [
+    {
+      required: true,
+      validator: (formdata:categoryChildren) => {
+        return !!formdata.category_name?.trim();
+      },
+      message: 'Tên danh mục con không được để trống hoặc chỉ chứa khoảng trắng.',
+    }
+  ]},
   { key: 'description', label: 'Mô tả', type: FormFieldType.TextArea },
 ];

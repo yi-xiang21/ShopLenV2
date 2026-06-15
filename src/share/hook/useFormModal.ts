@@ -42,7 +42,7 @@ export const useFormModal = <T>() => {
     openEdit,
     close,
     setLoading,
-    
+ 
 
     setSelectedRecord,
   };
