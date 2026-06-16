@@ -27,6 +27,7 @@ const SelectFetchCustom = ({
       try {
         const data = await fetchOptions();
           setOptions(data);
+          console.log('Options đã được cập nhật:', data);
       } catch (error) {
         console.error('Lỗi khi fetch options cho Select:', error);
       } finally {

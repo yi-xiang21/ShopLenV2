@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Table, Input, Button } from "antd";
 import type { TableProps } from "antd/es/table";
 
-import { accountFields } from "@/pages/Admin/managerAccount/constants/accountFields";
+import { productFields } from "@/pages/Admin/managerProducts/constants/ProductsFields";
+import { childrenProductsFields } from "@/pages/Admin/managerProducts/constants/productsChildrenField";
 import { useFormModal } from "@/share/hook/useFormModal";
 import Notification from "@/share/ComponentCustom/Notification/Notification";
 
@@ -11,30 +12,29 @@ import {
   type FormModalModeType,
 } from "@/share/types/type-form-mode";
 import FormModal from "@/share/ComponentCustom/ModelForm";
-import {AccountApi } from "@/pages/Admin/managerAccount/api/account_api";
+import { ProductApi } from "@/pages/Admin/managerProducts/api/products_api";
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
 import axios from "axios";
 
-import type { account } from "@/pages/Admin/managerAccount/type/account";
+import type { Product } from "@/pages/Admin/managerProducts/type/products";
+import {getProductFieldsByMode,getVariantFieldsByMode} from "@/pages/Admin/managerProducts/constants/sortField";
 
 
 const { Search } = Input;
 
-const defaultFormValues: account = {
-  user_id: 0,
-  username: "",
-  first_name: "",
-  last_name: "",
-  email: "",
-  phone_number: "",
-  status: { active: "active", inactive: "inactive" },
-  role: { customer: "customer", admin: "admin" },
- 
+const defaultFormValues: Product = {
+  product_id: 0,
+  type_id: 0,
+  category_id: 0,
+  product_name: "",
+  description: "",
+  product_status: "active",
+  variants: [],
 };
 
 const AdminManagerAccount = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [accounts, setAccounts] = useState<account[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | "">("");
   const [notifyData, setNotifyData] = useState<{
     key: string;
@@ -47,7 +47,7 @@ const AdminManagerAccount = () => {
     open: isModalOpen,
     mode: modalMode,
     loading,
-    selectedRecord: selectedAccount,
+    selectedRecord: selectedProduct,
     currentPage,
     pageSize,
     total,
@@ -59,14 +59,14 @@ const AdminManagerAccount = () => {
     setPageSize,
     setTotal,
     setLoading,
-  } = useFormModal<account>();
+  } = useFormModal<Product>();
 
 
-  const fetchAccounts = useCallback(
+  const fetchProducts = useCallback(
   async (page: number, limit: number) => {
     try {
-      const response = await AccountApi.getAll(page, limit);
-      setAccounts(response.data?.data?.users ?? []);
+      const response = await ProductApi.getAll(page, limit);
+      setProducts(response.data?.data?.products ?? []);
       setTotal(response.data?.data?.pagination?.total_items ?? 0);
     } catch (error) {
       console.error(error);
@@ -75,10 +75,12 @@ const AdminManagerAccount = () => {
   [setTotal]
 );
   useEffect(() => {
-    void fetchAccounts(currentPage, pageSize);
-  }, [currentPage, pageSize,fetchAccounts]);  
+    void fetchProducts(currentPage, pageSize);
+  }, [currentPage, pageSize,fetchProducts]);  
 
-  const handleAction = async (mode: FormModalModeType, record?: account) => {
+
+
+  const handleAction = async (mode: FormModalModeType, record?: Product) => {
     if (mode === FormModalMode.CREATE) {
       setEditingId("");
       openCreate();
@@ -87,12 +89,12 @@ const AdminManagerAccount = () => {
 
     if (record) {
       try {
-        const response = await AccountApi.getById(record.user_id);
-        const data = response.data;
-        console.log("Fetched account details:", data);
+        const response = await ProductApi.getById(record.product_id);
+        const data = response.data.data.product;
+        console.log("Fetched product details:", data);
 
-        setEditingId(data.user_id);
-        delete data.password;
+        setEditingId(data.product_id);
+
 
 
         if (mode === FormModalMode.EDIT) {
@@ -101,49 +103,52 @@ const AdminManagerAccount = () => {
           openView(data);
         }
       } catch (error) {
-        console.error("Error fetching account details:", error);
+        console.error("Error fetching product details:", error);
         setNotifyData({
           key: Date.now().toString(),
           type: "error",
           title: "Thất bại",
-          message: "Không thể lấy thông tin tài khoản này!",
+          message: "Không thể lấy thông tin sản phẩm này!",
         });
       }
     }
   };
 
-  const handleSubmitForm = async (values: account) => {
+  const handleSubmitForm = async (values: Product) => {
     try {
+      
       setLoading(true);
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
-        delete payloadCreate.user_id;
-        delete payloadCreate.status;
 
-        await AccountApi.create(payloadCreate);
+        console.log("Payload for creating product:", payloadCreate);
+        await ProductApi.create(payloadCreate);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Tạo tai khoan mới thành công!",
+          message: "Tạo sản phẩm mới thành công!",
         });
       } else {
         const payloadUpdate = { ...values };
-        delete payloadUpdate.user_id;
-        
-        await AccountApi.update(editingId, payloadUpdate);
+
+        payloadUpdate.variants = payloadUpdate.variants?.map(variant => {
+          delete variant.slug;
+          return variant;
+        });
+        await ProductApi.update(editingId, payloadUpdate);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Cập nhật tài khoản thành công!",
+          message: "Cập nhật sản phẩm thành công!",
         });
       }
 
-      await fetchAccounts(currentPage, pageSize);
+      await fetchProducts(currentPage, pageSize);
       close();
     } catch (error) {
-        let message = "khong the luu tai khoan này!";
+        let message = "khong the luu san pham này!";
         if (axios.isAxiosError(error)) {
           message =
             error.response?.data?.message ??
@@ -157,8 +162,8 @@ const AdminManagerAccount = () => {
   message ||
   (
     modalMode === FormModalMode.CREATE
-      ? "Không thể tạo tài khoản mới!"
-      : "Không thể cập nhật tài khoản này!"
+      ? "Không thể tạo sản phẩm mới!"
+      : "Không thể cập nhật sản phẩm này!"
   ),
       });
     } finally {
@@ -166,20 +171,20 @@ const AdminManagerAccount = () => {
     }
   };
 
-  const handleDeleteAccount = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa tài khoản này?")) {
+  const handleDeleteProduct = async (id: number) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
       try {
         setLoading(true);
-        await AccountApi.delete(id);
-        await fetchAccounts(currentPage, pageSize);
+        await ProductApi.delete(id);
+        await fetchProducts(currentPage, pageSize);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Xóa tài khoản thành công!",
+          message: "Xóa sản phẩm thành công!",
         });
       } catch (error) {
-          let message = "khong thể xóa tài khoản này!";
+          let message = "khong thể xóa sản phẩm này!";
           if (axios.isAxiosError(error)) {
             message =
               error.response?.data?.message ??
@@ -188,7 +193,7 @@ const AdminManagerAccount = () => {
         setNotifyData({
           key: Date.now().toString(),
           type: "warning",
-          title: "Lỗi xóa tài khoản",
+          title: "Lỗi xóa sản phẩm",
           message: message,
         });
       } finally {
@@ -197,19 +202,21 @@ const AdminManagerAccount = () => {
     }
   };
 
-  const filteredAccounts = accounts.filter((account) =>
-    account.username.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredProducts = products.filter((product) =>
+    product.product_name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  const columns: TableProps<account>["columns"] = [
-    { title: "user_id", dataIndex: "user_id", key: "id" },
-    { title: "Name", dataIndex: "username", key: "username" },
-    { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Phone Number", dataIndex: "phone_number", key: "phone_number" },
-    { title: "Status", dataIndex: "status", key: "status" },
-    { title: "Role", dataIndex: "role", key: "role" },
-    { title: "First Name", dataIndex: "first_name", key: "first_name" },
-    { title: "Last Name", dataIndex: "last_name", key: "last_name" },
+  const columns: TableProps<Product>["columns"] = [
+    {title: 'ID', dataIndex: 'product_id', key: 'product_id'},
+    { title: "Tên sản phẩm", dataIndex: "product_name", key: "product_name" },
+
+    {title: 'Trang Thái', dataIndex: 'product_status', key: 'product_status'},
+    {title : 'Tên Danh Mục', dataIndex: 'category_name', key: 'category_name'},
+    {
+      title: "Tên Loại",
+      dataIndex: "type_name",
+      key: "type_name",
+    },
     {
       title: "Action",
       key: "action",
@@ -230,7 +237,7 @@ const AdminManagerAccount = () => {
           <Button
             type="primary"
             danger
-            onClick={() => handleDeleteAccount(record.user_id as number)}
+            onClick={() => handleDeleteProduct(record.product_id as number)}
           >
             Delete
           </Button>
@@ -241,11 +248,10 @@ const AdminManagerAccount = () => {
 
   const modalTitle =
     modalMode === FormModalMode.CREATE
-      ? "Thêm tài khoản mới"
+      ? "Thêm sản phẩm mới"
       : modalMode === FormModalMode.EDIT
-        ? "Cập nhật tài khoản"
-        : "Chi tiết tài khoản";
-
+        ? "Cập nhật sản phẩm"
+        : "Chi tiết sản phẩm";
   return (
     <div className="flex flex-col h-full w-full mt-12 md:mt-0">
       {notifyData && (
@@ -257,12 +263,12 @@ const AdminManagerAccount = () => {
         />
       )}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Quản lý tài khoản</h2>
+        <h2 className="text-2xl font-bold">Quản lý sản phẩm</h2>
         <button
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           onClick={() => handleAction(FormModalMode.CREATE)}
         >
-          Thêm tài khoản
+          Thêm sản phẩm
         </button>
       </div>
 
@@ -275,7 +281,7 @@ const AdminManagerAccount = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="mb-4"
         />
-        <Table columns={columns} dataSource={filteredAccounts} rowKey="user_id" pagination={
+        <Table columns={columns} dataSource={filteredProducts} rowKey="product_id" pagination={
           {
             current: currentPage,
             pageSize: pageSize,
@@ -288,18 +294,20 @@ const AdminManagerAccount = () => {
           }
         } />
       </div>
+      
 
-      <FormModal<account>
+      <FormModal<Product>
         isOpen={isModalOpen}
         onClose={close}
+        childKey="variants"
         loading={loading}
         mode={modalMode}
         title={modalTitle}
-        fields={modalMode === (FormModalMode.CREATE) ? accountFields : accountFields.filter(field => field.key !== 'password') }
-        initialValues={selectedAccount || defaultFormValues}
+        fields={getProductFieldsByMode(productFields, modalMode)}
+        childFields={getVariantFieldsByMode(childrenProductsFields, modalMode)}
+        initialValues={selectedProduct || defaultFormValues}
         onSubmit={handleSubmitForm}
-        hasChildren={false}
-        
+        hasChildren={true}
       />
     </div>
   );

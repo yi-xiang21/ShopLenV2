@@ -9,5 +9,6 @@ export const FormFieldType = {
   DatePicker: 'datePicker',
   ImageUpload: 'imageUpload',
   TextArea: 'textArea',
+  inputFile: 'inputFile',
 } as const;
 export type FormFieldType = typeof FormFieldType[keyof typeof FormFieldType];

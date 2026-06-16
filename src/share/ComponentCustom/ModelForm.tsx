@@ -8,7 +8,7 @@ import {
   type FormModalModeType,
 } from "@/share/types/type-form-mode";
 import validateForm from "@/share/ComponentCustom/validateForm";
-
+import { validateChildren } from "@/share/ComponentCustom/validateFormChildren";
 interface FormModalProps<T extends object> {
   isOpen: boolean;
   onClose: () => void;
@@ -18,7 +18,7 @@ interface FormModalProps<T extends object> {
   initialValues: T;
   onSubmit: (values: T) => void;
   loading?: boolean;
-
+  childKey?: keyof T;
   hasChildren?: boolean;
   childFields?: FormField<any>[];
   nestedLimit?: number;
@@ -32,6 +32,7 @@ const FormModal = <T extends object>({
   fields,
   initialValues,
   onSubmit,
+  childKey,
 
   loading,
   hasChildren = false,
@@ -49,43 +50,60 @@ const FormModal = <T extends object>({
   const isViewMode = mode === FormModalMode.VIEW;
   const activeChildFields = childFields || fields;
   const [error, setError] = useState<Record<string, string>>({});
+  const activeChildKey = (childKey as string) || "children";
 
-  const handleParentChange = (
-  key: string,
-  value: unknown
-) => {
-  setFormData((prev: any) => ({
-    ...prev,
-    [key]: value,
-  }));
 
-  setError((prev) => {
-    const newErrors = { ...prev };
+  const handleParentChange = (key: string, value: unknown) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      [key]: value,
+    }));
 
-    delete newErrors[key];
+    setError((prev) => {
+      const newErrors = { ...prev };
 
-    return newErrors;
-  });
-};
+      delete newErrors[key];
 
-  const handleChildrenArrayChange = (newChildrenArray: any[]) => {
-    setFormData((prev: any) => ({ ...prev, children: newChildrenArray }));
+      return newErrors;
+    });
+  };
+
+  const handleChildrenArrayChange = (newChildrenArray:any) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      [activeChildKey]: newChildrenArray,
+    }));
+    setError((prev) => {
+      const newErrors = { ...prev };
+      Object.keys(newErrors).forEach(key => {
+        if (key.startsWith(activeChildKey)) {
+          delete newErrors[key];
+        }
+      });
+      return newErrors;
+    });
   };
 
   const handleSubmit = () => {
-  const validationErrors = validateForm(
-    formData,
-    fields
-  );
+    const parentErrors = validateForm(formData, fields);
 
-  if (Object.keys(validationErrors).length > 0) {
-    setError(validationErrors);
-    return;
-  }
+    const childErrors = hasChildren 
+      ? validateChildren(formData[activeChildKey] || [], activeChildFields, activeChildKey)
+      : {};
 
-  setError({});
-  onSubmit(formData);
-};
+    const validationErrors = {
+      ...parentErrors,
+      ...childErrors,
+    };
+
+    if (Object.keys(validationErrors).length > 0) {
+      setError(validationErrors);
+      return;
+    }
+
+    setError({});
+    onSubmit(formData);
+  };
 
   return (
     <Modal
@@ -133,12 +151,14 @@ const FormModal = <T extends object>({
 
         {hasChildren && (
           <ChildTabs
-            dataList={formData.children || []}
+            dataList={formData[activeChildKey] || []}
             onChange={handleChildrenArrayChange}
             fields={activeChildFields}
             nestedLimit={nestedLimit}
             isViewMode={isViewMode}
             tabNamePrefix="Mục con"
+            error={error}
+            parentPath={activeChildKey}
           />
         )}
       </div>

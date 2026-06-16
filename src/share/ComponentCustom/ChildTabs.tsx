@@ -5,47 +5,59 @@ import DynamicForm from '@/share/ComponentCustom/DynamicForm';
 import type { FormField } from '@/share/types/form-field';
 
 interface ChildTabsProps {
-  dataList: any[];                      // Mảng dữ liệu con hiện tại
-  onChange: (newDataList: any[]) => void; // Hàm trả về mảng mới khi có thay đổi
-  fields: FormField<any>[];             // Bộ fields dùng cho con
-  
-  // Props quản lý lồng nhau
-  nestedLimit: number;                  // Số lượng cấp con lồng nhau tối đa được phép
-  currentDepth?: number;                // Độ sâu hiện tại (ẩn, dùng cho nội bộ)
-  
-  isViewMode: boolean;                  // Chế độ xem?
-  tabNamePrefix?: string;               // Tiền tố tên tab (VD: "Biến thể", "Danh mục con")
+  dataList: any[];
+  onChange: (newDataList: any[]) => void;
+  fields: FormField<any>[];
+  error?: Record<string, string>;
+  nestedLimit: number;
+  currentDepth?: number;
+  isViewMode: boolean;
+  tabNamePrefix?: string;
+  parentPath?: string; 
 }
 
 const ChildTabs: React.FC<ChildTabsProps> = ({
   dataList = [],
   onChange,
   fields,
+  error,
   nestedLimit,
   currentDepth = 1,
   isViewMode,
   tabNamePrefix = 'Mục con',
+  parentPath = 'children',
 }) => {
-  // 1. Thêm một Tab mới
-  const handleAddTab = () => {
-    onChange([...dataList, {}]); // Thêm 1 object rỗng vào mảng
+
+  const getErrorsForTab = (index: number) => {
+    const result: Record<string, string> = {};
+    
+    const prefix = `${parentPath}.${index}.`;
+
+    Object.entries(error || {}).forEach(([key, value]) => {
+      if (key.startsWith(prefix)) {
+        result[key.replace(prefix, '')] = value;
+      }
+    });
+    return result;
   };
 
-  // 2. Xóa một Tab
+ 
+  const handleAddTab = () => {
+    onChange([...dataList, {}]); 
+  };
+
   const handleRemoveTab = (indexToRemove: number) => {
     const newData = [...dataList];
     newData.splice(indexToRemove, 1);
     onChange(newData);
   };
 
-  // 3. Thay đổi dữ liệu form bên trong 1 Tab
   const handleFormChange = (index: number, key: string, value: unknown) => {
     const newData = [...dataList];
     newData[index] = { ...newData[index], [key]: value };
     onChange(newData);
   };
 
-  // 4. Thay đổi mảng con của con (Dành cho cấp lồng nhau)
   const handleNestedChildrenChange = (index: number, newChildrenArray: any[]) => {
     const newData = [...dataList];
     newData[index] = { ...newData[index], children: newChildrenArray };
@@ -69,11 +81,11 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
         <Tabs
           type="card"
           items={dataList.map((item: any, index: number) => ({
-            key: index.toString(),
-            label: item.category_name || item.sku || `${tabNamePrefix} ${index + 1}`,
+           
+            key: item.id?.toString() || index.toString(),
+            label: `${tabNamePrefix} ${index + 1}`,
             children: (
               <div className="p-4 bg-white border border-t-0 border-slate-200 flex flex-col gap-4">
-                {/* Nút xóa Tab */}
                 {!isViewMode && (
                   <div className="flex justify-end">
                     <Button danger size="small" icon={<DeleteOutlined />} onClick={() => handleRemoveTab(index)}>
@@ -82,15 +94,14 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
                   </div>
                 )}
 
-                {/* Form nhập liệu của Tab này */}
                 <DynamicForm
                   fields={fields}
                   values={item}
                   onChange={(key, val) => handleFormChange(index, key as string, val)}
+                  error={getErrorsForTab(index)}
                   disabled={isViewMode}
                 />
 
-                {/* RENDER TIẾP TỤC BẢN THÂN NÓ NẾU ĐƯỢC PHÉP LỒNG NHAU */}
                 {canHaveNestedChildren && (
                   <ChildTabs
                     dataList={item.children || []}
@@ -100,7 +111,8 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
                     currentDepth={currentDepth + 1}
                     isViewMode={isViewMode}
                     tabNamePrefix={`Con của ${tabNamePrefix}`}
-                    
+                    error={error}
+                    parentPath={`${parentPath}.${index}.children`} 
                   />
                 )}
               </div>

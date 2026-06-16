@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Table, Input, Button } from "antd";
 import type { TableProps } from "antd/es/table";
 import type {
@@ -15,7 +15,7 @@ import {
 } from "@/share/types/type-form-mode";
 import FormModal from "@/share/ComponentCustom/ModelForm";
 import { categoryApi } from "@/pages/Admin/managerCatelogy/api/cate_api";
-import { childCategoryFields } from "../constants/catrgoryChildrenField";
+import { childCategoryFields } from "@/pages/Admin/managerCatelogy/constants/catrgoryChildrenField";
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
 import axios from "axios";
 
@@ -57,21 +57,22 @@ const AdminManagerCatelogries = () => {
     setLoading,
   } = useFormModal<CategoryFormValues>();
 
-  const fetchCategories = async (page: number, limit: number) => {
-    try {
-      const response = await categoryApi.getAll(
-        page,
-        limit
+  const fetchCategories = useCallback(
+    async (page: number, limit: number) => {
+        try {
+          const response = await categoryApi.getAll(page, limit);
+          setCategories(response.data?.data?.categories ?? []);
+          setTotal(response.data?.data?.pagination?.total_items ?? 0);
+        } catch (error) {
+          console.error(error);
+        }
+      },
+      [setTotal] 
       );
-      setCategories(response.data?.data?.categories ?? []);
-      setTotal(response.data?.data?.pagination?.total_items ?? 0);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   useEffect(() => {
+
     void fetchCategories(currentPage, pageSize);
-  }, [currentPage, pageSize]);  
+  }, [currentPage, pageSize,fetchCategories]);  
 
   const handleAction = async (mode: FormModalModeType, record?: Category) => {
     if (mode === FormModalMode.CREATE) {
@@ -126,9 +127,11 @@ const AdminManagerCatelogries = () => {
   const handleSubmitForm = async (values: CategoryFormValues) => {
     try {
       setLoading(true);
+      console.log("Form values on submit:", values);
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
         delete payloadCreate.id;
+        console.log("Payload for creating category:", payloadCreate);
 
         await categoryApi.create(payloadCreate);
         setNotifyData({
@@ -317,6 +320,7 @@ const AdminManagerCatelogries = () => {
       <FormModal<CategoryFormValues>
         isOpen={isModalOpen}
         onClose={close}
+        childKey="children"
         loading={loading}
         mode={modalMode}
         title={modalTitle}

@@ -28,6 +28,13 @@ export const API_CONFIG = {
     UPDATE_CATEGORY: (id: string) => `/api/categories/${id}`,
     DELETE_CATEGORY: (id: string) => `/api/categories/${id}`,
 
+    //admin product
+    GET_PRODUCTS: '/api/products',
+    GET_PRODUCT: (id: string) => `/api/products/${id}`,
+    CREATE_PRODUCT: '/api/products',
+    UPDATE_PRODUCT: (id: string) => `/api/products/${id}`,
+    DELETE_PRODUCT: (id: string) => `/api/products/${id}`,
+
     
 
     FORGOT_PASSWORD: '/api/auth/forgot-password',

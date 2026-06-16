@@ -15,6 +15,7 @@ import AccountSettingsPage from '@/pages/UserProfile/UserSettingAccount';
 import AboutUs from '@/pages/About';
 import AdminManagerAccount from '@/pages/Admin/managerAccount/pages/AdminManagerAccount';
 import AdminManagerCategory from '@/pages/Admin/managerCatelogy/pages/AdminManagerCatelogries';
+import AdminManagerProducts from '@/pages/Admin/managerProducts/pages/AdminManagerProduct';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
 
 
@@ -110,6 +111,10 @@ export const routes = createBrowserRouter([
                     {
                         path: 'Manager-Category',
                         element: <AdminManagerCategory />,
+                    },
+                    {
+                        path: 'Manager-Products',
+                        element: <AdminManagerProducts />,
                     },
                     {
                         path: 'setting',

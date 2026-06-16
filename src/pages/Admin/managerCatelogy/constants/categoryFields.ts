@@ -43,13 +43,10 @@ export const categoryFields: FormField<CategoryFormValues>[] = [
 
     placeholder: 'Nhập URL hình ảnh',
     
-    type: FormFieldType.ImageUpload,
+    type: FormFieldType.inputFile,
       rules: [
         {
           required: true,
-          validator: (formdata: CategoryFormValues) => {
-            return !!formdata.image_url?.trim();
-          },
           message: 'Hình ảnh là bắt buộc.',
         }
       ]

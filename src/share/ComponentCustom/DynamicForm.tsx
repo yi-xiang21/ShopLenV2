@@ -8,7 +8,7 @@ type DynamicFormProps<T extends object> = {
   values: T;
   onChange: (key: keyof T, value: unknown) => void;
   disabled?: boolean;
-  error?: Record<string, string> ;
+  error?: Record<string, string>;
 };
 
 const DynamicForm = <T extends object>({
@@ -32,8 +32,7 @@ const DynamicForm = <T extends object>({
             disabled={disabled}
           />
         );
-
-      case FormFieldType.ImageUpload:
+      case FormFieldType.inputFile:
         return (
           <div>
             <input
@@ -56,6 +55,78 @@ const DynamicForm = <T extends object>({
                 className="mt-2 max-h-40 object-contain"
               />
             )}
+
+          </div>
+          
+        );
+
+     case FormFieldType.ImageUpload:
+        return (
+          <div>
+            <input
+              className="w-full p-2 border border-gray-300 rounded"
+              type="file"
+              multiple // Cho phép chọn nhiều file
+              accept="image/*"
+              onChange={async (e) => {
+                const files = Array.from(e.target.files || []);
+                if (files.length > 0) {
+                  // 1. Đọc tất cả các file thành mảng base64
+                  const base64Promises = files.map((file) => {
+                    return new Promise<string>((resolve, reject) => {
+                      const reader = new FileReader();
+                      reader.onload = () => resolve(reader.result as string);
+                      reader.onerror = (error) => reject(error);
+                      reader.readAsDataURL(file);
+                    });
+                  });
+
+                  try {
+                    const base64Images = await Promise.all(base64Promises);
+                    
+                    
+                    const formattedImages = base64Images.map((base64, index) => ({
+                      image_url: base64,
+                      sort_order: index + 1, 
+                    }));
+
+
+                    const currentImages = Array.isArray(value) ? value : [];
+                    onChange(key, [...currentImages, ...formattedImages]);
+                    
+                    
+                  } catch (error) {
+                    console.error("Lỗi đọc file hình ảnh:", error);
+                  }
+                }
+              }}
+              disabled={disabled}
+            />
+            
+            {/* Vùng hiển thị Preview nhiều ảnh đã được cập nhật */}
+            <div className="flex flex-wrap gap-2 mt-2">
+              {Array.isArray(value) ? (
+                value.map((item: any, index) => {
+                  // Hỗ trợ đọc link ảnh từ chuẩn Object mới hoặc String cũ
+                  const src = typeof item === "string" ? item : item.image_url;
+                  
+                  return src ? (
+                    <img
+                      key={index}
+                      src={src}
+                      alt={`Preview ${index + 1}`}
+                      className="max-h-40 object-contain border border-gray-200 rounded"
+                    />
+                  ) : null;
+                })
+              ) : value && typeof value === "string" ? (
+                <img
+                  src={value}
+                  alt="Preview"
+                  className="max-h-40 object-contain border border-gray-200 rounded"
+                />
+              ) : null}
+            </div>
           </div>
         );
 
@@ -99,7 +170,7 @@ const DynamicForm = <T extends object>({
             placeholder={field.placeholder}
             value={value !== undefined ? String(value) : ""}
             onChange={(e) => onChange(key, Number(e.target.value))}
-            disabled={disabled} // Thêm disabled
+            disabled={disabled}
           />
         );
       case FormFieldType.InputPassword:
@@ -110,7 +181,6 @@ const DynamicForm = <T extends object>({
             onChange={(e) => onChange(key, e.target.value)}
             disabled={disabled}
           />
-
         );
       case FormFieldType.TimePicker:
         return (

@@ -34,7 +34,7 @@ const Notification = ({ type, title, message }: NotificationProps) => {
   };
 
   return (
-    <div className="fixed top-5 right-5 z-50 ">
+    <div className="fixed top-5 right-5 z-[9999] ">
       
     <div
         className={`w-80 p-4 rounded-lg shadow-lg border-l-4 animate-slide-in-right ${colors[type]}`}
