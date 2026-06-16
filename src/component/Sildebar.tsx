@@ -7,12 +7,16 @@ interface SidebarProps {
 
 const menuItems = [
     { name: 'Dashboard', link: '/admin' },
-    { name: 'Quản lý người dùng', link:'' },
+    { name: 'Quản lý người dùng', link:'/admin/Manager-Account' },
     { name: 'Quản lý đơn hàng', link: '' },
     { name: 'Quản lý sản phẩm', link: '' },
     { name: 'Quản lý Kho', link: '' },
     { name: 'Quản lý danh mục', link: '/admin/Manager-Category' },
     { name: 'Quản lý workshop', link: '' },
+    {
+        name :' Quan lý khuyen mai',
+        link: '/admin/Manager-Discount'
+    },
     { name: 'Quay về trang chủ', link: '/' },
     { name: 'Cài đặt', link: '/admin/setting' }
 ]

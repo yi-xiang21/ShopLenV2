@@ -14,8 +14,12 @@ export const API_CONFIG = {
     PROFILE: '/api/auth/me',
     UPDATE_PROFILE: '/api/users/user/me',
 
-    //admin
+    //admin account
     GETALL_USERS: '/api/users',
+    GET_USER: (id: string) => `/api/users/${id}`,
+    CREATE_USER: '/api/users',
+    UPDATE_USER: (id: string) => `/api/users/${id}`,
+    DELETE_USER: (id: string) => `/api/users/${id}`,
     
     //admin category
     GET_CATEGORIES: '/api/categories',
@@ -23,6 +27,8 @@ export const API_CONFIG = {
     CREATE_CATEGORY: '/api/categories',
     UPDATE_CATEGORY: (id: string) => `/api/categories/${id}`,
     DELETE_CATEGORY: (id: string) => `/api/categories/${id}`,
+
+    
 
     FORGOT_PASSWORD: '/api/auth/forgot-password',
     VERIFY_OTP: '/api/auth/verify-reset-otp',

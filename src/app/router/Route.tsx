@@ -13,7 +13,7 @@ import PurchaseHistoryPage from '@/pages/UserProfile/PurchaseHistory';
 import WorkshopPage from '@/pages/UserProfile/UserWorkshop';
 import AccountSettingsPage from '@/pages/UserProfile/UserSettingAccount';
 import AboutUs from '@/pages/About';
-import AdminManagerAccount from '@/pages/Admin/AdminManagerAccount';
+import AdminManagerAccount from '@/pages/Admin/managerAccount/pages/AdminManagerAccount';
 import AdminManagerCategory from '@/pages/Admin/managerCatelogy/pages/AdminManagerCatelogries';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
 
@@ -104,6 +104,7 @@ export const routes = createBrowserRouter([
                 children: [
                     {
                         index: true,
+                        path: 'Manager-Account',
                         element: <AdminManagerAccount />,
                     },
                     {
