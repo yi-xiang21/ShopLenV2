@@ -1,4 +1,4 @@
-import type { FormFieldType } from "./type-form-field";
+import type { FormFieldTypeKey } from "./type-form-field";
 import type { ValidationRule } from "./validate-form";
 
 export interface FormField<T> {
@@ -6,10 +6,9 @@ export interface FormField<T> {
 
   label: string;
 
-  type: FormFieldType;
+  type: FormFieldTypeKey;
 
   placeholder?: string;
-
 
   options?: {
     label: string;
@@ -17,5 +16,6 @@ export interface FormField<T> {
   }[];
   fetchOptions?: () => Promise<{ label: string; value: string | number }[]>;
   rules?: ValidationRule[];
+  disabled?: boolean;
   
 }

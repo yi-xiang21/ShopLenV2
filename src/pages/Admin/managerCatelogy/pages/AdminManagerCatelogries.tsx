@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Input, Button } from "antd";
+import { Table, Button } from "antd";
 import type { TableProps } from "antd/es/table";
 import type {
   Category,
@@ -18,8 +18,9 @@ import { categoryApi } from "@/pages/Admin/managerCatelogy/api/cate_api";
 import { childCategoryFields } from "@/pages/Admin/managerCatelogy/constants/catrgoryChildrenField";
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
 import axios from "axios";
+import {filterCategory} from "@/pages/Admin/managerCatelogy/constants/cataFilter";
+import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
 
-const { Search } = Input;
 
 const defaultFormValues: CategoryFormValues = {
   category_name: "",
@@ -29,9 +30,9 @@ const defaultFormValues: CategoryFormValues = {
 };
 
 const AdminManagerCatelogries = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [editingId, setEditingId] = useState<string>("");
+  const [filters, setFilters] = useState<Record<string, any>>({});
   const [notifyData, setNotifyData] = useState<{
     key: string;
     type: NotificationType;
@@ -58,21 +59,38 @@ const AdminManagerCatelogries = () => {
   } = useFormModal<CategoryFormValues>();
 
   const fetchCategories = useCallback(
-    async (page: number, limit: number) => {
-        try {
-          const response = await categoryApi.getAll(page, limit);
-          setCategories(response.data?.data?.categories ?? []);
-          setTotal(response.data?.data?.pagination?.total_items ?? 0);
-        } catch (error) {
-          console.error(error);
-        }
-      },
-      [setTotal] 
-      );
+    async (page: number, limit: number, currentFilters: Record<string, any>) => {
+            try {
+              setLoading(true); 
+              let response;
+      
+      
+              if (Object.keys(currentFilters).length > 0) {
+               
+                
+                response = await categoryApi.filter({ ...currentFilters, page, limit });
+                
+              } 
+              else {
+                response = await categoryApi.getAll(page, limit);
+              
+              }
+      
+              setCategories(response.data?.data?.categories ?? []);
+              setTotal(response.data?.data?.pagination?.total_items ?? 0);
+            } catch (error) {
+              console.error("Lỗi khi tải danh sách danh mục:", error);
+            } finally {
+              setLoading(false);
+            }
+          },
+          [setTotal, setLoading]
+        );
+
   useEffect(() => {
 
-    void fetchCategories(currentPage, pageSize);
-  }, [currentPage, pageSize,fetchCategories]);  
+    void fetchCategories(currentPage, pageSize, filters);
+  }, [currentPage, pageSize, filters, fetchCategories]);  
 
   const handleAction = async (mode: FormModalModeType, record?: Category) => {
     if (mode === FormModalMode.CREATE) {
@@ -154,7 +172,7 @@ const AdminManagerCatelogries = () => {
         });
       }
 
-      await fetchCategories(currentPage, pageSize);
+      await fetchCategories(currentPage, pageSize, filters);
       close();
     } catch (error) {
         let message = "trung ten danh muc con";
@@ -183,7 +201,7 @@ const AdminManagerCatelogries = () => {
       try {
         setLoading(true);
         await categoryApi.delete(id);
-        await fetchCategories(currentPage, pageSize);
+        await fetchCategories(currentPage, pageSize, filters);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
@@ -209,9 +227,10 @@ const AdminManagerCatelogries = () => {
     }
   };
 
-  const filteredCategories = categories.filter((category) =>
-    category.category_name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+    const handleFilter = (newFilters: Record<string, any>) => {
+    setFilters(newFilters);
+    setCurrentPage(1);     
+  };
 
   const columns: TableProps<Category>["columns"] = [
     { title: "ID", dataIndex: "id", key: "id" },
@@ -295,15 +314,12 @@ const AdminManagerCatelogries = () => {
       </div>
 
       <div className="mt-5 bg-slate-200 p-10 rounded-lg">
-        <Search
-          placeholder="input search text"
-          allowClear
-          enterButton="Search"
-          size="large"
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="mb-4"
+        <FilterHeader
+          fields={filterCategory}
+          onSearch={handleFilter}
+          loading={loading}
         />
-        <Table columns={columns} dataSource={filteredCategories} rowKey="id" pagination={
+        <Table columns={columns} dataSource={categories} rowKey="id" pagination={
           {
             current: currentPage,
             pageSize: pageSize,

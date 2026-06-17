@@ -5,7 +5,7 @@ interface CardCatelogyProps {
 }
 const CardCatelogy = ({ Data }: CardCatelogyProps) => {
   return (
-    <a className="group relative overflow-hidden rounded-2xl shrink-0 shadow-lg h-80 w-70  md:h-100 md:w-90" href={`/category/${Data.slug}`}>
+    <a className="group relative overflow-hidden rounded-2xl shrink-0 shadow-lg h-80 w-70  md:h-100 md:w-80" href={`/category/${Data.slug}`}>
       <img src={Data.image_url} className="h-full w-full object-cover" />
 
       <div

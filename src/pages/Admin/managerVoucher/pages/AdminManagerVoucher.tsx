@@ -2,39 +2,39 @@ import { useCallback, useEffect, useState } from "react";
 import { Table, Button } from "antd";
 import type { TableProps } from "antd/es/table";
 
-import { filterAccount } from "@/pages/Admin/managerAccount/constants/accountFilter";
-import { accountFields } from "@/pages/Admin/managerAccount/constants/accountFields";
 import { useFormModal } from "@/share/hook/useFormModal";
 import Notification from "@/share/ComponentCustom/Notification/Notification";
-
+import {voucherFields} from "@/pages/Admin/managerVoucher/constants/vouchersFields";
+import {filterVouchers} from "@/pages/Admin/managerVoucher/constants/vouchersFilter";
+import { vouchersApi } from "@/pages/Admin/managerVoucher/api/vouchers_api";
 import {
   FormModalMode,
   type FormModalModeType,
 } from "@/share/types/type-form-mode";
 import FormModal from "@/share/ComponentCustom/ModelForm";
-import {AccountApi } from "@/pages/Admin/managerAccount/api/account_api";
+
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
 import axios from "axios";
-
-import type { account } from "@/pages/Admin/managerAccount/type/account";
+import type { voucher } from "@/pages/Admin/managerVoucher/type/vouchers"
 import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
+import {getVoucherFieldsByMode} from "@/pages/Admin/managerVoucher/constants/sortField";
 
 
-
-const defaultFormValues: account = {
-  user_id: 0,
-  username: "",
-  first_name: "",
-  last_name: "",
-  email: "",
-  phone_number: "",
-  status: { active: "active", inactive: "inactive" },
-  role: { customer: "customer", admin: "admin" },
+const defaultFormValues: voucher = {
+  code: "",
+  voucher_name: "",
+  discount_type: "percent",
+  value: 0,
+  minimum_value: 0,
+  max_discount: undefined,
+  quantity: 0,
+  start_date: "",
+  end_date: "",
  
 };
 
-const AdminManagerAccount = () => {
-  const [accounts, setAccounts] = useState<account[]>([]);
+const AdminManagerVoucher = () => {
+  const [vouchers, setVouchers] = useState<voucher[]>([]);
   const [editingId, setEditingId] = useState<number | "">("");
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [notifyData, setNotifyData] = useState<{
@@ -48,7 +48,7 @@ const AdminManagerAccount = () => {
     open: isModalOpen,
     mode: modalMode,
     loading,
-    selectedRecord: selectedAccount,
+    selectedRecord: selecteVoucher,
     currentPage,
     pageSize,
     total,
@@ -60,10 +60,10 @@ const AdminManagerAccount = () => {
     setPageSize,
     setTotal,
     setLoading,
-  } = useFormModal<account>();
+  } = useFormModal<voucher>();
 
 
-  const fetchAccounts = useCallback(
+  const fetchVouchers = useCallback(
       async (page: number, limit: number, currentFilters: Record<string, any>) => {
         try {
           setLoading(true); 
@@ -71,20 +71,21 @@ const AdminManagerAccount = () => {
   
   
           if (Object.keys(currentFilters).length > 0) {
-           
-            console.log("Fetching accounts with filters:",currentFilters, "page:", page, "limit:", limit);
-            response = await AccountApi.filter({ ...currentFilters, page, limit });
-            console.log("Filtered accounts fetched:", response.data);
+          
+            console.log("Fetching vouchers with filters:", currentFilters, "Page:", page, "Limit:", limit);
+            response = await vouchersApi.filter({ ...currentFilters, page, limit });
+            console.log("Filtered vouchers response:", response.data);
+        
           } 
           else {
-            response = await AccountApi.getAll(page, limit);
+            response = await vouchersApi.getAll(page, limit);
           
           }
   
-          setAccounts(response.data?.data?.users ?? []);
+          setVouchers(response.data?.data?.vouchers ?? []);
           setTotal(response.data?.data?.pagination?.total_items ?? 0);
         } catch (error) {
-          console.error("Lỗi khi tải danh sách tài khoản:", error);
+          console.error("Lỗi khi tải danh sách voucher:", error);
         } finally {
           setLoading(false);
         }
@@ -94,11 +95,11 @@ const AdminManagerAccount = () => {
   
   
     useEffect(() => {
-      void fetchAccounts(currentPage, pageSize, filters);
-    }, [currentPage, pageSize, filters, fetchAccounts]);
+      void fetchVouchers(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters, fetchVouchers ]);
     
 
-  const handleAction = async (mode: FormModalModeType, record?: account) => {
+  const handleAction = async (mode: FormModalModeType, record?: voucher) => {
     if (mode === FormModalMode.CREATE) {
       setEditingId("");
       openCreate();
@@ -107,12 +108,10 @@ const AdminManagerAccount = () => {
 
     if (record) {
       try {
-        const response = await AccountApi.getById(record.user_id);
-        const data = response.data;
-        console.log("Fetched account details:", data);
-
-        setEditingId(data.user_id);
-        delete data.password;
+        const response = await vouchersApi.getById(record.voucher_id);
+        const data = response.data.data?.voucher;
+        console.log("Fetched voucher details:", data);
+        setEditingId(data.voucher_id);
 
 
         if (mode === FormModalMode.EDIT) {
@@ -126,41 +125,41 @@ const AdminManagerAccount = () => {
           key: Date.now().toString(),
           type: "error",
           title: "Thất bại",
-          message: "Không thể lấy thông tin tài khoản này!",
+          message: "Không thể lấy thông tin voucher này!",
         });
       }
     }
   };
 
-  const handleSubmitForm = async (values: account) => {
+  const handleSubmitForm = async (values: voucher) => {
     try {
       setLoading(true);
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
-        delete payloadCreate.user_id;
-        delete payloadCreate.status;
 
-        await AccountApi.create(payloadCreate);
+        
+        await vouchersApi.create(payloadCreate);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Tạo tai khoan mới thành công!",
+          message: "Tạo voucher mới thành công!",
         });
       } else {
         const payloadUpdate = { ...values };
-        delete payloadUpdate.user_id;
-        
-        await AccountApi.update(editingId, payloadUpdate);
+
+        console.log("Updating voucher with ID:", editingId, "Payload:", payloadUpdate);
+
+        await vouchersApi.update(editingId, payloadUpdate);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Cập nhật tài khoản thành công!",
+          message: "Cập nhật voucher thành công!",
         });
       }
 
-      await fetchAccounts(currentPage, pageSize, filters);
+      await fetchVouchers(currentPage, pageSize, filters);
       close();
     } catch (error) {
         let message = "khong the luu tai khoan này!";
@@ -177,8 +176,8 @@ const AdminManagerAccount = () => {
   message ||
   (
     modalMode === FormModalMode.CREATE
-      ? "Không thể tạo tài khoản mới!"
-      : "Không thể cập nhật tài khoản này!"
+      ? "Không thể tạo voucher mới!"
+      : "Không thể cập nhật voucher này!"
   ),
       });
     } finally {
@@ -186,12 +185,12 @@ const AdminManagerAccount = () => {
     }
   };
 
-  const handleDeleteAccount = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa tài khoản này?")) {
+  const handleDeleteVoucher = async (id: number) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa voucher này?")) {
       try {
         setLoading(true);
-        await AccountApi.delete(id);
-        await fetchAccounts(currentPage, pageSize, filters);
+        await vouchersApi.delete(id);
+        await fetchVouchers(currentPage, pageSize, filters);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
@@ -199,7 +198,7 @@ const AdminManagerAccount = () => {
           message: "Xóa tài khoản thành công!",
         });
       } catch (error) {
-          let message = "khong thể xóa tài khoản này!";
+          let message = "khong thể xóa voucher này!";
           if (axios.isAxiosError(error)) {
             message =
               error.response?.data?.message ??
@@ -208,7 +207,7 @@ const AdminManagerAccount = () => {
         setNotifyData({
           key: Date.now().toString(),
           type: "warning",
-          title: "Lỗi xóa tài khoản",
+          title: "Lỗi xóa voucher",
           message: message,
         });
       } finally {
@@ -218,23 +217,15 @@ const AdminManagerAccount = () => {
   };
 
 
-  const columns: TableProps<account>["columns"] = [
-    { title: "user_id", dataIndex: "user_id", key: "id" },
-    { title: "Name", dataIndex: "username", key: "username" },
-    { title: "Email", dataIndex: "email", key: "email" },
-    { title: "Phone Number", dataIndex: "phone_number", key: "phone_number" },
-    { title: "Status", dataIndex: "status", key: "status",
-      render: (status: string) => (
-        <span
-          className={`px-2 py-1 rounded ${status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
-        >
-          {status === "active" ? "Active" : "Inactive"}
-        </span>
-      ),
-    },
-    { title: "Role", dataIndex: "role", key: "role" },
-    { title: "First Name", dataIndex: "first_name", key: "first_name" },
-    { title: "Last Name", dataIndex: "last_name", key: "last_name" },
+  const columns: TableProps<voucher>["columns"] = [
+    {title: "ID", dataIndex: "voucher_id", key: "voucher_id" },
+    {title: "Mã voucher", dataIndex: "code", key: "code" },
+    { title: "Tên voucher", dataIndex: "voucher_name", key: "voucher_name" },
+    { title: "Loại giảm giá", dataIndex: "discount_type", key: "discount_type" },
+    { title: "Giá trị giảm giá", dataIndex: "value", key: "value" },
+    { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
+    { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" },
+    { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" },
     {
       title: "Action",
       key: "action",
@@ -255,7 +246,7 @@ const AdminManagerAccount = () => {
           <Button
             type="primary"
             danger
-            onClick={() => handleDeleteAccount(record.user_id as number)}
+            onClick={() => handleDeleteVoucher(record.voucher_id as number)}
           >
             Delete
           </Button>
@@ -299,12 +290,12 @@ const AdminManagerAccount = () => {
       <div className="mt-5 bg-slate-200 p-10 rounded-lg">
 
        <FilterHeader
-          fields={filterAccount}
+          fields={filterVouchers}
           onSearch={handleFilter}
           loading={loading}
         />
         
-        <Table columns={columns} dataSource={accounts} rowKey="user_id" pagination={
+        <Table columns={columns} dataSource={vouchers} rowKey="voucher_id" pagination={
           {
             current: currentPage,
             pageSize: pageSize,
@@ -318,20 +309,19 @@ const AdminManagerAccount = () => {
         } />
       </div>
 
-      <FormModal<account>
+      <FormModal<voucher>
         isOpen={isModalOpen}
         onClose={close}
         loading={loading}
         mode={modalMode}
         title={modalTitle}
-        fields={modalMode === (FormModalMode.CREATE) ? accountFields : accountFields.filter(field => field.key !== 'password') }
-        initialValues={selectedAccount || defaultFormValues}
+        fields={getVoucherFieldsByMode(voucherFields, modalMode)}
+        initialValues={selecteVoucher || defaultFormValues}
         onSubmit={handleSubmitForm}
         hasChildren={false}
-        
       />
     </div>
   );
 };
 
-export default AdminManagerAccount;
+export default AdminManagerVoucher;

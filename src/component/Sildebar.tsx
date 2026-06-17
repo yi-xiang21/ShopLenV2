@@ -11,12 +11,9 @@ const menuItems = [
     { name: 'Quản lý đơn hàng', link: '' },
     { name: 'Quản lý sản phẩm', link: '/admin/Manager-Products' },
     { name: 'Quản lý Kho', link: '' },
+    { name: 'Quản lý vouchers', link: '/admin/Manager-Vouchers' },
     { name: 'Quản lý danh mục', link: '/admin/Manager-Category' },
     { name: 'Quản lý workshop', link: '' },
-    {
-        name :' Quan lý khuyen mai',
-        link: '/admin/Manager-Discount'
-    },
     { name: 'Quay về trang chủ', link: '/' },
     { name: 'Cài đặt', link: '/admin/setting' }
 ]

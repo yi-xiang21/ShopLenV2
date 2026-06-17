@@ -17,5 +17,8 @@ export const categoryApi = {
     },
     delete: async (id: string) => {
         return callAPI.delete(API_CONFIG.ENDPOINTS.DELETE_CATEGORY(id));
+    },
+    filter: async (filter: any) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.FiLTER_CATEGORIES, filter );
     }
 }

@@ -67,7 +67,6 @@ export const productFields: FormField<Product>[] = [
     fetchOptions: async () => {
       try {
         const response = await categoryApi.getAll(1, 1000);
-        console.log("Danh mục nhận được từ API:", response.data?.data?.categories);
         return response.data?.data?.categories.map((category: { id: number; category_name: string }) => ({
           label: category.category_name,
           value: category.id,
@@ -94,15 +93,7 @@ export const productFields: FormField<Product>[] = [
     label: 'Mô tả',
     placeholder: 'Nhập mô tả sản phẩm',
     type: FormFieldType.TextArea,
-    rules: [
-      {
-        required: true,
-        validator: (formdata:Product) => {
-          return !!formdata.description?.trim();
-        },
-        message: 'Mô tả không được để trống hoặc chỉ chứa khoảng trắng.',
-      }
-    ],
+    
   },
   {
     key: 'product_status',

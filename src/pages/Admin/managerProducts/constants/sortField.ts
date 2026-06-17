@@ -19,17 +19,10 @@ export const getVariantFieldsByMode = <T extends object>(
   fields: FormField<T>[],
   mode: FormModalModeType
 ): FormField<T>[] => {
-  if (mode === FormModalMode.VIEW) return fields; // VIEW thì lấy hết
-
-  if (mode === FormModalMode.CREATE) {
-
-    return fields.filter((field) => !["variant_id", "slug"].includes(String(field.key)));
+  if (mode === FormModalMode.VIEW) 
+    return fields; 
+  else
+  {
+    return fields.filter((field) => !["slug","variant_id","sku"].includes(String(field.key)));
   }
-
-  if (mode === FormModalMode.EDIT) {
-
-    return fields.filter((field) => !["slug"].includes(String(field.key)));
-  }
-
-  return fields;
 };

@@ -33,28 +33,17 @@ export const childrenProductsFields: FormField<Variant>[] = [
       validator: (formdata:Variant) => {
         return !!formdata.price?.trim();
       },
+      
       message: 'Giá không được để trống hoặc chỉ chứa khoảng trắng.',
+    },
+    {
+      pattern: /^\d+(\.\d{1,2})?$/,
+      message: 'Giá phải là một số hợp lệ, có thể có tối đa 2 chữ số thập phân.',
     }
   ] 
   , placeholder: 'Nhập giá sản phẩm' },
-  { key: 'color', label: 'Màu sắc', type: FormFieldType.Input, placeholder: 'Nhập màu sắc' , rules: [
-    {
-      required: true,
-      validator: (formdata:Variant) => {
-        return !!formdata.color?.trim();
-      },
-      message: 'Màu sắc không được để trống hoặc chỉ chứa khoảng trắng.',
-    }
-  ]},
-  { key: 'size', label: 'Kích thước', type: FormFieldType.Input, placeholder: 'Chọn kích thước' , rules: [
-    {
-      required: true,
-      validator: (formdata:Variant) => {
-        return !!formdata.size?.trim();
-      },
-      message: 'Kích thước không được để trống hoặc chỉ chứa khoảng trắng.',
-    }
-  ]},
+  { key: 'color', label: 'Màu sắc', type: FormFieldType.Input, placeholder: 'Nhập màu sắc' },
+  { key: 'size', label: 'Kích thước', type: FormFieldType.Input, placeholder: 'Chọn kích thước' },
   { key: 'images', label: 'Hình ảnh', type: FormFieldType.ImageUpload , rules: [
     {
       required: true,

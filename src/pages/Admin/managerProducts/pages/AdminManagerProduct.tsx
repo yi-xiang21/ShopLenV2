@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Input, Button } from "antd";
+import { Table, Button } from "antd";
 import type { TableProps } from "antd/es/table";
 
 import { productFields } from "@/pages/Admin/managerProducts/constants/ProductsFields";
@@ -18,9 +18,9 @@ import axios from "axios";
 
 import type { Product } from "@/pages/Admin/managerProducts/type/products";
 import {getProductFieldsByMode,getVariantFieldsByMode} from "@/pages/Admin/managerProducts/constants/sortField";
+import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
+import { filterProducts } from "../constants/filterProducts";
 
-
-const { Search } = Input;
 
 const defaultFormValues: Product = {
   product_id: 0,
@@ -33,9 +33,9 @@ const defaultFormValues: Product = {
 };
 
 const AdminManagerAccount = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | "">("");
+  const [filters, setFilters] = useState<Record<string, any>>({}); // State để lưu trữ các bộ lọc hiện tại
   const [notifyData, setNotifyData] = useState<{
     key: string;
     type: NotificationType;
@@ -62,21 +62,37 @@ const AdminManagerAccount = () => {
   } = useFormModal<Product>();
 
 
-  const fetchProducts = useCallback(
-  async (page: number, limit: number) => {
-    try {
-      const response = await ProductApi.getAll(page, limit);
-      setProducts(response.data?.data?.products ?? []);
-      setTotal(response.data?.data?.pagination?.total_items ?? 0);
-    } catch (error) {
-      console.error(error);
-    }
-  },
-  [setTotal]
-);
+const fetchProducts = useCallback(
+    async (page: number, limit: number, currentFilters: Record<string, any>) => {
+      try {
+        setLoading(true); 
+        let response;
+
+
+        if (Object.keys(currentFilters).length > 0) {
+         
+          response = await ProductApi.filter({ ...currentFilters, page, limit });
+
+        } 
+        else {
+          response = await ProductApi.getAll(page, limit);
+        }
+
+        setProducts(response.data?.data?.products ?? []);
+        setTotal(response.data?.data?.pagination?.total_items ?? 0);
+      } catch (error) {
+        console.error("Lỗi khi tải danh sách sản phẩm:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setTotal, setLoading]
+  );
+
+
   useEffect(() => {
-    void fetchProducts(currentPage, pageSize);
-  }, [currentPage, pageSize,fetchProducts]);  
+    void fetchProducts(currentPage, pageSize, filters);
+  }, [currentPage, pageSize, filters, fetchProducts]);
 
 
 
@@ -91,7 +107,6 @@ const AdminManagerAccount = () => {
       try {
         const response = await ProductApi.getById(record.product_id);
         const data = response.data.data.product;
-        console.log("Fetched product details:", data);
 
         setEditingId(data.product_id);
 
@@ -120,7 +135,7 @@ const AdminManagerAccount = () => {
       setLoading(true);
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
-
+        
         console.log("Payload for creating product:", payloadCreate);
         await ProductApi.create(payloadCreate);
         setNotifyData({
@@ -145,7 +160,7 @@ const AdminManagerAccount = () => {
         });
       }
 
-      await fetchProducts(currentPage, pageSize);
+      await fetchProducts(currentPage, pageSize, filters);
       close();
     } catch (error) {
         let message = "khong the luu san pham này!";
@@ -176,7 +191,7 @@ const AdminManagerAccount = () => {
       try {
         setLoading(true);
         await ProductApi.delete(id);
-        await fetchProducts(currentPage, pageSize);
+        await fetchProducts(currentPage, pageSize, filters);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
@@ -202,15 +217,27 @@ const AdminManagerAccount = () => {
     }
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.product_name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+
+
+
+  const handleFilter = (newFilters: Record<string, any>) => {
+    setFilters(newFilters); // Cập nhật bộ lọc
+    setCurrentPage(1);      // Trở về trang 1 mỗi khi đổi bộ lọc tìm kiếm
+  };
 
   const columns: TableProps<Product>["columns"] = [
     {title: 'ID', dataIndex: 'product_id', key: 'product_id'},
     { title: "Tên sản phẩm", dataIndex: "product_name", key: "product_name" },
 
-    {title: 'Trang Thái', dataIndex: 'product_status', key: 'product_status'},
+    {title: 'Trang Thái', dataIndex: 'product_status', key: 'product_status',
+      render: (status: string) => (
+        <span
+          className={`px-2 py-1 rounded ${status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+        >
+          {status === "active" ? "Active" : "Inactive"}
+        </span>
+      ),
+    },
     {title : 'Tên Danh Mục', dataIndex: 'category_name', key: 'category_name'},
     {
       title: "Tên Loại",
@@ -273,15 +300,12 @@ const AdminManagerAccount = () => {
       </div>
 
       <div className="mt-5 bg-slate-200 p-10 rounded-lg">
-        <Search
-          placeholder="input search text"
-          allowClear
-          enterButton="Search"
-          size="large"
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="mb-4"
+        <FilterHeader
+          fields={filterProducts}
+          onSearch={handleFilter}
+          loading={loading}
         />
-        <Table columns={columns} dataSource={filteredProducts} rowKey="product_id" pagination={
+        <Table columns={columns} dataSource={products} rowKey="product_id" pagination={
           {
             current: currentPage,
             pageSize: pageSize,

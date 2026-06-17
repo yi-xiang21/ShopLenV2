@@ -17,5 +17,9 @@ export const ProductApi = {
     },
     delete: async (id: any) => {
         return callAPI.delete(API_CONFIG.ENDPOINTS.DELETE_PRODUCT( id));
+    },
+    filter: async (filter: any) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.FiLTER_PRODUCTS, filter );
     }
+
 }

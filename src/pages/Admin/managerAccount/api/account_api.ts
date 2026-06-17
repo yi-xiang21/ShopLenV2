@@ -17,5 +17,8 @@ export const AccountApi = {
     },
     delete: async (id: any) => {
         return callAPI.delete(API_CONFIG.ENDPOINTS.DELETE_USER( id));
+    },
+    filter: async (filter: any) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.FILTER_USERS, filter );
     }
 }

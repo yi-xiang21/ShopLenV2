@@ -5,10 +5,12 @@ import HomeBanner1 from "../assets/HomeBanner1.png";
 import HomeBanner2 from "../assets/HomeBanner2.png";
 import WokShopHome from "../assets/WorkShopHome.png";
 import section1 from "../assets/section1.jpg";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Catelogy from "../component/CardCatelogy";
 import CurvedItem from "../component/CurvedScrollItems";
 import type { Category } from "../pages/Admin/managerCatelogy/type/catelogy";
+import { Skeleton } from 'antd';
+import { categoryApi } from "./Admin/managerCatelogy/api/cate_api";
 export interface Item {
   id: number;
   name: string;
@@ -25,32 +27,36 @@ const items: Item[] = [
   { id: 7, name: "Item 7", content: "Nội dung chi tiết của Item 7: stu" ,img:HomeBanner1},
 ];
 
-// Dữ liệu giả lập cho các danh mục sau nay thay bang tan stack api
-const Data: Category[] = [
-  {
-    id: "1",
-    category_name: "Điện thoại",
-    description:
-      "Các loại điện thoại thông minh từ các thương hiệu hàng đầu.",
-    slug: "dien-thoai",
-    image_url: HomeBanner1,
-    children: [],
-  },
-  {
-    id: "2",
-    category_name: "Laptop",
-    description: "Các loại laptop phục vụ cho công việc và giải trí.",
-    slug: "laptop",
-    image_url: HomeBanner2,
-    children: [],
-  }
-  
-];
+
 
   
 
 const HomePage = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      try {
+        const response = await categoryApi.getAll(1, 1000);
+        setCategories(response.data?.data?.categories || []);
+      }
+      catch (error) {
+        console.error('Lỗi khi lấy danh mục:', error);
+      }
+      finally {
+        setLoading(false);
+      }
+    };
+
+    void fetchCategories();
+  }, []);
+
+     
+
   const bannerImages = [HomeBanner1, HomeBanner2];
+
   //test 3d
   const containerRef = useRef<HTMLElement | null>(null);
 
@@ -159,9 +165,16 @@ const HomePage = () => {
         <h1>Các Danh Mục Của Chúng Tôi</h1>
         <p>khám phá các sản phẩm với cách danh mục bạn muốn.</p>
         <div className="h-100 w-full overflow-x-auto overflow-y-hidden flex items-center p-10 justify-start gap-8 md:w-full md:h-120 no-scrollbar">
-          {Data.map((item) => (
-            <Catelogy key={item.id} Data={item} />
-          ))}
+          {loading ? (
+            <Skeleton active paragraph={{ rows: 4 }} />
+          ) 
+          : 
+          (
+            categories.map((category) => (
+              <Catelogy key={category.id} Data={category} />
+            ))
+          )
+          }
         </div>
       </section>
 

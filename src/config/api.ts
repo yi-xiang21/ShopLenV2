@@ -20,6 +20,7 @@ export const API_CONFIG = {
     CREATE_USER: '/api/users',
     UPDATE_USER: (id: string) => `/api/users/${id}`,
     DELETE_USER: (id: string) => `/api/users/${id}`,
+      FILTER_USERS: '/api/users/filter',
     
     //admin category
     GET_CATEGORIES: '/api/categories',
@@ -27,6 +28,7 @@ export const API_CONFIG = {
     CREATE_CATEGORY: '/api/categories',
     UPDATE_CATEGORY: (id: string) => `/api/categories/${id}`,
     DELETE_CATEGORY: (id: string) => `/api/categories/${id}`,
+    FiLTER_CATEGORIES: '/api/categories/filter',
 
     //admin product
     GET_PRODUCTS: '/api/products',
@@ -34,8 +36,17 @@ export const API_CONFIG = {
     CREATE_PRODUCT: '/api/products',
     UPDATE_PRODUCT: (id: string) => `/api/products/${id}`,
     DELETE_PRODUCT: (id: string) => `/api/products/${id}`,
+    FiLTER_PRODUCTS: '/api/products/filter',  
 
-    
+    //admin voucher
+    GET_VOUCHERS: '/api/vouchers/vouchers',
+    GET_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
+    CREATE_VOUCHER: '/api/vouchers/vouchers',
+    UPDATE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
+    DELETE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
+    FILTER_VOUCHERS: '/api/vouchers/vouchers/filter',
+
+
 
     FORGOT_PASSWORD: '/api/auth/forgot-password',
     VERIFY_OTP: '/api/auth/verify-reset-otp',

@@ -60,75 +60,116 @@ const DynamicForm = <T extends object>({
           
         );
 
-     case FormFieldType.ImageUpload:
-        return (
-          <div>
-            <input
-              className="w-full p-2 border border-gray-300 rounded"
-              type="file"
-              multiple // Cho phép chọn nhiều file
-              accept="image/*"
-              onChange={async (e) => {
-                const files = Array.from(e.target.files || []);
-                if (files.length > 0) {
-                  // 1. Đọc tất cả các file thành mảng base64
-                  const base64Promises = files.map((file) => {
-                    return new Promise<string>((resolve, reject) => {
-                      const reader = new FileReader();
-                      reader.onload = () => resolve(reader.result as string);
-                      reader.onerror = (error) => reject(error);
-                      reader.readAsDataURL(file);
-                    });
-                  });
+    case FormFieldType.ImageUpload: {
+        // Đảm bảo value luôn là 1 mảng
+        const currentImages = Array.isArray(value) ? value : [];
 
-                  try {
-                    const base64Images = await Promise.all(base64Promises);
-                    
-                    
-                    const formattedImages = base64Images.map((base64, index) => ({
-                      image_url: base64,
-                      sort_order: index + 1, 
-                    }));
+        // Hàm xử lý khi xoá 1 hình ảnh
+        const handleDeleteImage = (indexToRemove: number) => {
+          const newImages = currentImages.filter((_, idx) => idx !== indexToRemove);
+          
+          // Đánh lại số thứ tự (sort_order) cho mảng mới
+          const reorderedImages = newImages.map((img: any, idx: number) => ({
+            ...img, // Giữ nguyên image_id (nếu có)
+            sort_order: idx + 1, 
+          }));
+          
+          onChange(key, reorderedImages);
+        };
 
 
-                    const currentImages = Array.isArray(value) ? value : [];
-                    onChange(key, [...currentImages, ...formattedImages]);
-                    
-                    
-                  } catch (error) {
-                    console.error("Lỗi đọc file hình ảnh:", error);
-                  }
-                }
-              }}
-              disabled={disabled}
-            />
+        const handleAddImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
+          const files = Array.from(e.target.files || []);
+          if (files.length === 0) return;
+
+          const base64Promises = files.map((file) => {
+            return new Promise<string>((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result as string);
+              reader.onerror = (error) => reject(error);
+              reader.readAsDataURL(file);
+            });
+          });
+
+          try {
+            const base64Images = await Promise.all(base64Promises);
             
-            {/* Vùng hiển thị Preview nhiều ảnh đã được cập nhật */}
-            <div className="flex flex-wrap gap-2 mt-2">
-              {Array.isArray(value) ? (
-                value.map((item: any, index) => {
-                  // Hỗ trợ đọc link ảnh từ chuẩn Object mới hoặc String cũ
-                  const src = typeof item === "string" ? item : item.image_url;
-                  
-                  return src ? (
+            // Tạo mảng object hình mới
+            const newImages = base64Images.map((base64) => ({
+              image_url: base64,
+              sort_order: 0, // Tạm thời để 0, sẽ được đánh lại ngay bên dưới
+            }));
+
+            // Gộp mảng cũ và mảng mới
+            const combinedImages = [...currentImages, ...newImages];
+            
+            // Đánh lại toàn bộ số thứ tự (sort_order)
+            const reorderedImages = combinedImages.map((img: any, idx: number) => ({
+              ...img,
+              sort_order: idx + 1,
+            }));
+
+            onChange(key, reorderedImages);
+          } catch (error) {
+            console.error("Lỗi đọc file hình ảnh:", error);
+          }
+        };
+
+        return (
+          <div className="flex flex-col gap-3 border p-3 rounded-md bg-slate-50">
+            {/* Input thêm hình chỉ hiển thị khi không ở chế độ View */}
+            {!disabled && (
+              <input
+                className="w-full p-2 border border-blue-300 rounded bg-white cursor-pointer"
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleAddImages}
+              />
+            )}
+            
+
+            <div className="flex flex-wrap gap-4 mt-2">
+              {currentImages.map((img: any, index: number) => {
+                const src = typeof img === "string" ? img : img.image_url;
+                
+                return src ? (
+                  <div key={img.image_id || index} className="relative border border-slate-300 p-2 rounded bg-white flex flex-col items-center group shadow-sm hover:shadow-md transition-shadow">
                     <img
-                      key={index}
                       src={src}
                       alt={`Preview ${index + 1}`}
-                      className="max-h-40 object-contain border border-gray-200 rounded"
+                      className="h-32 w-32 object-cover rounded"
                     />
-                  ) : null;
-                })
-              ) : value && typeof value === "string" ? (
-                <img
-                  src={value}
-                  alt="Preview"
-                  className="max-h-40 object-contain border border-gray-200 rounded"
-                />
-              ) : null}
+
+                    <div className="text-xs text-slate-600 mt-2 text-center flex flex-col">
+                      <span className="font-semibold text-blue-600">Thứ tự: {img.sort_order || index + 1}</span>
+                      {img.image_id && (
+                        <span className="text-gray-400">ID: {img.image_id}</span>
+                      )}
+                    </div>
+
+                    {/* Nút Xoá (chỉ hiện khi Form không bị disabled) */}
+                    {!disabled && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteImage(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold shadow-md transform scale-0 group-hover:scale-100 transition-transform"
+                        title="Xoá hình này"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                ) : null;
+              })}
+              
+              {currentImages.length === 0 && (
+                <span className="text-sm text-gray-400 italic">Chưa có hình ảnh nào.</span>
+              )}
             </div>
           </div>
         );
+      }
 
       case FormFieldType.TextArea:
         return (

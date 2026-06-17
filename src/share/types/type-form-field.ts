@@ -11,4 +11,4 @@ export const FormFieldType = {
   TextArea: 'textArea',
   inputFile: 'inputFile',
 } as const;
-export type FormFieldType = typeof FormFieldType[keyof typeof FormFieldType];
+export type FormFieldTypeKey = typeof FormFieldType[keyof typeof FormFieldType];

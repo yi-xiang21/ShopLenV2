@@ -1,5 +1,5 @@
 import type { FormField } from "@/share/types/form-field";
-import type { categoryChildren } from "../type/catelogy";
+import type { categoryChildren } from "@/pages/Admin/managerCatelogy/type/catelogy";
 import { FormFieldType } from "@/share/types/type-form-field";
 
 
