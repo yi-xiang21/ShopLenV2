@@ -3,39 +3,106 @@ import type { Category } from "../pages/Admin/managerCatelogy/type/catelogy";
 interface CardCatelogyProps {
   Data: Category;
 }
+
 const CardCatelogy = ({ Data }: CardCatelogyProps) => {
   return (
-    <a className="group relative overflow-hidden rounded-2xl shrink-0 shadow-lg h-80 w-70  md:h-100 md:w-80" href={`/category/${Data.slug}`}>
-      <img src={Data.image_url} className="h-full w-full object-cover" />
+    <a
+      href={`/category/${Data.slug}`}
+      className="
+        group
+        relative
+        overflow-hidden
+        rounded-2xl
+        shadow-md
+        hover:shadow-2xl
+        transition-all
+        duration-500
+        w-72
+        h-96
+        shrink-0
+        bg-white
+      "
+    >
+      <img
+        src={Data.image_url}
+        alt={Data.category_name}
+        className="
+          w-full
+          h-full
+          object-cover
+          transition-transform
+          duration-700
+          group-hover:scale-110
+        "
+      />
 
       <div
         className="
-      absolute
-      inset-x-0
-      bottom-0
-      translate-y-[20%]
-      bg-white/95
-      p-2
-      transition-transform duration-500
-      group-hover:translate-y-0
-    "
-      >
-        <h1 className="text-black!">{Data.category_name}</h1>  
-      </div>
+          absolute
+          inset-0
+          bg-gradient-to-t
+          from-black/80
+          via-black/20
+          to-transparent
+        "
+      />
 
       <div
         className="
-      absolute bottom-0 left-0 right-0
-      translate-y-full
-      bg-white
-      p-4
-      transition-transform duration-500
-      group-hover:translate-y-0
-    "
+          absolute
+          bottom-0
+          left-0
+          right-0
+          p-5
+          text-white
+          transition-all
+          duration-500
+        "
       >
-        <h1 className="text-black!">{Data.category_name}</h1>
+        <h3
+          className="
+            text-xl
+            font-bold
+            mb-2
+          "
+        >
+          {Data.category_name}
+        </h3>
 
-        <p>{Data.description}</p>
+        <p
+          className="
+            text-sm
+            text-gray-200
+            line-clamp-3
+            opacity-0
+            translate-y-4
+            group-hover:opacity-100
+            group-hover:translate-y-0
+            transition-all
+            duration-500
+          "
+        >
+          {Data.description}
+        </p>
+
+        <div
+          className="
+            mt-4
+            inline-flex
+            items-center
+            gap-2
+            text-sm
+            font-medium
+            opacity-0
+            translate-y-4
+            group-hover:opacity-100
+            group-hover:translate-y-0
+            transition-all
+            duration-700
+          "
+        >
+          Xem sản phẩm →
+        </div>
       </div>
     </a>
   );

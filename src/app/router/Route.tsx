@@ -5,18 +5,19 @@ import LoginAndRegister from '@/pages/Login&Register/pages/LoginAndRegister';
 import UserLayout from '@/layout/UserLayout';
 import HomePage from '@/pages/Home';
 import UserProfileLayout from '@/layout/UserProfileLayout';
-import ProfileUser from '@/pages/UserProfile/ProfileUser';
-import UserOrderTracking from '@/pages/UserProfile/UserOrderTracking';
+import ProfileUser from '@/pages/User/UserProfile/ProfileUser';
+import UserOrderTracking from '@/pages/User/UserProfile/UserOrderTracking';
 import ChangePassword from '@/pages/Login&Register/pages/ChangePassword';
 import ResetPassword from '@/pages/Login&Register/pages/ResetPassword';
-import PurchaseHistoryPage from '@/pages/UserProfile/PurchaseHistory';
-import WorkshopPage from '@/pages/UserProfile/UserWorkshop';
-import AccountSettingsPage from '@/pages/UserProfile/UserSettingAccount';
+import PurchaseHistoryPage from '@/pages/User/UserProfile/PurchaseHistory';
+import WorkshopPage from '@/pages/User/UserProfile/UserWorkshop';
+import AccountSettingsPage from '@/pages/User/UserProfile/UserSettingAccount';
 import AboutUs from '@/pages/About';
 import AdminManagerAccount from '@/pages/Admin/managerAccount/pages/AdminManagerAccount';
 import AdminManagerCategory from '@/pages/Admin/managerCatelogy/pages/AdminManagerCatelogries';
 import AdminManagerProducts from '@/pages/Admin/managerProducts/pages/AdminManagerProduct';
 import AdminManagerVouchers from '@/pages/Admin/managerVoucher/pages/AdminManagerVoucher';
+import AdminManagerPromotion from '@/pages/Admin/managerPromotion/pages/AdminManagerPromotion';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
 
 
@@ -120,6 +121,10 @@ export const routes = createBrowserRouter([
                     {
                         path: 'Manager-Vouchers',
                         element: <AdminManagerVouchers />,
+                    },
+                    {
+                        path: 'Manager-Promotions',
+                        element: <AdminManagerPromotion />,
                     },
                     {
                         path: 'setting',

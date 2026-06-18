@@ -1,5 +1,5 @@
-import { API_CONFIG } from "../../../config/api";
-import { callAPI } from "../../../share/lib/axios";
+import { API_CONFIG } from "@/config/api";
+import { callAPI } from "@/share/lib/axios";
 
 export const userApi = {
   getProfile: async () => {

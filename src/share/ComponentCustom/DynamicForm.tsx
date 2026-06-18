@@ -1,7 +1,8 @@
 import type { FormField } from "@/share/types/form-field";
 import { FormFieldType } from "@/share/types/type-form-field";
-import { Input, Select } from "antd";
+import { DatePicker, Input, Select, TimePicker } from "antd";
 import SelectFetchCustom from "@/share/ComponentCustom/select/SelectFetchCustom";
+import { formatToBE, parseToDayjs } from "./FormatTime";
 
 type DynamicFormProps<T extends object> = {
   fields: FormField<T>[];
@@ -186,9 +187,11 @@ const DynamicForm = <T extends object>({
           <Select
             placeholder={field.placeholder}
             value={value}
+            mode={field.mode}
             options={field.options}
             onChange={(value) => onChange(key, value)}
             allowClear
+           
             disabled={disabled}
           />
         );
@@ -201,6 +204,7 @@ const DynamicForm = <T extends object>({
             onChange={(value) => onChange(key, value)}
             fetchOptions={field.fetchOptions}
             disabled={disabled}
+            mode={field.mode}
           />
         );
 
@@ -225,22 +229,25 @@ const DynamicForm = <T extends object>({
         );
       case FormFieldType.TimePicker:
         return (
-          <Input
-            type="time"
+          <TimePicker
             placeholder={field.placeholder}
-            value={String(value ?? "")}
-            onChange={(e) => onChange(key, e.target.value)}
+            value={parseToDayjs(value)} 
+            onChange={(time) => onChange(key, formatToBE(time, 'time'))} 
             disabled={disabled}
+            className="w-full" 
+            format="HH:mm:ss"
           />
         );
+
       case FormFieldType.DatePicker:
         return (
-          <Input
-            type="date"
+          <DatePicker
             placeholder={field.placeholder}
-            value={String(value ?? "")}
-            onChange={(e) => onChange(key, e.target.value)}
+            value={parseToDayjs(value)} 
+            onChange={(date) => onChange(key, formatToBE(date, 'date'))} 
             disabled={disabled}
+            className="w-full"
+            format="YYYY-MM-DD"
           />
         );
       case FormFieldType.Checkbox:

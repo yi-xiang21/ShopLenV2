@@ -151,7 +151,11 @@ export const voucherFields: FormField<voucher>[] = [
         required: true,
         validator: (formdata:voucher) => {
           const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
           const startDate = new Date(formdata.start_date);
+          startDate.setHours(0, 0, 0, 0);
+
           return startDate >= today;
         },
         message: 'Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.',
@@ -170,14 +174,16 @@ export const voucherFields: FormField<voucher>[] = [
     rules: [
       {
         required: true,
-        validator: (formdata:voucher) => {
-          if (formdata.start_date && formdata.end_date) {
-            const startDate = new Date(formdata.start_date);
-            const endDate = new Date(formdata.end_date);
-            return endDate > startDate;
-          }
-          return true;
-        },
+        validator: (formdata: voucher) => {
+  if (!formdata.start_date || !formdata.end_date) {
+    return true;
+  }
+
+  const startDate = new Date(formdata.start_date);
+  const endDate = new Date(formdata.end_date);
+
+  return endDate > startDate;
+},
         message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
       },
       {

@@ -17,5 +17,6 @@ export interface FormField<T> {
   fetchOptions?: () => Promise<{ label: string; value: string | number }[]>;
   rules?: ValidationRule[];
   disabled?: boolean;
+  mode?: 'multiple' | 'tags';
   
 }

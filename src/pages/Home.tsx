@@ -11,6 +11,8 @@ import CurvedItem from "../component/CurvedScrollItems";
 import type { Category } from "../pages/Admin/managerCatelogy/type/catelogy";
 import { Skeleton } from 'antd';
 import { categoryApi } from "./Admin/managerCatelogy/api/cate_api";
+import { ProductApi } from "./Admin/managerProducts/api/products_api";
+import CardProducts from "@/component/CardProducts";
 export interface Item {
   id: number;
   name: string;
@@ -34,6 +36,9 @@ const items: Item[] = [
 const HomePage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [products, setProducts] = useState<any[]>([]); 
+
+
   
   useEffect(() => {
     const fetchCategories = async () => {
@@ -49,8 +54,22 @@ const HomePage = () => {
         setLoading(false);
       }
     };
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await ProductApi.getAll(1, 1000);
+        setProducts(response.data?.data?.products || []);
+      }
+      catch (error) {
+        console.error('Lỗi khi lấy sản phẩm:', error);
+      }
+      finally {
+        setLoading(false);
+      }
 
+    };
     void fetchCategories();
+    void fetchProducts();
   }, []);
 
      
@@ -150,9 +169,18 @@ const HomePage = () => {
           <h1>Sản Phẩm Bán Chạy</h1>
           <p>Khám phá những sản phẩm được yêu thích nhất của chúng tôi.</p>
           <ParallaxSection image={""}>
-            <div className="flex flex-col items-center justify-around h-full bg-red-700">
-                <div className="grid grid-cols-3 gap-4 mb-10 md:grid-cols-6 h w-full px-6 md:px-10 bg-yellow-800">
-                    // thay bang sp tan stack api sau nay
+            <div className="flex flex-col items-center justify-around h-full">
+                <div className="flex gap-10 w-full p-10 ">
+                  {loading ? (
+                    <Skeleton active paragraph={{ rows: 4 }} />
+                  )
+                  :
+                  (
+                    products.map((product) => (
+                      <CardProducts key={product.product_id} data={product} />
+                    ))
+                  )
+                  }
                 </div>
               <button className="button_user">Xem Sản Phẩm Bán Chạy</button>
             </div>

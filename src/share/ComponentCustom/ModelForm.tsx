@@ -21,6 +21,7 @@ interface FormModalProps<T extends object> {
   childKey?: keyof T;
   hasChildren?: boolean;
   childFields?: FormField<any>[];
+  tabNamePrefix?: string;
   nestedLimit?: number;
 }
 
@@ -38,6 +39,7 @@ const FormModal = <T extends object>({
   hasChildren = false,
   childFields,
   nestedLimit = 0,
+  tabNamePrefix,
 }: FormModalProps<T>) => {
   const [formData, setFormData] = useState<any>(initialValues);
 
@@ -51,7 +53,7 @@ const FormModal = <T extends object>({
   const activeChildFields = childFields || fields;
   const [error, setError] = useState<Record<string, string>>({});
   const activeChildKey = (childKey as string) || "children";
-
+  
 
   const handleParentChange = (key: string, value: unknown) => {
     setFormData((prev: any) => ({
@@ -156,7 +158,7 @@ const FormModal = <T extends object>({
             fields={activeChildFields}
             nestedLimit={nestedLimit}
             isViewMode={isViewMode}
-            tabNamePrefix="Mục con"
+            tabNamePrefix={tabNamePrefix || "Mục con"}
             error={error}
             parentPath={activeChildKey}
           />

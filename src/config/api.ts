@@ -36,7 +36,9 @@ export const API_CONFIG = {
     CREATE_PRODUCT: '/api/products',
     UPDATE_PRODUCT: (id: string) => `/api/products/${id}`,
     DELETE_PRODUCT: (id: string) => `/api/products/${id}`,
-    FiLTER_PRODUCTS: '/api/products/filter',  
+    FiLTER_PRODUCTS: '/api/products/filter',
+    
+    
 
     //admin voucher
     GET_VOUCHERS: '/api/vouchers/vouchers',
@@ -45,6 +47,16 @@ export const API_CONFIG = {
     UPDATE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
     DELETE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
     FILTER_VOUCHERS: '/api/vouchers/vouchers/filter',
+
+    //admin promotion
+    GET_PROMOTIONS_ACTIVE: '/api/promotions',
+    GET_PROMOTION: (id: string) => `/api/promotions/${id}`,
+    GET_PROMOTIONS: '/api/promotions/promotions/all',
+    CREATE_PROMOTION: '/api/promotions/promotions',
+    UPDATE_PROMOTION: (id: string) => `/api/promotions/promotions/${id}`,
+    DELETE_PROMOTION: (id: string) => `/api/promotions/promotions/${id}`,
+    FILTER_PROMOTIONS: '/api/promotions/promotions/filter',
+
 
 
 

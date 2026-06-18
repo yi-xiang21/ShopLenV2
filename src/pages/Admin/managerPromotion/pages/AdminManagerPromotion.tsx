@@ -4,9 +4,9 @@ import type { TableProps } from "antd/es/table";
 
 import { useFormModal } from "@/share/hook/useFormModal";
 import Notification from "@/share/ComponentCustom/Notification/Notification";
-import {voucherFields} from "@/pages/Admin/managerVoucher/constants/vouchersFields";
-import {filterVouchers} from "@/pages/Admin/managerVoucher/constants/vouchersFilter";
-import { vouchersApi } from "@/pages/Admin/managerVoucher/api/vouchers_api";
+import { promotionApi } from "@/pages/Admin/managerPromotion/api/promotion_api";
+import { filterPromotions } from "@/pages/Admin/managerPromotion/constants/promotionFilter";
+import { promotionFields } from "@/pages/Admin/managerPromotion/constants/promotionFields";
 import {
   FormModalMode,
   type FormModalModeType,
@@ -15,28 +15,26 @@ import FormModal from "@/share/ComponentCustom/ModelForm";
 
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
 import axios from "axios";
-import type { voucher } from "@/pages/Admin/managerVoucher/type/vouchers"
+import type { promotion } from "@/pages/Admin/managerPromotion/type/promotion";
 import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
-import {getVoucherFieldsByMode} from "@/pages/Admin/managerVoucher/constants/sortField";
+import { getPromotionFieldsByMode } from "@/pages/Admin/managerPromotion/constants/sortField";
 import { parseToDayjs } from "@/share/ComponentCustom/FormatTime";
+import {promotionChildrenFields} from "@/pages/Admin/managerPromotion/constants/promotionChilrenFields";
 
-
-
-const defaultFormValues: voucher = {
-  code: "",
-  voucher_name: "",
+const defaultFormValues:  promotion = {
+  title: "",
   discount_type: "percent",
   value: 0,
-  minimum_value: 0,
-  max_discount: undefined,
-  quantity: 0,
+  min_order_value: 0,
+  status: "active",
   start_date: "",
   end_date: "",
+  applicable_products: [],
  
 };
 
-const AdminManagerVoucher = () => {
-  const [vouchers, setVouchers] = useState<voucher[]>([]);
+const AdminManagerPromotion = () => {
+  const [promotions, setPromotions] = useState<promotion[]>([]);
   const [editingId, setEditingId] = useState<number | "">("");
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [notifyData, setNotifyData] = useState<{
@@ -50,7 +48,7 @@ const AdminManagerVoucher = () => {
     open: isModalOpen,
     mode: modalMode,
     loading,
-    selectedRecord: selecteVoucher,
+    selectedRecord: selectedPromotion,
     currentPage,
     pageSize,
     total,
@@ -62,10 +60,10 @@ const AdminManagerVoucher = () => {
     setPageSize,
     setTotal,
     setLoading,
-  } = useFormModal<voucher>();
+  } = useFormModal<promotion>();
 
 
-  const fetchVouchers = useCallback(
+  const fetchPromotions = useCallback(
       async (page: number, limit: number, currentFilters: Record<string, any>) => {
         try {
           setLoading(true); 
@@ -74,20 +72,21 @@ const AdminManagerVoucher = () => {
   
           if (Object.keys(currentFilters).length > 0) {
           
-            console.log("Fetching vouchers with filters:", currentFilters, "Page:", page, "Limit:", limit);
-            response = await vouchersApi.filter({ ...currentFilters, page, limit });
-            console.log("Filtered vouchers response:", response.data);
+            console.log("Fetching promotions with filters:", currentFilters, "Page:", page, "Limit:", limit);
+            response = await promotionApi.filter({ ...currentFilters, page, limit });
+            console.log("Filtered promotions response:", response.data);
         
           } 
           else {
-            response = await vouchersApi.getAll(page, limit);
-          
+            
+            response = await promotionApi.getAll(page, limit);
+            console.log("Fetched promotions response:", response.data);
           }
   
-          setVouchers(response.data?.data?.vouchers ?? []);
+          setPromotions(response.data?.data?.promotions ?? []);
           setTotal(response.data?.data?.pagination?.total_items ?? 0);
         } catch (error) {
-          console.error("Lỗi khi tải danh sách voucher:", error);
+          console.error("Lỗi khi tải danh sách promotion:", error);
         } finally {
           setLoading(false);
         }
@@ -97,11 +96,11 @@ const AdminManagerVoucher = () => {
   
   
     useEffect(() => {
-      void fetchVouchers(currentPage, pageSize, filters);
-    }, [currentPage, pageSize, filters, fetchVouchers ]);
+      void fetchPromotions(currentPage, pageSize, filters);
+    }, [currentPage, pageSize, filters, fetchPromotions ]);
     
 
-  const handleAction = async (mode: FormModalModeType, record?: voucher) => {
+  const handleAction = async (mode: FormModalModeType, record?: promotion) => {
     if (mode === FormModalMode.CREATE) {
       setEditingId("");
       openCreate();
@@ -110,10 +109,10 @@ const AdminManagerVoucher = () => {
 
     if (record) {
       try {
-        const response = await vouchersApi.getById(record.voucher_id);
-        const data = response.data.data?.voucher;
-        console.log("Fetched voucher details:", data);
-        setEditingId(data.voucher_id);
+        const response = await promotionApi.getById(record.promotion_id);
+        const data = response.data.data?.promotion;
+        console.log("Fetched promotion details:", data);
+        setEditingId(data.promotion_id);
         
 
 
@@ -128,41 +127,41 @@ const AdminManagerVoucher = () => {
           key: Date.now().toString(),
           type: "error",
           title: "Thất bại",
-          message: "Không thể lấy thông tin voucher này!",
+          message: "Không thể lấy thông tin promotion này!",
         });
       }
     }
   };
 
-  const handleSubmitForm = async (values: voucher) => {
+  const handleSubmitForm = async (values: promotion) => {
     try {
       setLoading(true);
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
 
         
-        await vouchersApi.create(payloadCreate);
+        await promotionApi.create(payloadCreate);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Tạo voucher mới thành công!",
+          message: "Tạo promotion mới thành công!",
         });
       } else {
         const payloadUpdate = { ...values };
 
-        console.log("Updating voucher with ID:", editingId, "Payload:", payloadUpdate);
+        console.log("Updating promotion with ID:", editingId, "Payload:", payloadUpdate);
 
-        await vouchersApi.update(editingId, payloadUpdate);
+        await promotionApi.update(editingId, payloadUpdate);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Cập nhật voucher thành công!",
+          message: "Cập nhật promotion thành công!",
         });
       }
 
-      await fetchVouchers(currentPage, pageSize, filters);
+      await fetchPromotions(currentPage, pageSize, filters);
       close();
     } catch (error) {
         let message = "khong the luu tai khoan này!";
@@ -188,20 +187,20 @@ const AdminManagerVoucher = () => {
     }
   };
 
-  const handleDeleteVoucher = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa voucher này?")) {
+  const handleDeletePromotion = async (id: number) => {
+    if (window.confirm("Bạn có chắc chắn muốn xóa promotion này?")) {
       try {
         setLoading(true);
-        await vouchersApi.delete(id);
-        await fetchVouchers(currentPage, pageSize, filters);
+        await promotionApi.delete(id);
+        await fetchPromotions(currentPage, pageSize, filters);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
           title: "Thành công",
-          message: "Xóa tài khoản thành công!",
+          message: "Xóa promotion thành công!",
         });
       } catch (error) {
-          let message = "khong thể xóa voucher này!";
+          let message = "khong thể xóa promotion này!";
           if (axios.isAxiosError(error)) {
             message =
               error.response?.data?.message ??
@@ -210,7 +209,7 @@ const AdminManagerVoucher = () => {
         setNotifyData({
           key: Date.now().toString(),
           type: "warning",
-          title: "Lỗi xóa voucher",
+          title: "Lỗi xóa promotion",
           message: message,
         });
       } finally {
@@ -220,13 +219,12 @@ const AdminManagerVoucher = () => {
   };
 
 
-  const columns: TableProps<voucher>["columns"] = [
-    {title: "ID", dataIndex: "voucher_id", key: "voucher_id" },
-    {title: "Mã voucher", dataIndex: "code", key: "code" },
-    { title: "Tên voucher", dataIndex: "voucher_name", key: "voucher_name" },
+  const columns: TableProps<promotion>["columns"] = [
+    { title: "ID", dataIndex: "promotion_id", key: "promotion_id" },
+    { title: "Tiêu đề", dataIndex: "title", key: "title" },
     { title: "Loại giảm giá", dataIndex: "discount_type", key: "discount_type" },
-    { title: "Giá trị giảm giá", dataIndex: "value", key: "value" },
-    { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
+    { title: "Giá trị", dataIndex: "value", key: "value" },
+    { title: "Giá trị đơn hàng tối thiểu", dataIndex: "min_order_value", key: "min_order_value" },
     { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
     { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
     {
@@ -249,7 +247,7 @@ const AdminManagerVoucher = () => {
           <Button
             type="primary"
             danger
-            onClick={() => handleDeleteVoucher(record.voucher_id as number)}
+            onClick={() => handleDeletePromotion(record.promotion_id as number)}
           >
             Delete
           </Button>
@@ -293,12 +291,12 @@ const AdminManagerVoucher = () => {
       <div className="mt-5 bg-slate-200 p-10 rounded-lg">
 
        <FilterHeader
-          fields={filterVouchers}
+          fields={filterPromotions}
           onSearch={handleFilter}
           loading={loading}
         />
         
-        <Table columns={columns} dataSource={vouchers} rowKey="voucher_id" pagination={
+        <Table columns={columns} dataSource={promotions} rowKey="promotion_id" pagination={
           {
             current: currentPage,
             pageSize: pageSize,
@@ -312,19 +310,22 @@ const AdminManagerVoucher = () => {
         } />
       </div>
 
-      <FormModal<voucher>
+      <FormModal<promotion>
         isOpen={isModalOpen}
         onClose={close}
         loading={loading}
         mode={modalMode}
         title={modalTitle}
-        fields={getVoucherFieldsByMode(voucherFields, modalMode)}
-        initialValues={selecteVoucher || defaultFormValues}
+        fields={getPromotionFieldsByMode(promotionFields, modalMode)}
+        initialValues={selectedPromotion || defaultFormValues}
         onSubmit={handleSubmitForm}
-        hasChildren={false}
+        hasChildren={true}
+        childFields={promotionChildrenFields}
+        childKey="applicable_products"
+        tabNamePrefix="Sản phẩm áp dụng"
       />
     </div>
   );
 };
 
-export default AdminManagerVoucher;
+export default AdminManagerPromotion;

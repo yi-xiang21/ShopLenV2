@@ -2,8 +2,8 @@
 
 import {  useState,useEffect } from 'react';
 
-import type { user } from '@/pages/UserProfile/types/user-type';
-import { userApi } from '@/pages/UserProfile/api/user-api';
+import type { user } from '@/pages/User/UserProfile/types/user-type';
+import { userApi } from '@/pages/User/UserProfile/api/user-api';
 import { useAppSelector } from '@/app/redux/hooks';
 
 const ProfileUser = () => {

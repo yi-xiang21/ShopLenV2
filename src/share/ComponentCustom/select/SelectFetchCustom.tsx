@@ -6,6 +6,7 @@ export interface SelectFetchProps {
   value?: any;
   onChange?: (value: any) => void;
   placeholder?: string;
+  mode?: 'multiple' | 'tags';
   disabled?: boolean;
 }
 
@@ -14,7 +15,8 @@ const SelectFetchCustom = ({
   value, 
   onChange, 
   placeholder, 
-  disabled 
+  disabled ,
+  mode
 }: SelectFetchProps) => {
   const [options, setOptions] = useState<{ label: string; value: string | number }[]>([]);
   const [loading, setLoading] = useState(false);
@@ -39,6 +41,7 @@ const SelectFetchCustom = ({
   return (
     <Select
       style={{ width: '100%' }}
+      mode={mode}
       value={value}
       onChange={onChange}
       options={options}
