@@ -14,6 +14,11 @@ export const API_CONFIG = {
     PROFILE: '/api/auth/me',
     UPDATE_PROFILE: '/api/users/user/me',
 
+    //whistlist
+    POST_WISHLIST: '/api/wishlist/toggle',
+    GET_WISHLIST: '/api/wishlist',
+
+
     //admin account
     GETALL_USERS: '/api/users',
     GET_USER: (id: string) => `/api/users/${id}`,

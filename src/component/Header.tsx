@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaBars, FaRegUser, FaShoppingCart, FaTimes ,FaHeart } from 'react-icons/fa'
 import { FiSearch } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
@@ -6,14 +6,24 @@ import logo from '@/assets/Logo.png'
 import HeaderDesktopMenu from '@/component/HeaderDesktopMenu'
 import HeaderMobileMenu from '@/component/HeaderMobileMenu'
 import Badge from 'antd/es/badge/Badge'
-import { useAppSelector } from '@/app/redux/hooks'
+import { useAppDispatch, useAppSelector } from '@/app/redux/hooks'
+import { getWishlistThunk } from '@/pages/User/whistlist/store/wishlist_thunck'
 
 
 export type ActiveMenuKey = 'home' | 'shop' | 'about' | 'workshop'
 
 
 const Header = () => {
+  const dispatch = useAppDispatch();
    const { user } = useAppSelector((state) => state.auth);
+   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
+   console.log('wishlistItems in Header:', wishlistItems); 
+
+   useEffect(() => {
+     if (user) {
+       dispatch(getWishlistThunk());
+     }
+   }, [user, dispatch]);
    const router = () =>{ 
     if (!user) return '/auth/login';
 
@@ -83,13 +93,13 @@ const Header = () => {
               <FaRegUser aria-hidden='true' className='h-5 w-5' />
             </Link>
             <Link
-              aria-label='yeu thich'
+              aria-label='Yêu thích'
               className='rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800'
-              type='button'
-              // sua lai thanh route yeu thich sau khi lam xong chuc nang
-              to={""}
+              to={"/wishlist"}
             >
-              <FaHeart aria-hidden='true' className='h-5 w-5' />
+              <Badge count={wishlistItems.length} >
+                <FaHeart aria-hidden='true' className='h-5 w-5' />
+              </Badge>
             </Link>
             {/* thay bang antdesign badge */}
             <button
