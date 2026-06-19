@@ -40,7 +40,7 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
         className="
           absolute
           inset-0
-          bg-gradient-to-t
+          bg-linear-to-t
           from-black/80
           via-black/20
           to-transparent
