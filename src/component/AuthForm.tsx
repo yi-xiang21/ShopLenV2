@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { AuthMode } from "../layout/AuthLayout.tsx";
+//animation
+import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
+
+
 
 export interface AuthFormData {
   email: string;
@@ -14,17 +18,47 @@ type Props = {
   mode: AuthMode;
   formData: AuthFormData;
   setFormData: React.Dispatch<React.SetStateAction<AuthFormData>>;
-  onSubmit: () => void;
+  onSubmit: () => Promise<boolean>;
   onGoogleLogin?: () => void;
   onSwitch: () => void;
 };
 
 const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwitch }: Props) => {
+  //animation
+  const { RiveComponent, rive } = useRive({
+    src: '/animation/8314-15930-animated-login-bunny-character.riv',
+    stateMachines: 'State Machine 1', 
+    autoplay: true,
+  });
+
+  // 2. Lấy các công tắc ra dựa đúng vào hình bạn gửi
+  const isFocusInput = useStateMachineInput(rive, 'State Machine 1', 'isFocus');
+  const isPasswordInput = useStateMachineInput(rive, 'State Machine 1', 'IsPassword');
+  const successTrigger = useStateMachineInput(rive, 'State Machine 1', 'login_success');
+  const failTrigger = useStateMachineInput(rive, 'State Machine 1', 'login_fail');
+
   const [showPassword, setShowPassword] = useState(false);
   const isLogin = mode === "login";
 
+  const handleFormSubmit = async () => {
+    // Đợi Component Cha gọi API xong và trả về kết quả
+    const isSuccess = await onSubmit();
+
+    
+    if (isSuccess) {
+      successTrigger?.fire(); // Thỏ vui mừng
+    } else {
+      failTrigger?.fire();    // Thỏ buồn bã / khóc
+    }
+  };
+  
+
   return (
-    <div className="w-full flex flex-col gap-5 text-center">
+    <div className="w-full flex flex-col gap-3 text-center">
+      
+      <div className="w-full h-30 ">
+        <RiveComponent />
+      </div>
       <p className="text-xs font-semibold uppercase tracking-[0.25em] text-orange-500 pb-4">
         {isLogin ? "Chào quay trở lại" : "Đăng ký ngay"}
       </p>
@@ -58,6 +92,12 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
           className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
           value={formData.phone_number}
           onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+          // Khi bấm vào ô Email -> Bật isFocus lên
+          // eslint-disable-next-line
+        onFocus={() => isFocusInput && (isFocusInput.value = true)}
+        // Khi bấm ra ngoài -> Tắt isFocus đi
+        // eslint-disable-next-line
+        onBlur={() => isFocusInput && (isFocusInput.value = false)}
         />
       )}
 
@@ -68,11 +108,22 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
           className="w-full rounded-xl border border-slate-200 bg-white px-4 py-4 pr-11 text-sm outline-none transition focus:border-orange-400 focus:ring-4 focus:ring-orange-100"
           value={formData.password}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+          
+      
         />
-        <button
+        
+       <button
           type="button"
-          onClick={() => setShowPassword((current) => !current)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+          onClick={() => {
+            const currentShowState = !showPassword;
+            setShowPassword(currentShowState);
+
+            if (isPasswordInput) {
+              // eslint-disable-next-line
+              isPasswordInput.value = currentShowState; 
+            }
+          }}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500..."
         >
           {showPassword ? "🙈" : "👁️"}
         </button>
@@ -88,7 +139,7 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
 
       <button
         type="button"
-        onClick={onSubmit}
+        onClick={handleFormSubmit}
         className="w-full cursor-pointer rounded-xl bg-linear-to-r from-orange-500 to-amber-500 px-4 py-4 font-semibold text-white shadow-lg shadow-orange-300/40 transition duration-150 hover:scale-[1.02] hover:brightness-105 active:scale-95"
       >
         {isLogin ? "Đăng nhập" : "Đăng ký"}

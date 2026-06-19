@@ -22,7 +22,7 @@ const AuthLayout = ({ mode, children }: Props) => {
         <div
           className={`grid w-full overflow-hidden rounded-[28px] border border-orange-200/60 bg-white/90 shadow-2xl shadow-orange-200/45 backdrop-blur-sm md:min-h-160 md:grid-cols-[1.05fr_0.95fr] ${bounceClass}`}
         >
-          <div className="relative hidden md:order-1 md:block h-160">
+          <div className="relative hidden md:order-1 md:block h-190">
             <img src={imageSrc} alt="Auth visual" className="h-full w-full object-cover" />
           </div>
           <div className="flex items-center justify-center bg-white/85 p-6 md:order-2 ">
