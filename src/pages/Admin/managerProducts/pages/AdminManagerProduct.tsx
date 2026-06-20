@@ -35,7 +35,7 @@ const defaultFormValues: Product = {
 const AdminManagerAccount = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | "">("");
-  const [filters, setFilters] = useState<Record<string, any>>({}); // State để lưu trữ các bộ lọc hiện tại
+  const [filters, setFilters] = useState<Record<string, any>>({});
   const [notifyData, setNotifyData] = useState<{
     key: string;
     type: NotificationType;
@@ -70,9 +70,13 @@ const fetchProducts = useCallback(
 
 
         if (Object.keys(currentFilters).length > 0) {
-         
-          response = await ProductApi.filter({ ...currentFilters, page, limit });
-
+          const dataToSend = {
+            ...currentFilters,
+            page,
+            limit,
+          };
+          console.log("Dữ liệu gửi đi:", dataToSend);
+          response = await ProductApi.filter(dataToSend);
         } 
         else {
           response = await ProductApi.getAll(page, limit);
@@ -221,8 +225,8 @@ const fetchProducts = useCallback(
 
 
   const handleFilter = (newFilters: Record<string, any>) => {
-    setFilters(newFilters); // Cập nhật bộ lọc
-    setCurrentPage(1);      // Trở về trang 1 mỗi khi đổi bộ lọc tìm kiếm
+    setFilters(newFilters); 
+    setCurrentPage(1);     
   };
 
   const columns: TableProps<Product>["columns"] = [

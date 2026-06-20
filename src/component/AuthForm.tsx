@@ -31,7 +31,6 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
     autoplay: true,
   });
 
-  // 2. Lấy các công tắc ra dựa đúng vào hình bạn gửi
   const isFocusInput = useStateMachineInput(rive, 'State Machine 1', 'isFocus');
   const isPasswordInput = useStateMachineInput(rive, 'State Machine 1', 'IsPassword');
   const successTrigger = useStateMachineInput(rive, 'State Machine 1', 'login_success');
@@ -41,14 +40,14 @@ const AuthForm = ({ mode, formData, setFormData, onSubmit, onGoogleLogin, onSwit
   const isLogin = mode === "login";
 
   const handleFormSubmit = async () => {
-    // Đợi Component Cha gọi API xong và trả về kết quả
+    
     const isSuccess = await onSubmit();
 
     
     if (isSuccess) {
-      successTrigger?.fire(); // Thỏ vui mừng
+      successTrigger?.fire(); 
     } else {
-      failTrigger?.fire();    // Thỏ buồn bã / khóc
+      failTrigger?.fire();    
     }
   };
   

@@ -65,17 +65,20 @@ export const productFields: FormField<Product>[] = [
     placeholder: 'Chọn danh mục',
     type: FormFieldType.SelectFetch,
     fetchOptions: async () => {
-      try {
-        const response = await categoryApi.getAll(1, 1000);
-        return response.data?.data?.categories.map((category: { id: number; category_name: string }) => ({
-          label: category.category_name,
-          value: category.id,
-        }));
-      }
-      catch (error) {
-        console.error('Lỗi khi lấy danh mục:', error);
-        return [];
-      }
+     try {
+  const response = await categoryApi.getAll(1, 1000);
+  const categories = response.data?.data?.categories || [];
+
+  return categories.flatMap((parent: { children: any[] }) => 
+    parent.children.map((child: { id: number; category_name: string }) => ({
+      label: child.category_name,
+      value: child.id,
+    }))
+  );
+} catch (error) {
+  console.error('Lỗi khi lấy danh mục:', error);
+  return [];
+}
     },
     rules: [
       {

@@ -10,5 +10,6 @@ export const FormFieldType = {
   ImageUpload: 'imageUpload',
   TextArea: 'textArea',
   inputFile: 'inputFile',
+  rangePicker: 'rangePicker',
 } as const;
 export type FormFieldTypeKey = typeof FormFieldType[keyof typeof FormFieldType];

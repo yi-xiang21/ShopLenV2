@@ -44,7 +44,7 @@ const FilterHeader: React.FC<FilterHeaderProps> = ({
   };
 
   return (
-    <div className="bg-white p-4 rounded-md shadow-sm mb-4 border border-gray-100">
+    <div className="bg-white p-4 rounded-md shadow-sm mb-4 border border-gray-100 ">
       <Form
         form={form}
         layout="inline"
@@ -74,6 +74,8 @@ const FilterHeader: React.FC<FilterHeaderProps> = ({
               <SelectFetchCustom
                 placeholder={field.placeholder}
                 fetchOptions={field.fetchOptions}
+                mode={field.mode}
+                style={{ width: field.width || 200 }}
               />
             )}
           </Form.Item>

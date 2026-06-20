@@ -265,10 +265,10 @@ const AdminManagerVoucher = () => {
 
   const modalTitle =
     modalMode === FormModalMode.CREATE
-      ? "Thêm tài khoản mới"
+      ? "Thêm voucher mới"
       : modalMode === FormModalMode.EDIT
-        ? "Cập nhật tài khoản"
-        : "Chi tiết tài khoản";
+        ? "Cập nhật voucher"
+        : "Chi tiết voucher";
 
   return (
     <div className="flex flex-col h-full w-full mt-12 md:mt-0">
@@ -281,12 +281,12 @@ const AdminManagerVoucher = () => {
         />
       )}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Quản lý tài khoản</h2>
+        <h2 className="text-2xl font-bold">Quản lý voucher</h2>
         <button
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           onClick={() => handleAction(FormModalMode.CREATE)}
         >
-          Thêm tài khoản
+          Thêm voucher
         </button>
       </div>
 

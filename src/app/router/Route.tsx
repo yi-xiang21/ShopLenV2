@@ -18,6 +18,7 @@ import AdminManagerCategory from '@/pages/Admin/managerCatelogy/pages/AdminManag
 import AdminManagerProducts from '@/pages/Admin/managerProducts/pages/AdminManagerProduct';
 import AdminManagerVouchers from '@/pages/Admin/managerVoucher/pages/AdminManagerVoucher';
 import AdminManagerPromotion from '@/pages/Admin/managerPromotion/pages/AdminManagerPromotion';
+import ShopPage from '@/pages/User/Shop/pages/Shop';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
 
 
@@ -38,6 +39,11 @@ export const routes = createBrowserRouter([
                 path: '/reset-password',
                 element: <ResetPassword />,
             },
+            {
+                path: '/shop',
+                element: <ShopPage />,
+
+            }
         ],
     },
     {

@@ -8,6 +8,7 @@ export interface SelectFetchProps {
   placeholder?: string;
   mode?: 'multiple' | 'tags';
   disabled?: boolean;
+  style?: React.CSSProperties;
 }
 
 const SelectFetchCustom = ({ 
@@ -16,7 +17,8 @@ const SelectFetchCustom = ({
   onChange, 
   placeholder, 
   disabled ,
-  mode
+  mode,
+  style
 }: SelectFetchProps) => {
   const [options, setOptions] = useState<{ label: string; value: string | number }[]>([]);
   const [loading, setLoading] = useState(false);
@@ -40,7 +42,7 @@ const SelectFetchCustom = ({
 
   return (
     <Select
-      style={{ width: '100%' }}
+      style={style}
       mode={mode}
       value={value}
       onChange={onChange}

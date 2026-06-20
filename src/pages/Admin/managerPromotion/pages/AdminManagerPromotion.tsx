@@ -263,10 +263,10 @@ const AdminManagerPromotion = () => {
 
   const modalTitle =
     modalMode === FormModalMode.CREATE
-      ? "Thêm tài khoản mới"
+      ? "Thêm khuyến mãi mới"
       : modalMode === FormModalMode.EDIT
-        ? "Cập nhật tài khoản"
-        : "Chi tiết tài khoản";
+        ? "Cập nhật khuyến mãi"
+        : "Chi tiết khuyến mãi";
 
   return (
     <div className="flex flex-col h-full w-full mt-12 md:mt-0">
@@ -279,12 +279,12 @@ const AdminManagerPromotion = () => {
         />
       )}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Quản lý tài khoản</h2>
+        <h2 className="text-2xl font-bold">Quản lý khuyến mãi</h2>
         <button
           className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
           onClick={() => handleAction(FormModalMode.CREATE)}
         >
-          Thêm tài khoản
+          Thêm khuyến mãi 
         </button>
       </div>
 

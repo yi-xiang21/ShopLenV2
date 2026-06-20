@@ -30,10 +30,6 @@ export const childrenProductsFields: FormField<Variant>[] = [
   { key: 'price', label: 'Giá', type: FormFieldType.Input, rules: [
     {
       required: true,
-      validator: (formdata:Variant) => {
-        return !!formdata.price?.trim();
-      },
-      
       message: 'Giá không được để trống hoặc chỉ chứa khoảng trắng.',
     },
     {

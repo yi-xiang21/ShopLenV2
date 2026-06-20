@@ -99,16 +99,11 @@ const LoginAndRegister = () => {
 
     try {
       await dispatch(loginThunk({ ...loginPayload })).unwrap();
-      
-      // Delay 1.2s để người dùng kịp xem hoạt ảnh thỏ vui mừng rồi mới chuyển trang
-      setTimeout(() => {
-        navigate("/");
-      }, 1200); 
 
-      return true; // Báo cho AuthForm biết là THÀNH CÔNG
+      return true; 
     } catch (error) {
       console.error("Login failed:", error);
-      return false; // Báo cho AuthForm biết là THẤT BẠI
+      return false; 
     }
   };
 

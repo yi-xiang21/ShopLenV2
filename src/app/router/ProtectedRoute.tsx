@@ -27,7 +27,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requireAuth = true, req
 
   // Route auth (login / register)
   if (!requireAuth && user) {
-    return <Navigate to="/" replace />;
+        return <Navigate to="/" replace />;
   }
 
   if (requireAdmin) {

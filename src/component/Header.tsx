@@ -17,7 +17,6 @@ const Header = () => {
   const dispatch = useAppDispatch();
    const { user } = useAppSelector((state) => state.auth);
    const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
-   console.log('wishlistItems in Header:', wishlistItems); 
 
    useEffect(() => {
      if (user) {
