@@ -91,8 +91,9 @@ const HomePage = () => {
 
         const allProducts = response.data?.data?.products || [];
 
-const activeProducts = allProducts.filter((product: any) => product.product_status === "active");
-setProducts(activeProducts);
+      const activeProducts = allProducts.filter((product: any) => product.product_status === "active");
+      setProducts(activeProducts);
+      console.log("Active products:", activeProducts);
       } catch (error) {
         console.error("Lỗi khi lấy sản phẩm:", error);
       } finally {

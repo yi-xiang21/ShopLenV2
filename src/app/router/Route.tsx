@@ -19,6 +19,7 @@ import AdminManagerProducts from '@/pages/Admin/managerProducts/pages/AdminManag
 import AdminManagerVouchers from '@/pages/Admin/managerVoucher/pages/AdminManagerVoucher';
 import AdminManagerPromotion from '@/pages/Admin/managerPromotion/pages/AdminManagerPromotion';
 import ShopPage from '@/pages/User/Shop/pages/Shop';
+import WhistlistPage from '@/pages/User/whistlist/pages/wishlist';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
 
 
@@ -44,7 +45,7 @@ export const routes = createBrowserRouter([
                 element: <ShopPage />,
 
             }
-        ],
+        ],  
     },
     {
         element: <ProtectedRoute requireAuth={false} />,
@@ -100,7 +101,12 @@ export const routes = createBrowserRouter([
                             },
                         ],
                     },
+                    {
+                        path: 'wishlist',
+                        element: <WhistlistPage />,
+                    }
                 ],
+                
             },
         ]
     },

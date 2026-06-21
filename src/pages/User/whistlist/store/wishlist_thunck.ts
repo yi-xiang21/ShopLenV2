@@ -20,7 +20,7 @@ export const getWishlistThunk = createAsyncThunk(
 
 export const toggleWishlistThunk = createAsyncThunk(
   '/api/wishlist/toggle',
-  async (productId: number, thunkAPI) => {
+  async (productId: number, thunkAPI) => {    
     try {
       const res = await WishlistApi.toggleWishlist(productId);
     
