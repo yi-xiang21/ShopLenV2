@@ -52,11 +52,13 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
     onChange(newData);
   };
 
+  // xử lý thay đổi dữ liệu trong tab
   const handleFormChange = (index: number, key: string, value: unknown) => {
     const newData = [...dataList];
     newData[index] = { ...newData[index], [key]: value };
     onChange(newData);
   };
+  // xử lý thay đổi dữ liệu trong tab con
 
   const handleNestedChildrenChange = (index: number, newChildrenArray: any[]) => {
     const newData = [...dataList];

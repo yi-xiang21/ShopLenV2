@@ -54,13 +54,13 @@ export const promotionFields: FormField<promotion>[] = [
       rules: [
         {
           validator: (formdata: promotion) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
 
-  const startDate = new Date(formdata.start_date);
-  startDate.setHours(0, 0, 0, 0);
+          const startDate = new Date(formdata.start_date);
+          startDate.setHours(0, 0, 0, 0);
 
-  return startDate >= today;},
+          return startDate >= today;},
           message: 'Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại.',
         },
         {

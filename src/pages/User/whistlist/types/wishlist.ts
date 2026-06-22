@@ -4,4 +4,5 @@ export interface WishlistItem {
   status: string;
   min_price: string;
   image_url: string;
+  final_price?: string;
 }

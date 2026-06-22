@@ -87,10 +87,34 @@ const FormModal = <T extends object>({
   };
 
   const handleSubmit = () => {
-    const parentErrors = validateForm(formData, fields);
+    // 1. Khởi tạo mảng fields mặc định để validate
+    let fieldsToValidate = fields;
+    let childFieldsToValidate = activeChildFields;
+
+    // 2. Xử lý riêng cho chế độ EDIT
+    if (mode === FormModalMode.EDIT) {
+      // Khai báo các type (hoặc name) của field thời gian mà bạn muốn bỏ qua
+      // NOTE: Bạn hãy điều chỉnh mảng này khớp với định nghĩa trong FormField của bạn
+      const timeFieldTypes = ['time', 'date', 'datetime', 'datePicker', 'timePicker'];
+
+      // Lọc bỏ các field thời gian khỏi danh sách validate của cha
+      fieldsToValidate = fields.filter(
+        (field) => !timeFieldTypes.includes(field.type as string)
+      );
+
+      // Lọc bỏ các field thời gian khỏi danh sách validate của con (nếu có)
+      if (hasChildren && activeChildFields) {
+        childFieldsToValidate = activeChildFields.filter(
+          (field) => !timeFieldTypes.includes(field.type as string)
+        );
+      }
+    }
+
+    // 3. Truyền danh sách fields đã được lọc vào hàm validate
+    const parentErrors = validateForm(formData, fieldsToValidate);
 
     const childErrors = hasChildren 
-      ? validateChildren(formData[activeChildKey] || [], activeChildFields, activeChildKey)
+      ? validateChildren(formData[activeChildKey] || [], childFieldsToValidate, activeChildKey)
       : {};
 
     const validationErrors = {
@@ -105,7 +129,7 @@ const FormModal = <T extends object>({
 
     setError({});
     onSubmit(formData);
-  };
+};
 
   return (
     <Modal

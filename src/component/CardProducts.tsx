@@ -24,12 +24,8 @@ const CardProducts = ({ data }: CardProductsProps) => {
   const variants: Variant[] = data.variants || [];
   const firstVariant = variants[0];
   const [isFavorite, setIsFavorite] = useState(false);
-  // 1. Ép tất cả các giá về kiểu Number một cách an toàn
-  const prices = variants.map((variant) => Number(variant.price || 0));
+  const discountValue = firstVariant?.discount?.value || 0;
 
-  // 2. Lấy Min Max (Có bắt trường hợp mảng rỗng để không bị lỗi Infinity)
-  const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-  const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
 
   useEffect(() => {
     if (wishlistItems && data?.product_id) {
@@ -71,6 +67,17 @@ const CardProducts = ({ data }: CardProductsProps) => {
           }`}
         />
       </button>
+      <div className="absolute top-4 left-4 z-20 w-full text-white text-xs font-medium p-2 rounded-full ">
+       {firstVariant?.discount && (
+        <div className="absolute top-1 left-1 z-20 flex items-center justify-center pointer-events-none">
+          <div className="bg-rose-500/95 backdrop-blur-sm text-white text-[11px] font-bold px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1 tracking-wide uppercase border border-rose-400/50">
+            {firstVariant.discount.type === "percent"
+              ? `Giảm ${discountValue}%`
+              : `Giảm ${Number(discountValue).toLocaleString("vi-VN")}₫`}
+          </div>
+        </div>
+      )}
+      </div>
 
       <Link to={`/product/${data.product_id}`} className="block h-45 p-3">
         <Swiper
@@ -115,13 +122,25 @@ const CardProducts = ({ data }: CardProductsProps) => {
         </p>
 
        
-        <div className="mt-2 text-xl font-bold text-violet-500">
-          {minPrice === maxPrice ? (
-            // Nếu các biến thể có giá bằng nhau (hoặc chỉ có 1 biến thể) -> Hiển thị 1 giá
-            `${minPrice.toLocaleString("vi-VN")}₫`
+        <div className="mt-3 flex flex-col justify-center">
+          {firstVariant?.discount ? (
+            <div className="flex items-baseline gap-2.5">
+              {/* Giá sau giảm */}
+              <span className="text-2xl  text-rose-600 tracking-tight">
+                {Number(firstVariant.final_price).toLocaleString("vi-VN")}₫
+              </span>
+              {/* Giá gốc bị gạch ngang */}
+              <span className="text-sm f text-slate-400 line-through decoration-slate-300">
+                {Number(firstVariant.price).toLocaleString("vi-VN")}₫
+              </span>
+            </div>
           ) : (
-            // Nếu có nhiều giá khác nhau -> Hiển thị từ Min đến Max
-            `${minPrice.toLocaleString("vi-VN")}₫ - ${maxPrice.toLocaleString("vi-VN")}₫`
+            <div className="flex items-baseline">
+              {/* Giá hiển thị bình thường khi không có thẻ giảm */}
+              <span className="text-2xl  text-slate-800 tracking-tight">
+                {Number(firstVariant?.price || 0).toLocaleString("vi-VN")}₫
+              </span>
+            </div>
           )}
         </div>
 

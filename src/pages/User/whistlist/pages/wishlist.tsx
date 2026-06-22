@@ -21,10 +21,10 @@ const Wishlist = () => {
     dispatch(toggleWishlistThunk(productId));
   };
   
+  
   const formatCurrencyVND = (price: string | number) => {
   const numericPrice = Number(price);
   
-  // Kiểm tra nếu không phải là số hợp lệ thì trả về 0 hoặc chuỗi rỗng
   if (isNaN(numericPrice)) return "0";
 
   return new Intl.NumberFormat('vi-VN').format(numericPrice);
@@ -70,9 +70,18 @@ const Wishlist = () => {
                       <h3 className="text-base md:text-lg font-medium text-gray-800 line-clamp-2">
                         {item.product_name}
                       </h3>
-                      <p className="text-lg font-semibold text-rose-600">
-                        {formatCurrencyVND(item.min_price)}₫
-                      </p>
+                      {item.final_price!=item.min_price ? (
+                        <p className="text-lg font-semibold text-rose-600">
+                          <del className="text-gray-400 mr-2">
+                            {formatCurrencyVND(item.min_price)}₫
+                          </del>
+                          chỉ còn {formatCurrencyVND(item.final_price || 0)}₫
+                        </p>
+                      ) : (
+                        <p className="text-lg font-semibold text-rose-600">
+                          {formatCurrencyVND(item.min_price)}₫
+                        </p>
+                      )}
                     </div>
                   </div>
 

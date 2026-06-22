@@ -3,6 +3,12 @@ export interface image  {
     image_url: string,
     sort_order: number
 }
+export interface voucher {
+    type?: string,
+    value?: number,
+    voucher_id?: number,
+    voucher_name?: string,
+}
 export interface Variant {
     variant_id?: number,
     sku: string,
@@ -10,7 +16,9 @@ export interface Variant {
     price: string,
     color: string,
     size: string,
+    discount?:voucher,
     images: image[]
+    final_price?: string
 }
 export interface Product {
     product_id?: number,
