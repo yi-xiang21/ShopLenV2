@@ -1,0 +1,241 @@
+import { ProductApi } from "@/pages/Admin/managerProducts/api/products_api";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import type { Product, Variant } from "@/pages/Admin/managerProducts/type/products";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import { FaHeart } from "react-icons/fa";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
+
+import { toggleWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck"; 
+import CardProducts from "@/component/CardProducts";
+
+const Detail = () => {
+  const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [activeImage, setActiveImage] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [activeVariant, setActiveVariant] = useState<Variant | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+
+  const dispatch = useAppDispatch();
+  const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
+
+
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        
+        const response = await ProductApi.getById(id);
+        const productData = response.data?.data.product || null;
+        setProduct(productData);
+
+        
+        if (productData && productData.category_id) {
+            const senddata = {
+            category_ids: [productData.category_id],
+            status: "active",
+            page: 1,
+            limit: 10,
+            };
+          const relatedResponse = await ProductApi.filter(senddata);
+          setRelatedProducts(relatedResponse.data?.data.products || []);
+        }
+
+        if (productData && productData.variants?.length > 0) {
+          setActiveVariant(productData.variants[0]);
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải thông tin sản phẩm:", error);
+      }
+    };
+    if (id) {
+      void fetchProductData();
+    }
+  }, [id]);
+
+  
+  useEffect(() => {
+    
+    if (wishlistItems && product?.product_id) {
+      const isFav = wishlistItems.some((item: any) => item.product_id === product.product_id);
+      setIsFavorite(isFav);
+    }
+  }, [wishlistItems, product?.product_id]);
+
+  
+  const images = product?.variants?.flatMap((variant) => variant.images || []) || [];
+
+
+  const handleSelectVariant = (variant: Variant) => {
+    setActiveVariant(variant);
+
+    if (variant.images && variant.images.length > 0) {
+      const firstImageUrl = variant.images[0].image_url;
+      const imageIndex = images.findIndex((img) => img.image_url === firstImageUrl);
+      
+      if (imageIndex !== -1) {
+        setActiveImage(imageIndex);
+      }
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (!activeVariant) return;
+    console.log("Thêm vào giỏ hàng với Variant ID:", activeVariant.variant_id);
+  };
+
+  
+  const handleToggleWishlist = async () => {
+    if (!product) return;
+    try {
+      await dispatch(toggleWishlistThunk(product.product_id || 0)).unwrap();
+      setIsFavorite((prev) => !prev);
+    } catch (error) {
+      console.error("Lỗi khi toggle wishlist:", error);
+    }
+  };
+
+  return (
+    <div className="w-full h-auto p-4 flex flex-col items-center justify-center gap-3">
+      <div className="flex gap-2 w-7xl p-4">
+        
+        <div className="w-150 p-4">
+          
+          <div className="overflow-hidden rounded-xl mb-2">
+            <img
+              src={images[activeImage]?.image_url}
+              alt="Main Product"
+              className="h-100 w-150 object-cover rounded-xl transition-all duration-300"
+            />
+          </div>
+
+          {/* Thumbnail Slider */}
+          <div className="relative">
+            <button className="thumb-prev absolute left-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2 shadow-lg hover:bg-slate-50">
+              ←
+            </button>
+            <button className="thumb-next absolute right-0 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white p-2 shadow-lg hover:bg-slate-50">
+              →
+            </button>
+
+            <Swiper
+              modules={[Navigation]}
+              navigation={{ prevEl: ".thumb-prev", nextEl: ".thumb-next" }}
+              slidesPerView={5}
+              spaceBetween={10}
+              className="h-30 w-125  "
+
+            >
+              {images.map((img, index) => (
+                <SwiperSlide key={index} className="h-30 w-40 ">
+                  <img
+                    src={img.image_url}
+                    onClick={() => setActiveImage(index)}
+                    alt={`Thumbnail ${index}`}
+                    className={`
+                      h-30 w-40 cursor-pointer rounded-xl object-cover border-2 p-1 transition-colors
+                      ${activeImage === index ? "border-violet-500" : "border-transparent hover:border-slate-300"}
+                    `}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+
+        
+        <div className="w-full lg:w-1/2 p-8 relative">
+          
+         
+          <button
+            onClick={handleToggleWishlist}
+            className="absolute top-8 right-8 z-20 w-10 h-10 rounded-full shadow-md flex items-center justify-center transition-all cursor-pointer bg-white border border-slate-100 hover:bg-slate-50"
+            title="Thêm vào yêu thích"
+          >
+            <FaHeart
+              className={`transition-colors text-xl ${
+                isFavorite ? "text-red-500" : "text-slate-300"
+              }`}
+            />
+          </button>
+
+          <h1 className="text-4xl font-bold text-slate-800 pr-12">
+            {product?.product_name}
+          </h1>
+
+          <p className="mt-3 text-slate-500">{product?.category_name}</p>
+
+          
+          <div className="mt-6">
+            {activeVariant?.discount ? (
+              <div className="flex items-baseline gap-3">
+                <span className="text-4xl font-extrabold text-rose-600 tracking-tight">
+                  {Number(activeVariant.final_price).toLocaleString("vi-VN")}₫
+                </span>
+                <span className="text-lg font-medium text-slate-400 line-through decoration-slate-300">
+                  {Number(activeVariant.price).toLocaleString("vi-VN")}₫
+                </span>
+              </div>
+            ) : (
+              <span className="text-4xl font-extrabold text-slate-800 tracking-tight">
+                {Number(activeVariant?.price || 0).toLocaleString("vi-VN")}₫
+              </span>
+            )}
+          </div>
+
+          
+          <div className="mt-8">
+            <h3 className="mb-3 font-semibold text-slate-800">Màu sắc & Kích thước</h3>
+            <div className="flex flex-wrap gap-3">
+              {product?.variants.map((variant) => {
+                const isSelected = activeVariant?.variant_id === variant.variant_id;
+                return (
+                  <button
+                    key={variant.variant_id}
+                    onClick={() => handleSelectVariant(variant)}
+                    className={`
+                      rounded-full border px-4 py-2 text-sm font-medium transition-all cursor-pointer
+                      ${isSelected 
+                        ? "border-violet-500 bg-violet-50 text-violet-600 shadow-sm" 
+                        : "border-slate-300 text-slate-600 hover:border-violet-400 hover:text-violet-500"}
+                    `}
+                  >
+                    {variant.color} - {variant.size}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <h3 className="mb-2 font-semibold text-slate-800">Mô tả sản phẩm</h3>
+            <p className="leading-7 text-slate-600">{product?.description}</p>
+          </div>
+
+          
+          <div className="mt-10 flex gap-4">
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 rounded-2xl bg-violet-600 py-4 text-white font-semibold hover:bg-violet-700 hover:shadow-lg transition-all cursor-pointer active:scale-[0.98]"
+            >
+              Thêm vào giỏ hàng
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="w-full h-auto p-4">
+        <h2 className="text-2xl font-bold text-slate-800 mb-4">Sản phẩm liên quan</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {relatedProducts.map((product) => (
+            <CardProducts key={product.product_id}  data={product}/>
+          ))}
+        </div>
+      </div>
+      
+    </div>
+  );
+};
+
+export default Detail;

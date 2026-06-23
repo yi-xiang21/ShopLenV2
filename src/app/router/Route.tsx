@@ -20,6 +20,7 @@ import AdminManagerVouchers from '@/pages/Admin/managerVoucher/pages/AdminManage
 import AdminManagerPromotion from '@/pages/Admin/managerPromotion/pages/AdminManagerPromotion';
 import ShopPage from '@/pages/User/Shop/pages/Shop';
 import WhistlistPage from '@/pages/User/whistlist/pages/wishlist';
+import Detail from '@/pages/User/Shop/pages/Detail';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
 
 
@@ -41,9 +42,13 @@ export const routes = createBrowserRouter([
                 element: <ResetPassword />,
             },
             {
-                path: '/shop',
+                path: '/shop/:categoryId?',
                 element: <ShopPage />,
 
+            },
+            {
+                path: '/detail/:id',
+                element: <Detail />,
             }
         ],  
     },

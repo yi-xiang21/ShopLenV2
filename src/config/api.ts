@@ -34,6 +34,7 @@ export const API_CONFIG = {
     UPDATE_CATEGORY: (id: string) => `/api/categories/${id}`,
     DELETE_CATEGORY: (id: string) => `/api/categories/${id}`,
     FiLTER_CATEGORIES: '/api/categories/filter',
+    
 
     //admin product
     GET_PRODUCTS: '/api/products',
@@ -42,6 +43,7 @@ export const API_CONFIG = {
     UPDATE_PRODUCT: (id: string) => `/api/products/${id}`,
     DELETE_PRODUCT: (id: string) => `/api/products/${id}`,
     FiLTER_PRODUCTS: '/api/products/filter',
+    GET_PRODUCTS_BY_CATEGORY: (id: string) => `/api/products/category/${id}`,
     
     
 

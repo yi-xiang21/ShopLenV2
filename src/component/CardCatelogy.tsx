@@ -7,7 +7,7 @@ interface CardCatelogyProps {
 const CardCatelogy = ({ Data }: CardCatelogyProps) => {
   return (
     <a
-      href={`/category/${Data.slug}`}
+      href={`/shop/${Data.id}`}
       className="
         group
         relative

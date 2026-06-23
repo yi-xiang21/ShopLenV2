@@ -79,7 +79,7 @@ const CardProducts = ({ data }: CardProductsProps) => {
       )}
       </div>
 
-      <Link to={`/product/${data.product_id}`} className="block h-45 p-3">
+      <Link to={`/detail/${data.product_id}`} className="block h-45 p-3">
         <Swiper
           modules={[Pagination, Autoplay, EffectFade]}
           autoplay={{ delay: 3500, disableOnInteraction: false }}
@@ -107,7 +107,7 @@ const CardProducts = ({ data }: CardProductsProps) => {
       {/* Content */}
       <div className="p-4 pt-2 flex flex-col">
         {/* Title - Bấm vào tên để chuyển trang */}
-        <Link to={`/product/${data.product_id}`}>
+        <Link to={`/detail/${data.product_id}`}>
           <h3
             className="text-lg font-semibold text-slate-800 line-clamp-1 hover:text-violet-500 transition-colors"
             title={data.product_name}

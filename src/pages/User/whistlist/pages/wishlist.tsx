@@ -15,7 +15,7 @@ const Wishlist = () => {
   useEffect(() => {
     dispatch(getWishlistThunk());
     console.log("Wishlist items:", wishlistItems);
-  }, [dispatch]);
+  }, [dispatch, wishlistItems]);
 
   const removeFromWishlist = (productId: any) => {
     dispatch(toggleWishlistThunk(productId));
@@ -64,7 +64,7 @@ const Wishlist = () => {
                     <img
                       src={item.image_url}
                       alt={item.product_name}
-                      className="w-24 h-24 md:w-28 md:h-28 object-cover rounded-lg bg-gray-50 flex-shrink-0"
+                      className="w-24 h-24 md:w-28 md:h-28 object-cover rounded-lg bg-gray-50 shirk-0 transition-transform duration-1000 group-hover:scale-105"
                     />
                     <div className="flex flex-col gap-1">
                       <h3 className="text-base md:text-lg font-medium text-gray-800 line-clamp-2">

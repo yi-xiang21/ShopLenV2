@@ -8,8 +8,11 @@ import type { Product } from '@/pages/Admin/managerProducts/type/products';
 import { useFormModal } from '@/share/hook/useFormModal';
 import { Button } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const Shop = () => {
+  const {categoryId} = useParams<{categoryId: string}>();
+  console.log("Category ID from URL:", categoryId);
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -41,27 +44,37 @@ const Shop = () => {
       try {
         setLoading(true);
         let response;
+        if (categoryId) {
+          response = await ProductApi.getProductsByCategory(categoryId);
+          console.log("Products by category response:", response.data);
+        } 
+        else 
+        {
+        
+          const cleanedFilters = Object.fromEntries(
+            Object.entries(currentFilters).filter(([_,value]) => {
+              if (Array.isArray(value)) return value.length > 0;
+              return value !== null && value !== undefined && value !== "";
+            })
+          );
+      
 
-        const cleanedFilters = Object.fromEntries(
-          Object.entries(currentFilters).filter(([_,value]) => {
-            if (Array.isArray(value)) return value.length > 0;
-            return value !== null && value !== undefined && value !== "";
-          })
-        );
-
-        if (Object.keys(cleanedFilters).length > 0) {
-          const dataToSend = {
-            ...cleanedFilters,
-            status: "active", 
-            page,
-            limit,
-          };
-          response = await ProductApi.filter(dataToSend);
-        } else {
-          response = (await ProductApi.getAll(page, limit));
-          response.data.data.products = response.data.data.products.filter((product: Product) => product.product_status === "active");
+          if (Object.keys(cleanedFilters).length > 0) {
+            const dataToSend = {
+              ...cleanedFilters,
+              status: "active", 
+              page,
+              limit,
+            };
+            console.log("Sending filter data:", dataToSend);
+            response = await ProductApi.filter(dataToSend);
+            console.log("Filtered products response:", response.data);
+          } else {
+            response = (await ProductApi.getAll(page, limit));
+            response.data.data.products = response.data.data.products.filter((product: Product) => product.product_status === "active");
+          }
+        
         }
-
         setProducts(response.data?.data?.products ?? []);
         setTotal(response.data?.data?.pagination?.total_items ?? 0);
       } catch (error) {
@@ -70,12 +83,13 @@ const Shop = () => {
         setLoading(false);
       }
     },
-    [setTotal, setLoading]
+    [setTotal, setLoading, categoryId]
+  
   );
 
   useEffect(() => {
     void fetchProducts(currentPage, pageSize, filters);
-  }, [currentPage, pageSize, filters, fetchProducts]);
+  }, [currentPage, pageSize, filters, fetchProducts, categoryId]);
 
   const handleFilterSubmit = async (data: any) => {
     setCurrentPage(1);
@@ -85,17 +99,19 @@ const Shop = () => {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const pre = () => setCurrentPage(prev => Math.max(prev - 1, 1));
   const next = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
-  const sortByPriceAsc = () => {
-    
-  }
+
   const sortByPriceDesc = () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      sort_price: 'des',
+    }));
     
   }
-  const sortByNameAsc = () => {
-    
-  }
-  const sortByNameDesc = () => {
-   
+  const sortByPriceAsc = () => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      sort_price: 'asc',
+    }));
   }
 
   return (
@@ -114,12 +130,6 @@ const Shop = () => {
             </Button>
             <Button onClick={sortByPriceDesc} >
               Giá giảm dần
-            </Button>
-            <Button onClick={sortByNameAsc} >
-              Tên A-Z
-            </Button>
-            <Button onClick={sortByNameDesc}>
-              Tên Z-A
             </Button>
           </div>
           

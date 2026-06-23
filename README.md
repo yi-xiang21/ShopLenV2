@@ -1,9 +1,8 @@
 
 // chua lam 
-// render lai sp khi co khuyen mai 
-// render lai wishlist kho co khuyen mai
 // ktra thong bao khuyen mai
-// loc sp Az zA tang giam
+// render lai ds danh muc
+// loc sp tang giam
 // loc admin table date tang giam 
 // detail
 // cart 

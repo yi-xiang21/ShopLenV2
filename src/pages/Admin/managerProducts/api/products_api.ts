@@ -20,6 +20,9 @@ export const ProductApi = {
     },
     filter: async (filter: any) => {
         return callAPI.post(API_CONFIG.ENDPOINTS.FiLTER_PRODUCTS, filter );
+    },
+    getProductsByCategory: async (id:string) => {
+        return callAPI.get(API_CONFIG.ENDPOINTS.GET_PRODUCTS_BY_CATEGORY( id));
     }
 
 }
