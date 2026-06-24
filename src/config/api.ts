@@ -18,6 +18,15 @@ export const API_CONFIG = {
     POST_WISHLIST: '/api/wishlist/toggle',
     GET_WISHLIST: '/api/wishlist',
 
+    //cart
+    GET_CART: '/api/cart',
+    ADD_CART: '/api/cart',
+    SYNC_CART: '/api/cart/sync',
+    UPDATE_CART: (variant_id: number) => `/api/cart/${variant_id}`,
+    DELETE_CART: (variant_id: number) => `/api/cart/${variant_id}`,
+
+
+
 
     //admin account
     GETALL_USERS: '/api/users',
@@ -44,6 +53,7 @@ export const API_CONFIG = {
     DELETE_PRODUCT: (id: string) => `/api/products/${id}`,
     FiLTER_PRODUCTS: '/api/products/filter',
     GET_PRODUCTS_BY_CATEGORY: (id: string) => `/api/products/category/${id}`,
+    GET_PRODUCTS_TOP_SELLING: '/api/products/top-selling',
     
     
 

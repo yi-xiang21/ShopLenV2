@@ -22,6 +22,7 @@ import ShopPage from '@/pages/User/Shop/pages/Shop';
 import WhistlistPage from '@/pages/User/whistlist/pages/wishlist';
 import Detail from '@/pages/User/Shop/pages/Detail';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
+import CartPage from '@/pages/User/cart/page/cart';
 
 
 
@@ -49,6 +50,16 @@ export const routes = createBrowserRouter([
             {
                 path: '/detail/:id',
                 element: <Detail />,
+            },
+            {
+                path: '/cart',
+                element: <ProtectedRoute requireAuth={true} />,
+                children: [
+                    {
+                        index: true,
+                        element: <CartPage />,
+                    },
+                ],
             }
         ],  
     },

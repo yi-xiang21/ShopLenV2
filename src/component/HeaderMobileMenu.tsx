@@ -5,7 +5,6 @@ type HeaderMobileMenuProps = {
   isOpen: boolean
   menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }>
   activeMenu: ActiveMenuKey
-  setActiveMenu: (key: ActiveMenuKey) => void
   onCloseMenu: () => void
 }
 
@@ -13,7 +12,6 @@ const HeaderMobileMenu = ({
   isOpen,
   menuItems,
   activeMenu,
-  setActiveMenu,
   onCloseMenu,
 }: HeaderMobileMenuProps) => {
   if (!isOpen) {
@@ -35,10 +33,6 @@ const HeaderMobileMenu = ({
                     : 'hover:bg-orange-50 hover:text-[#ee4d2d]'
                 }`}
                 to={item.link}
-                onClick={() => {
-                  setActiveMenu(item.key)
-                  onCloseMenu()
-                }}
               >
                 {item.label}
               </Link>

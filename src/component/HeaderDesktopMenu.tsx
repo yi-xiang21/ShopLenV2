@@ -4,13 +4,11 @@ import { Link } from 'react-router-dom'
 type HeaderDesktopMenuProps = {
   menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }>
   activeMenu: ActiveMenuKey
-  setActiveMenu: (key: ActiveMenuKey) => void
 }
 
 const HeaderDesktopMenu = ({
   menuItems,
   activeMenu,
-  setActiveMenu,
 }: HeaderDesktopMenuProps) => {
   return (
       <ul className='items-center justify-center gap-20 text-xl font-semibold text-gray-700 mb-0! md:flex hidden'>
@@ -25,9 +23,6 @@ const HeaderDesktopMenu = ({
                     : 'hover:-translate-y-0.5 hover:text-amber-800 hover:italic'
                 }`}
                 to={item.link}
-                onClick={() => {
-                  setActiveMenu(item.key)
-                }}
               >
                 {item.label}
               </Link>

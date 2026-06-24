@@ -1,6 +1,7 @@
 import type { FilterField } from "@/share/types/filter_param";
 import { FormFieldType } from "@/share/types/type-form-field";
-import { categoryApi } from "../../managerCatelogy/api/cate_api";
+import { categoryApi } from "@/pages/Admin/managerCatelogy/api/cate_api";
+import { getLeafCategories } from "@/pages/Admin/managerCatelogy/constants/getParentCate";
 
 export const filterProducts: FilterField[] = [
   {
@@ -26,21 +27,18 @@ export const filterProducts: FilterField[] = [
     type: FormFieldType.SelectFetch, 
     placeholder: 'Chọn danh mục',
     width: 200,
-    fetchOptions: async () => {
-      try {
-      const response = await categoryApi.getAll(1, 1000);
-      const categories = response.data?.data?.categories || [];
-      return categories.flatMap((parent: { children: any[] }) => 
-        parent.children.map((child: { id: number; category_name: string }) => ({
-          label: child.category_name,
-          value: child.id,
-        }))
-      );
-    } catch (error) {
-      console.error('Lỗi khi lấy danh mục:', error);
-      return [];
-    }
-    },
+   fetchOptions: async () => {
+     try {
+       const response = await categoryApi.getAll(1, 1000);
+   
+       return getLeafCategories(
+         response.data?.data?.categories || []
+       );
+     } catch (error) {
+       console.error(error);
+       return [];
+     }
+   },
     mode: 'multiple',
   },
   {

@@ -17,8 +17,9 @@ export interface Variant {
     color: string,
     size: string,
     discount?:voucher,
-    images: image[]
-    final_price?: string
+    images: image[],
+    final_price?: string,
+    stock_quantity?: number
 }
 export interface Product {
     product_id?: number,

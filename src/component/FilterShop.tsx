@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Radio, Select } from "antd"; // Xóa Checkbox, chỉ dùng Radio
 import type { Category } from "@/pages/Admin/managerCatelogy/type/catelogy";
 import { RiResetRightFill } from "react-icons/ri";
-
+import { getParentCategories } from "@/pages/Admin/managerCatelogy/constants/getParentCate";
 interface FilterShopProps {
   onSubmit: (data: any) => void;
   loading?: boolean;
@@ -20,6 +20,8 @@ const FilterShop = ({
     "min_price": null,  
     "max_price": null,
   });
+  const parentCategories = getParentCategories(categories);
+
 
   const handleChange = (key: string, value: unknown) => {
     setFormData((prev: any) => ({
@@ -102,7 +104,7 @@ const FilterShop = ({
           </div>
 
           <div className="pl-2 pr-2">
-            {categories.map((parent) => {
+            {parentCategories.map((parent) => {
               const isExpanded = expandedCategories.includes(parent.id);
 
               return (
@@ -134,7 +136,6 @@ const FilterShop = ({
                     parent.children.length > 0 && (
                       <div className="flex flex-col gap-3 pl-4 py-2">
                         {parent.children.map((child) => (
-                          // 2. Thay thế Checkbox bằng Radio độc lập
                           <Radio
                             key={child.id}
                             checked={formData.category_ids.includes(child.id)}
@@ -163,7 +164,7 @@ const FilterShop = ({
           </div>
           <div className="pl-2 pr-2">
             <Radio.Group
-              // 3. Sửa value ở đây để RadioGroup nhận diện đúng giá trị đang chọn
+              
               value={formData.type_ids[0]} 
               onChange={handleRadioChange}
               options={[

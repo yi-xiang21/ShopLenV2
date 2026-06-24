@@ -7,7 +7,7 @@ import {
   FaHeart,
 } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/assets/Logo.png";
 import HeaderDesktopMenu from "@/component/HeaderDesktopMenu";
 import HeaderMobileMenu from "@/component/HeaderMobileMenu";
@@ -16,12 +16,15 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { getWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck";
 import type { Product } from "@/pages/Admin/managerProducts/type/products";
 import {ProductApi} from "@/pages/Admin/managerProducts/api/products_api";
+import { getCart } from "@/pages/User/cart/store/cart_thunck";
 export type ActiveMenuKey = "home" | "shop" | "about" | "workshop";
 
 const Header = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
+  const { items: cartItems } = useAppSelector((state) => state.Cart);
 
   const [keyword, setKeyword] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -55,6 +58,7 @@ const Header = () => {
   useEffect(() => {
     if (user) {
       dispatch(getWishlistThunk());
+      dispatch(getCart());
     }
   }, [user, dispatch]);
   const router = () => {
@@ -62,7 +66,23 @@ const Header = () => {
 
     return user.role === "admin" ? "/admin" : "/profile";
   };
-  const [activeMenu, setActiveMenu] = useState<ActiveMenuKey>("home");
+
+  const location = useLocation();
+  const getActiveMenu = (): ActiveMenuKey => {
+  const path = location.pathname;
+
+  if (path.startsWith("/shop"))
+    return "shop";
+
+  if (path.startsWith("/about"))
+    return "about";
+
+  if (path.startsWith("/workshop"))
+    return "workshop";
+
+  return "home";
+};
+  const activeMenu = getActiveMenu();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const menuItems: Array<{ key: ActiveMenuKey; label: string; link: string }> =
@@ -136,6 +156,12 @@ const Header = () => {
                         <li
                           key={product.product_id}
                           className="px-4 py-2 w-full hover:bg-gray-200 hover:cursor-pointer"
+                          onMouseDown={() => {
+                            navigate(`/detail/${product.product_id}`);
+                            setIsFocused(false);
+                            setKeyword("");
+                          }
+                          }
                         >
                           {product.product_name}
                         </li>
@@ -169,14 +195,15 @@ const Header = () => {
                 <FaHeart aria-hidden="true" className="h-5 w-5" />
               </Badge>
             </Link>
-            {/* thay bang antdesign badge */}
             <button
               aria-label="Gio hang"
               className="relative rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800"
               type="button"
+              onClick={() => {
+                navigate("/cart");
+              }}
             >
-              {/* sua lai thanh route gio hang sau khi lam xong chuc nang */}
-              <Badge count={5}>
+              <Badge count={cartItems.length}>
                 <FaShoppingCart aria-hidden="true" className="h-5 w-5" />
               </Badge>
             </button>
@@ -189,7 +216,6 @@ const Header = () => {
           <HeaderDesktopMenu
             activeMenu={activeMenu}
             menuItems={menuItems}
-            setActiveMenu={setActiveMenu}
           />
         </div>
 
@@ -198,7 +224,6 @@ const Header = () => {
           isOpen={isMobileMenuOpen}
           menuItems={menuItems}
           onCloseMenu={closeMobileMenu}
-          setActiveMenu={setActiveMenu}
         />
       </header>
     </>

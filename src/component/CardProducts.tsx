@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay, EffectFade } from "swiper/modules";
 
 
-import { FaHeart, FaCartPlus } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { toggleWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck";
@@ -43,8 +43,8 @@ const CardProducts = ({ data }: CardProductsProps) => {
   } catch (error) {
      console.log(error)
   }
-      
   };
+  
   return (
 
     <div
@@ -79,7 +79,7 @@ const CardProducts = ({ data }: CardProductsProps) => {
       )}
       </div>
 
-      <Link to={`/detail/${data.product_id}`} className="block h-45 p-3">
+      <Link to={`/detail/${data.product_id}`} className="block h-55 p-3">
         <Swiper
           modules={[Pagination, Autoplay, EffectFade]}
           autoplay={{ delay: 3500, disableOnInteraction: false }}
@@ -117,7 +117,7 @@ const CardProducts = ({ data }: CardProductsProps) => {
         </Link>
 
         
-        <p className="mt-1 text-sm text-slate-500 line-clamp-2">
+        <p className="mt-1 text-sm text-slate-500 line-clamp-3 h-15">
           {data.description}
         </p>
 
@@ -151,20 +151,6 @@ const CardProducts = ({ data }: CardProductsProps) => {
           </div>
         </div>
 
-        
-        <div className="mt-5 flex gap-3">
-          <button
-            
-            className="
-            flex-1 h-12 rounded-xl bg-linear-to-r from-violet-300 to-pink-300 
-            text-slate-800 font-semibold flex items-center justify-center gap-2 
-            transition-all hover:scale-[1.02] hover:shadow-lg cursor-pointer
-          "
-          >
-            <FaCartPlus />
-            <span>Thêm vào giỏ</span>
-          </button>
-        </div>
       </div>
     </div>
   );

@@ -1,13 +1,21 @@
 import type { Category } from "../pages/Admin/managerCatelogy/type/catelogy";
-
+import { useNavigate } from "react-router-dom";
 interface CardCatelogyProps {
   Data: Category;
 }
 
 const CardCatelogy = ({ Data }: CardCatelogyProps) => {
+  const navigate = useNavigate();
+  const handleClickCategory = () => {
+  navigate("/shop", {
+    state: {
+      categoryId: Data.id,
+    },
+  });
+};
   return (
     <a
-      href={`/shop/${Data.id}`}
+      onClick={handleClickCategory}
       className="
         group
         relative
@@ -21,6 +29,7 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
         h-96
         shrink-0
         bg-white
+        cursor-pointer
       "
     >
       <img

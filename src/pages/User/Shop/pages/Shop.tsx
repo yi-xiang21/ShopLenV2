@@ -8,11 +8,12 @@ import type { Product } from '@/pages/Admin/managerProducts/type/products';
 import { useFormModal } from '@/share/hook/useFormModal';
 import { Button } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Shop = () => {
-  const {categoryId} = useParams<{categoryId: string}>();
-  console.log("Category ID from URL:", categoryId);
+  const location = useLocation();
+  const categoryId = location.state?.categoryId;
+  const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -46,7 +47,6 @@ const Shop = () => {
         let response;
         if (categoryId) {
           response = await ProductApi.getProductsByCategory(categoryId);
-          console.log("Products by category response:", response.data);
         } 
         else 
         {
@@ -94,6 +94,7 @@ const Shop = () => {
   const handleFilterSubmit = async (data: any) => {
     setCurrentPage(1);
     setFilters(data);
+    navigate("/shop");
   };
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));

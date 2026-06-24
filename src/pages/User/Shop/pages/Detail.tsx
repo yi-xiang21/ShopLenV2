@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
 import { toggleWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck"; 
 import CardProducts from "@/component/CardProducts";
+import Notification, { type NotificationType } from "@/share/ComponentCustom/Notification/Notification";
+import { addToCart } from "../../cart/store/cart_thunck";
 
 const Detail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,8 +19,16 @@ const Detail = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeVariant, setActiveVariant] = useState<Variant | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [quantity, setQuantity] = useState(1);
+  const [stock, setStock] = useState<number>(0);
+  const dispatch = useAppDispatch(); 
+  const [notifyData, setNotifyData] = useState<{
+      key: string;
+      type: NotificationType;
+      title: string;
+      message: string;
+    } | null>(null);
 
-  const dispatch = useAppDispatch();
   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
 
 
@@ -30,6 +40,7 @@ const Detail = () => {
         const response = await ProductApi.getById(id);
         const productData = response.data?.data.product || null;
         setProduct(productData);
+        console.log("Chi tiết sản phẩm:", productData);
 
         
         if (productData && productData.category_id) {
@@ -45,6 +56,7 @@ const Detail = () => {
 
         if (productData && productData.variants?.length > 0) {
           setActiveVariant(productData.variants[0]);
+          setStock(productData.variants[0].stock_quantity || 0);
         }
       } catch (error) {
         console.error("Lỗi khi tải thông tin sản phẩm:", error);
@@ -70,6 +82,7 @@ const Detail = () => {
 
   const handleSelectVariant = (variant: Variant) => {
     setActiveVariant(variant);
+    setStock(variant.stock_quantity || 0);
 
     if (variant.images && variant.images.length > 0) {
       const firstImageUrl = variant.images[0].image_url;
@@ -83,8 +96,25 @@ const Detail = () => {
 
   const handleAddToCart = () => {
     if (!activeVariant) return;
-    console.log("Thêm vào giỏ hàng với Variant ID:", activeVariant.variant_id);
-  };
+    if (quantity > stock) {
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "warning",
+        title: "Lỗi",
+        message: "Số lượng vượt quá số lượng trong kho.",
+      });
+      return;
+    }
+      try {
+        const payload = {
+          variant_id: Number(activeVariant.variant_id),
+          quantity: quantity,
+        };
+        void dispatch(addToCart(payload)).unwrap();
+      } catch (error) {
+        console.error("Lỗi khi thêm vào giỏ hàng:", error);
+      }
+    };
 
   
   const handleToggleWishlist = async () => {
@@ -99,6 +129,14 @@ const Detail = () => {
 
   return (
     <div className="w-full h-auto p-4 flex flex-col items-center justify-center gap-3">
+      {notifyData && (
+        <Notification
+          key={notifyData.key}
+          type={notifyData.type}
+          title={notifyData.title}
+          message={notifyData.message}
+        />
+      )}
       <div className="flex gap-2 w-7xl p-4">
         
         <div className="w-150 p-4">
@@ -206,6 +244,29 @@ const Detail = () => {
                   </button>
                 );
               })}
+            </div>
+          </div>
+          <div className="mt-8">
+            <h3 className="mb-3 font-semibold text-slate-800">Số lượng trong kho: {stock}</h3>
+          </div>
+
+          <div className="mt-8">
+            <h3 className="mb-3 mt-8 font-semibold text-slate-800">Số lượng</h3>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
+                className="w-10 h-10 rounded-2xl shadow  text-slate-600 hover:bg-slate-200 hover:cursor-pointer transition-all"
+              >
+                -
+              </button>
+              <input type="text" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value) || 1)} className="w-16 h-10 text-center rounded-2xl border border-slate-300" >
+              </input>
+              <button
+                onClick={() => setQuantity((prev) => Math.min(prev + 1, stock))}
+                className="w-10 h-10 rounded-2xl shadow text-slate-600 hover:bg-slate-200 hover:cursor-pointer transition-all"
+              >
+                +
+              </button>
             </div>
           </div>
 

@@ -22,7 +22,7 @@ export const registerThunk = createAsyncThunk(
   async (payload: RegisterPayload, thunkAPI) => {
     try {
       const res = await authApi.register(payload);
-
+      
       return res.data;
     } catch (error: unknown) {
       return thunkAPI.rejectWithValue((error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Đăng ký tài khoản thất bại');
