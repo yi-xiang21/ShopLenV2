@@ -17,6 +17,7 @@ export interface CategoryFormValues {
   id?: string | number;
   category_name: string;
   description?: string;
+  slug?: string;
   image_url?: string | null;
   children: categoryChildren[];
 }

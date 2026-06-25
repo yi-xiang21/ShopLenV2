@@ -53,13 +53,7 @@ export const routes = createBrowserRouter([
             },
             {
                 path: '/cart',
-                element: <ProtectedRoute requireAuth={true} />,
-                children: [
-                    {
-                        index: true,
-                        element: <CartPage />,
-                    },
-                ],
+                element: <CartPage />,
             }
         ],  
     },

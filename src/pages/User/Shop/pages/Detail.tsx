@@ -11,6 +11,7 @@ import { toggleWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunc
 import CardProducts from "@/component/CardProducts";
 import Notification, { type NotificationType } from "@/share/ComponentCustom/Notification/Notification";
 import { addToCart } from "../../cart/store/cart_thunck";
+import { addToLocalCart } from "../../cart/store/cart_slice";
 
 const Detail = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ const Detail = () => {
   const [quantity, setQuantity] = useState(1);
   const [stock, setStock] = useState<number>(0);
   const dispatch = useAppDispatch(); 
+  const { user } = useAppSelector((state) => state.auth);
   const [notifyData, setNotifyData] = useState<{
       key: string;
       type: NotificationType;
@@ -95,6 +97,19 @@ const Detail = () => {
   };
 
   const handleAddToCart = () => {
+    if (!user) {
+      dispatch(addToLocalCart({
+        variant_id: Number(activeVariant?.variant_id),
+        quantity: quantity,
+        image_url: activeVariant?.images[0]?.image_url || "",
+        product_name: product?.product_name || "",
+        price: String(activeVariant?.final_price) || "0",
+        size: activeVariant?.size || "",
+        color: activeVariant?.color || "",
+        stock_quantity: activeVariant?.stock_quantity || 0,
+      }));
+      return;
+    }
     if (!activeVariant) return;
     if (quantity > stock) {
       setNotifyData({

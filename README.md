@@ -1,9 +1,7 @@
 
 // chua lam 
+// sort sp theo danh muc va filter
 // ktra thong bao khuyen mai
-// render lai ds danh muc
-// loc admin table date tang giam 
-// cart 
 // ton kho
 // admin don hang,workshop
 // tao don hang user thanh toan app voucher

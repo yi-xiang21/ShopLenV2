@@ -43,4 +43,31 @@ export const syncCart = createAsyncThunk(
   }
 );
 
+export const updateCartItem = createAsyncThunk(
+  '/api/cart',
+  async (payload: cart, thunkAPI) => {
+        try {
+            const response = await CartApi.updateCart(payload.variant_id || 0, payload);
+            thunkAPI.dispatch(getCart());
+            return response.data.data.cart;
+        }
+        catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }   
+    });
+
+export const deleteCartItem = createAsyncThunk(
+  '/api/cart',
+  async (variant_id: number, thunkAPI) => {
+        try {
+            const response = await CartApi.deleteCart(variant_id);
+            thunkAPI.dispatch(getCart());
+            return response.data.data.cart;
+
+        }
+        catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    });
+
 

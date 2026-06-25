@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   FaBars,
   FaRegUser,
@@ -16,7 +16,8 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { getWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck";
 import type { Product } from "@/pages/Admin/managerProducts/type/products";
 import {ProductApi} from "@/pages/Admin/managerProducts/api/products_api";
-import { getCart } from "@/pages/User/cart/store/cart_thunck";
+import { getCart, syncCart } from "@/pages/User/cart/store/cart_thunck";
+import type { cart ,CartSync} from "@/pages/User/cart/types/cart";
 export type ActiveMenuKey = "home" | "shop" | "about" | "workshop";
 
 const Header = () => {
@@ -54,13 +55,36 @@ const Header = () => {
     return () => clearTimeout(timer);
   } 
   , [keyword]);
+const handleLoginSuccess = useCallback(async () => {
+  try {
+    const localCartStr = localStorage.getItem('localCart');
+    const localCartData: cart[] = localCartStr ? JSON.parse(localCartStr) : [];
+
+    if (localCartData.length > 0) {
+      const syncPayload: CartSync = {
+        local_cart: 
+          localCartData.map((item) => ({
+            variant_id: item.variant_id,
+            quantity: item.quantity,
+          })),
+      };
+      console.log("Sync payload:", syncPayload);
+      await dispatch(syncCart(syncPayload)).unwrap();
+      localStorage.removeItem('localCart');
+    } else {
+      dispatch(getCart());
+    }
+  } catch (error) {
+    console.error("Lỗi đồng bộ giỏ hàng:", error);
+  }
+}, [dispatch]);
 
   useEffect(() => {
     if (user) {
       dispatch(getWishlistThunk());
-      dispatch(getCart());
+      handleLoginSuccess();
     }
-  }, [user, dispatch]);
+  }, [user, dispatch, handleLoginSuccess]);
   const router = () => {
     if (!user) return "/auth/login";
 
@@ -197,7 +221,7 @@ const Header = () => {
             </Link>
             <button
               aria-label="Gio hang"
-              className="relative rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800"
+              className="relative rounded-full p-2 text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-amber-50 hover:text-amber-800 hover:cursor-pointer"
               type="button"
               onClick={() => {
                 navigate("/cart");
