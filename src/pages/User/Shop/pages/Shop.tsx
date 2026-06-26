@@ -8,12 +8,13 @@ import type { Product } from "@/pages/Admin/managerProducts/type/products";
 import { useFormModal } from "@/share/hook/useFormModal";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useSearchParams } from "react-router-dom";
 
 const Shop = () => {
-  const location = useLocation();
-  const categoryId = location.state?.categoryId;
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryId = searchParams.get("categoryId");
+  console.log("Category ID from state:", categoryId);
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -49,15 +50,16 @@ const Shop = () => {
       try {
         setLoading(true);
         let response;
-        if (categoryId) {
-          response = await ProductApi.getProductsByCategory(categoryId);
-        } else {
+       
           const cleanedFilters = Object.fromEntries(
             Object.entries(currentFilters).filter(([_, value]) => {
               if (Array.isArray(value)) return value.length > 0;
               return value !== null && value !== undefined && value !== "";
             }),
           );
+          if (categoryId!=undefined) {
+            cleanedFilters.category_id = categoryId;
+          }
 
           if (Object.keys(cleanedFilters).length > 0) {
             const dataToSend = {
@@ -75,7 +77,6 @@ const Shop = () => {
               (product: Product) => product.product_status === "active",
             );
           }
-        }
         setProducts(response.data?.data?.products ?? []);
         setTotal(response.data?.data?.pagination?.total_items ?? 0);
       } catch (error) {
@@ -91,11 +92,28 @@ const Shop = () => {
     void fetchProducts(currentPage, pageSize, filters);
   }, [currentPage, pageSize, filters, fetchProducts, categoryId]);
 
+ 
+
   const handleFilterSubmit = async (data: any) => {
-    setCurrentPage(1);
-    setFilters(data);
-    navigate("/shop");
-  };
+  // Tạo bản sao của URL hiện tại
+  const newParams = new URLSearchParams(searchParams);
+
+  if (data.category_id) {
+    newParams.set("categoryId", data.category_id);
+  } else {
+    newParams.delete("categoryId"); // Chỉ xóa mỗi categoryId nếu user bấm Reset
+  }
+  
+  setSearchParams(newParams); // Cập nhật URL một cách an toàn
+
+  setFilters({
+    min_price: data.min_price,
+    max_price: data.max_price,
+    type_ids: data.type_ids,
+  });
+  
+  setCurrentPage(1);
+};
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const pre = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -131,6 +149,7 @@ const Shop = () => {
           onSubmit={handleFilterSubmit}
           loading={loading}
           categories={categories}
+          initialCategoryId={categoryId}
         />
 
         <div className="w-full h-full bg-white col-span-3 rounded-xl shadow-sm border border-gray-100">

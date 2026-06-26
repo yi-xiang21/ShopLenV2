@@ -52,7 +52,6 @@ export const API_CONFIG = {
     UPDATE_PRODUCT: (id: string) => `/api/products/${id}`,
     DELETE_PRODUCT: (id: string) => `/api/products/${id}`,
     FiLTER_PRODUCTS: '/api/products/filter',
-    GET_PRODUCTS_BY_CATEGORY: (id: string) => `/api/products/category/${id}`,
     GET_PRODUCTS_TOP_SELLING: '/api/products/top-selling',
     
     

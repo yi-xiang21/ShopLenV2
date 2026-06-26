@@ -1,5 +1,6 @@
 
 // chua lam 
+// update hinh anh user
 // sort sp theo danh muc va filter
 // ktra thong bao khuyen mai
 // ton kho

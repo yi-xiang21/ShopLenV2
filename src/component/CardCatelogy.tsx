@@ -6,16 +6,11 @@ interface CardCatelogyProps {
 
 const CardCatelogy = ({ Data }: CardCatelogyProps) => {
   const navigate = useNavigate();
-  const handleClickCategory = () => {
-  navigate("/shop", {
-    state: {
-      categoryId: Data.id,
-    },
-  });
-};
+  
+
   return (
     <a
-      onClick={handleClickCategory}
+      onClick={() => navigate(`/shop?categoryId=${Data.id}`)}
       className="
         group
         relative

@@ -22,7 +22,7 @@ export const filterProducts: FilterField[] = [
     mode: 'multiple',
   },
   {
-    key: 'category_ids', 
+    key: 'category_id', 
     label: 'Danh mục',
     type: FormFieldType.SelectFetch, 
     placeholder: 'Chọn danh mục',
@@ -39,7 +39,6 @@ export const filterProducts: FilterField[] = [
        return [];
      }
    },
-    mode: 'multiple',
   },
   {
     key: 'status',

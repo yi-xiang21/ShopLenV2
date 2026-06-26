@@ -7,15 +7,17 @@ interface FilterShopProps {
   onSubmit: (data: any) => void;
   loading?: boolean;
   categories: Category[];
+  initialCategoryId?: string | null; // Thêm dòng này
 }
 
 const FilterShop = ({
   onSubmit,
   loading,
   categories = [],
+  initialCategoryId = null, // Thêm dòng này
 }: FilterShopProps) => {
   const [formData, setFormData] = useState<any>({
-    category_ids: [],
+    category_id: initialCategoryId ? initialCategoryId : undefined, 
     type_ids: [],
     "min_price": null,  
     "max_price": null,
@@ -34,7 +36,7 @@ const FilterShop = ({
 
   
   const handleCategoryCheck = (id: string) => {
-    handleChange("category_ids", [id]); 
+    handleChange("category_id", id); 
   };
 
   const toggleCategory = (id: string) => {
@@ -78,10 +80,12 @@ const FilterShop = ({
     formData.max_price !== null && formData.max_price !== undefined
       ? `${formData.min_price}-${formData.max_price}`
       : null;
+
+
   const resetForm = () => {
     const emptyData = {
       keyword: "",
-      category_ids: [],
+      category_id: undefined,
       type_ids: [],
       min_price: null,
       max_price: null,
@@ -89,7 +93,6 @@ const FilterShop = ({
     
     setFormData(emptyData);
     setExpandedCategories([]);
-    
     onSubmit(emptyData); 
   };
 
@@ -138,7 +141,7 @@ const FilterShop = ({
                         {parent.children.map((child) => (
                           <Radio
                             key={child.id}
-                            checked={formData.category_ids.includes(child.id)}
+                            checked={formData.category_id === child.id}
                             onChange={() => handleCategoryCheck(child.id)}
                             className="text-gray-500 text-sm"
                           >
