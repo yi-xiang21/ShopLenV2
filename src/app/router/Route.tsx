@@ -23,7 +23,7 @@ import WhistlistPage from '@/pages/User/whistlist/pages/wishlist';
 import Detail from '@/pages/User/Shop/pages/Detail';
 import  {AdminSetting } from '@/pages/Admin/AdminSetting';
 import CartPage from '@/pages/User/cart/page/cart';
-
+import AdminManagerOrder from '@/pages/Admin/managerOrder/pages/AdminManagerOrder';
 
 
 export const routes = createBrowserRouter([
@@ -147,6 +147,10 @@ export const routes = createBrowserRouter([
                     {
                         path: 'Manager-Promotions',
                         element: <AdminManagerPromotion />,
+                    },
+                    {
+                        path: 'Manager-Orders',
+                        element: <AdminManagerOrder />,
                     },
                     {
                         path: 'setting',
