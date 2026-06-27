@@ -14,13 +14,6 @@ import { ProductApi } from "./Admin/managerProducts/api/products_api";
 import CardProducts from "@/component/CardProducts";
 
 
-export interface Item {
-  id: number;
-  name: string;
-  content: string;
-  img?: string;
-}
-
 
 const HomePage = () => {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -65,7 +58,6 @@ const HomePage = () => {
         const response = await ProductApi.getProductsTopSelling();
         const topSellingProducts = response.data?.data?.products || [];
         setProductTop(topSellingProducts);
-        console.log("Top selling products:", topSellingProducts);
       }
       catch (error) {
         console.error("Lỗi khi lấy sản phẩm bán chạy:", error);

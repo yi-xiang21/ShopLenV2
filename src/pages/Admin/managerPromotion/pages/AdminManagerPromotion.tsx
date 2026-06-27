@@ -30,7 +30,6 @@ const defaultFormValues:  promotion = {
   start_date: "",
   end_date: "",
   applicable_products: [],
- 
 };
 
 const AdminManagerPromotion = () => {
@@ -72,15 +71,12 @@ const AdminManagerPromotion = () => {
   
           if (Object.keys(currentFilters).length > 0) {
           
-            console.log("Fetching promotions with filters:", currentFilters, "Page:", page, "Limit:", limit);
             response = await promotionApi.filter({ ...currentFilters, page, limit });
-            console.log("Filtered promotions response:", response.data);
         
           } 
           else {
             
             response = await promotionApi.getAll(page, limit);
-            console.log("Fetched promotions response:", response.data);
           }
   
           setPromotions(response.data?.data?.promotions ?? []);
@@ -111,7 +107,6 @@ const AdminManagerPromotion = () => {
       try {
         const response = await promotionApi.getById(record.promotion_id);
         const data = response.data.data?.promotion;
-        console.log("Fetched promotion details:", data);
         setEditingId(data.promotion_id);
         
 
@@ -149,8 +144,6 @@ const AdminManagerPromotion = () => {
         });
       } else {
         const payloadUpdate = { ...values };
-
-        console.log("Updating promotion with ID:", editingId, "Payload:", payloadUpdate);
 
         await promotionApi.update(editingId, payloadUpdate);
         setNotifyData({
@@ -256,8 +249,8 @@ const AdminManagerPromotion = () => {
     },
   ];
   const handleFilter = (newFilters: Record<string, any>) => {
-    setFilters(newFilters); // Cập nhật bộ lọc
-    setCurrentPage(1);      // Trở về trang 1 mỗi khi đổi bộ lọc tìm kiếm
+    setFilters(newFilters);
+    setCurrentPage(1);      
   };
 
 

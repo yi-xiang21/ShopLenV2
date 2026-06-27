@@ -14,8 +14,7 @@ const Wishlist = () => {
 
   useEffect(() => {
     dispatch(getWishlistThunk());
-    console.log("Wishlist items:", wishlistItems);
-  }, [dispatch, wishlistItems]);
+  }, [dispatch]);
 
   const removeFromWishlist = (productId: any) => {
     dispatch(toggleWishlistThunk(productId));

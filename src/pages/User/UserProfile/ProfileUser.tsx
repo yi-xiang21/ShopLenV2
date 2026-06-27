@@ -5,12 +5,12 @@ import {  useState,useEffect } from 'react';
 import type { user } from '@/pages/User/UserProfile/types/user-type';
 import { userApi } from '@/pages/User/UserProfile/api/user-api';
 import { useAppSelector } from '@/app/redux/hooks';
-
 const ProfileUser = () => {
 
   const { error, loading,user } = useAppSelector((state) => state.auth);
 
   const [profileForm, setProfileForm] = useState<user>( user || {
+  avatar: '',
   user_id: '',
   username: '',
   email: '',
@@ -26,6 +26,7 @@ const ProfileUser = () => {
     const fetchProfile = async () => {
       try {
         const response = await userApi.getProfile();
+        console.log('Fetched user profile:', response.data);
         setProfileForm(response.data);
       } catch (error) {
         console.error('Failed to fetch user profile:', error);
@@ -53,9 +54,14 @@ const ProfileUser = () => {
 
   return (
     <section className='space-y-6'>
-      <div>
-        <p className='text-sm font-semibold uppercase tracking-[0.22em] text-[#b95b2d]'>Thông tin người dùng</p>
-        <h2 className='mt-2 text-3xl font-semibold text-[#1f1935]'>Hồ sơ cá nhân</h2>
+      <div className="flex *:flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <div>
+          <p className='text-sm font-semibold uppercase tracking-[0.22em] text-[#b95b2d]'>Thông tin người dùng</p>
+          <h2 className='mt-2 text-3xl font-semibold text-[#1f1935]'>Hồ sơ cá nhân</h2>
+        </div>
+        <div className='flex items-center gap-3'> 
+          <img src={profileForm.avatar || '/images/avatar-default.png'} alt="Avatar" className='h-16 w-16 rounded-full object-cover bg-amber-950' />
+        </div>
       </div>
 
       <div className=' p-5'>

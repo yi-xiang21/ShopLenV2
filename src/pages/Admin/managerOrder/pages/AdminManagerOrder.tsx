@@ -80,7 +80,7 @@ const AdminManagerOrder = () => {
     void fetchOrders(currentPage, pageSize, filters);
   }, [currentPage, pageSize, filters, fetchOrders]);
 
-  const handleAction = async (mode: FormModalModeType, record?: Order) => {
+  const handleAction = async (mode: FormModalModeType, record?: Order) => { 
     if (record) {
       try {
         const response = await OrderApi.getById(record.order_id);

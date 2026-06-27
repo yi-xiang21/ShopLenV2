@@ -1,7 +1,6 @@
 
 // chua lam 
-// update hinh anh user
-// sort sp theo danh muc va filter
+// update hinh anh user tim hiu crop
 // ktra thong bao khuyen mai
 // ton kho
 // admin workshop

@@ -42,7 +42,6 @@ const Detail = () => {
         const response = await ProductApi.getById(id);
         const productData = response.data?.data.product || null;
         setProduct(productData);
-        console.log("Chi tiết sản phẩm:", productData);
 
         
         if (productData && productData.category_id) {
@@ -99,6 +98,7 @@ const Detail = () => {
   const handleAddToCart = () => {
     if (!user) {
       dispatch(addToLocalCart({
+        product_id: Number(product?.product_id),
         variant_id: Number(activeVariant?.variant_id),
         quantity: quantity,
         image_url: activeVariant?.images[0]?.image_url || "",
@@ -302,13 +302,15 @@ const Detail = () => {
         </div>
       </div>
       <div className="w-full h-auto p-4">
-        <h2 className="text-2xl font-bold text-slate-800 mb-4">Sản phẩm liên quan</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {relatedProducts.map((product) => (
-            <CardProducts key={product.product_id}  data={product}/>
-          ))}
-        </div>
+  <h2 className="mb-4 text-2xl font-bold text-slate-800">Sản phẩm liên quan</h2>
+  <div className="no-scrollbar flex w-full items-center justify-start gap-8 overflow-x-auto overflow-y-hidden p-10">
+    {relatedProducts.map((product) => (
+      <div key={product.product_id} className="shrink-0">
+        <CardProducts data={product} />
       </div>
+    ))}
+  </div>
+</div>
       
     </div>
   );

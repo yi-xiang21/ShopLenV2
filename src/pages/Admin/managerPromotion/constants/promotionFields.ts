@@ -92,7 +92,7 @@ export const promotionFields: FormField<promotion>[] = [
         {
           required: true,
           message: 'Ngày kết thúc không được để trống.',
-        }
+        }  
       ]
     },
   {

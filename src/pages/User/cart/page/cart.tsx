@@ -12,14 +12,15 @@ const Cart = () => {
 
   const { items: cartItems } = useAppSelector((state) => state.Cart);
   const { user } = useAppSelector((state) => state.auth);
+  
 
   useEffect(() => {
     if (user) {
       dispatch(getCart());
     }
     const localCart = JSON.parse(localStorage.getItem("localCart") || "[]");
+    
     dispatch(setLocalCart(localCart));
-    console.log("Cart items:", cartItems);
   }, [dispatch, user]);
 
   const handleDeleteItem = async (variant_id: number) => {
@@ -74,6 +75,7 @@ const Cart = () => {
     (sum, item) => sum + Number(item.price) * item.quantity,
     0,
   );
+  
 
   return (
     <div className="mx-auto max-w-7xl p-6">
