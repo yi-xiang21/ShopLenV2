@@ -17,7 +17,7 @@ import { getWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck";
 import type { Product } from "@/pages/Admin/managerProducts/type/products";
 import {ProductApi} from "@/pages/Admin/managerProducts/api/products_api";
 import { getCart, syncCart } from "@/pages/User/cart/store/cart_thunck";
-import type { cart ,CartSync} from "@/pages/User/cart/types/cart";
+import type { cart ,CartSync} from "@/pages/User/Cart/types/cart";
 export type ActiveMenuKey = "home" | "shop" | "about" | "workshop";
 
 const Header = () => {

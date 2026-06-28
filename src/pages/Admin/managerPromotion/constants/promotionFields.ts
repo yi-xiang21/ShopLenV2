@@ -78,15 +78,15 @@ export const promotionFields: FormField<promotion>[] = [
         {
           required: true,
           validator: (formdata: promotion) => {
-  if (!formdata.start_date || !formdata.end_date) {
-    return true;
-  }
+          if (!formdata.start_date || !formdata.end_date) {
+            return true;
+          }
 
-  const startDate = new Date(formdata.start_date);
-  const endDate = new Date(formdata.end_date);
+          const startDate = new Date(formdata.start_date);
+          const endDate = new Date(formdata.end_date);
 
-  return endDate > startDate;
-},
+          return endDate > startDate;
+      },
           message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
         },
         {

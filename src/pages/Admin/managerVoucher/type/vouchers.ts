@@ -13,3 +13,7 @@ export interface voucher {
    end_date: string,
 }
 
+export interface voucherApply{
+    code: string,
+    order_value: number,
+}

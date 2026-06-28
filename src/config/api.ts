@@ -25,7 +25,22 @@ export const API_CONFIG = {
     UPDATE_CART: (variant_id: number) => `/api/cart/${variant_id}`,
     DELETE_CART: (variant_id: number) => `/api/cart/${variant_id}`,
 
+    //voucher user
+    GET_VOUCHERS_USER: '/api/vouchers/my-vouchers',
+    POST_VOUCHER_USER: '/api/vouchers/save',
+    POST_VOUCHER_APPLY: '/api/vouchers/apply',
 
+
+    //billing
+    CREATE_BILLING: '/api/orders',
+    GET_SHIPPING_METHODS: '/api/orders/shipping-fees',
+    GET_MY_ORDERS: '/api/orders/my-orders',
+    GET_ORDER_DETAIL: (orderId: string) => `/api/orders/${orderId}`,
+    POST_ORDER_REPURCHASE: (orderId: string) => `/api/repurchase/${orderId}`,
+
+    //location
+    GET_LOCATIONS: '/api/location/cities',
+    GET_CITY_WARDS: (city_code: string) => `/api/location/cities/${city_code}/wards`,
 
 
     //admin account
@@ -63,6 +78,9 @@ export const API_CONFIG = {
     UPDATE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
     DELETE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
     FILTER_VOUCHERS: '/api/vouchers/vouchers/filter',
+
+
+
 
     //admin promotion
     GET_PROMOTIONS_ACTIVE: '/api/promotions',

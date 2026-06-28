@@ -1,6 +1,6 @@
 import { API_CONFIG } from "@/config/api";
 import { callAPI } from "@/share/lib/axios";
-import type { voucher } from "../type/vouchers";
+import type { voucher,voucherApply } from "../type/vouchers";
 
 export const vouchersApi = {
     getAll: async (page :number, limit: number) => {
@@ -20,5 +20,15 @@ export const vouchersApi = {
     },
     filter: async (filter: any) => {
         return callAPI.post(API_CONFIG.ENDPOINTS.FILTER_VOUCHERS, filter );
-    }
+    },
+    getMyVouchers: async () => {
+        return callAPI.get(API_CONFIG.ENDPOINTS.GET_VOUCHERS_USER);
+    },
+    saveVoucher: async (voucherId: number) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.POST_VOUCHER_USER, { voucher_id: voucherId });
+    },
+    applyVoucher: async (voucherCode: voucherApply) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.POST_VOUCHER_APPLY, { code: voucherCode });
+    },
+
 }

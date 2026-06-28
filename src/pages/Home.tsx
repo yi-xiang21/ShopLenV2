@@ -12,6 +12,7 @@ import { Skeleton } from "antd";
 import { categoryApi } from "./Admin/managerCatelogy/api/cate_api";
 import { ProductApi } from "./Admin/managerProducts/api/products_api";
 import CardProducts from "@/component/CardProducts";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -20,6 +21,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [products, setProducts] = useState<any[]>([]);
   const [productTop, setProductTop] = useState<any[]>([]);
+  const navigate = useNavigate();
 
   
   
@@ -126,7 +128,7 @@ const HomePage = () => {
               ))
             )}
           </div>
-          <button className="button_user">Xem Sản Phẩm Bán Chạy</button>
+          
         </div>
           
       </div>
@@ -161,7 +163,9 @@ const HomePage = () => {
               ))
             )}
           </div>
-          <button className="button_user">Xem Sản Phẩm Bán Chạy</button>
+          <button className="button_user" onClick={() => navigate('/shop')}>
+            Xem Sản Phẩm
+          </button>
         </div>
       </section>
 

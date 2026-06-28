@@ -1,7 +1,7 @@
 
 
 
-import type { cart, CartSync } from '@/pages/User/cart/types/cart';
+import type { cart, CartSync } from '@/pages/User/Cart/types/cart';
 import { API_CONFIG } from "@/config/api";
 import {callAPI} from "@/share/lib/axios";
 
