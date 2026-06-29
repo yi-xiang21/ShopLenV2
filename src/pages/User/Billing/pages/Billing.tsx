@@ -118,6 +118,52 @@ const BillingPage = () => {
   };
 
   const handleOkUser = () => {
+    if (!firstName || !lastName) {
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "error",
+        title: "Thiếu thông tin",
+        message: "Vui lòng nhập đầy đủ họ và tên!",
+      });
+      return;
+    }
+    if (!formData.sdt_nguoi_nhan) {
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "error",
+        title: "Thiếu thông tin",
+        message: "Vui lòng nhập số điện thoại!",
+      });
+      return;
+    }
+    const phoneToTest = formData.sdt_nguoi_nhan.trim();
+    if (phoneToTest && !/^\d{10,11}$/.test(phoneToTest)) {
+        setNotifyData({
+          key: Date.now().toString(),
+          type: "error",
+          title: "Sai định dạng",
+          message: "Vui lòng nhập số điện thoại hợp lệ!",
+        });
+        return;
+      }
+    if (!selectedCity || !selectedWard) {
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "error",
+        title: "Thiếu thông tin",
+        message: "Vui lòng chọn thành phố và phường/xã!",
+      });
+      return;
+    }
+    if (!formData.dia_chi_giao_hang) {
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "error",
+        title: "Thiếu thông tin",
+        message: "Vui lòng nhập địa chỉ giao hàng!",
+      });
+      return;
+    }
     setIsModalOpen(false);
   };
 
@@ -156,7 +202,8 @@ const BillingPage = () => {
       }
 
       
-      await BillingApi.createBilling(finalPayload);
+      const respone = await BillingApi.createBilling(finalPayload);
+      console.log("Đơn hàng đã được tạo thành công:", respone.data);
       
       setNotifyData({
         key: Date.now().toString(),
@@ -262,7 +309,7 @@ const BillingPage = () => {
         />
       )}
       <Modal
-        title="Basic Modal"
+        title="Thay đổi thông tin giao hàng"
         closable={{ "aria-label": "Custom Close Button" }}
         open={isModalOpen}
         onOk={handleOkUser}
@@ -335,7 +382,7 @@ const BillingPage = () => {
       </Modal>
 
       <Modal
-        title="Basic Modal"
+        title="Chọn Voucher"
         closable={{ "aria-label": "Custom Close Button" }}
         open={isModalVoucherOpen}
         onOk={handleApply}

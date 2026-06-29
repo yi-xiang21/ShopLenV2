@@ -46,18 +46,23 @@ const Detail = () => {
         
         if (productData && productData.category_id) {
             const senddata = {
-            category_ids: [productData.category_id],
+            category_id: productData.category_id,
             status: "active",
             page: 1,
             limit: 10,
             };
+            console.log("Dữ liệu gửi đi:", senddata);
           const relatedResponse = await ProductApi.filter(senddata);
+          console.log("Sản phẩm liên quan:", relatedResponse.data?.data.products);
           setRelatedProducts(relatedResponse.data?.data.products || []);
         }
 
         if (productData && productData.variants?.length > 0) {
+          
           setActiveVariant(productData.variants[0]);
+          console.log(activeVariant);
           setStock(productData.variants[0].stock_quantity || 0);
+          console.log("Số lượng trong kho:", stock);
         }
       } catch (error) {
         console.error("Lỗi khi tải thông tin sản phẩm:", error);

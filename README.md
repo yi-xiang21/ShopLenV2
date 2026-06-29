@@ -1,7 +1,6 @@
- 
+ //admin don hang
 // tao don hang user thanh toan app voucher check lai
-//sort ngay  tang giam
-// lay voucher user //phat voucheruser
+// lay voucher user //phat voucher user
 // update hinh anh user tim hiu crop
 // ktra thong bao khuyen mai
 // ton kho

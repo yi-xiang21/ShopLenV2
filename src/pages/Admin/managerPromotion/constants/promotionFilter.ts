@@ -19,6 +19,19 @@ export const filterPromotions: FilterField[] = [
       { label: 'fixed', value: 'fixed' },
     ],
     mode: 'multiple',
+  },
+  {
+    key : 'sort_by',
+    label: 'Sắp xếp theo',
+    type: FormFieldType.Select,
+    placeholder: 'Chọn tiêu chí sắp xếp',
+    width: 200,
+    options: [
+      { label: 'ngày bắt đàu tăng dần ', value: 'start_date_asc' },
+      { label: 'ngày bắt đầu giảm dần', value: 'start_date_desc' },
+      { label: 'ngày kết thúc tăng dần', value: 'end_date_asc' },
+      { label: 'ngày kết thúc giảm dần', value: 'end_date_desc' },
+    ],
   }
 ];
   

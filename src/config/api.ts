@@ -25,6 +25,11 @@ export const API_CONFIG = {
     UPDATE_CART: (variant_id: number) => `/api/cart/${variant_id}`,
     DELETE_CART: (variant_id: number) => `/api/cart/${variant_id}`,
 
+    //momo
+    POST_CREATE_PAYMENT: '/api/payment/momo/ipn',
+    GET_PAYMENT_SUCCESS: '/api/payment/momo/return',
+    POST_REFUND_MOMO_PAYMENT: (order_id: number) => `/api/payment/refund/${order_id}`,
+
     //voucher user
     GET_VOUCHERS_USER: '/api/vouchers/my-vouchers',
     POST_VOUCHER_USER: '/api/vouchers/save',
@@ -98,7 +103,6 @@ export const API_CONFIG = {
     GET_ORDER: (id: string) => `/api/orders/admin/${id}`,
     UPDATE_ORDER_STATUS: (id: string) => `/api/orders/admin/${id}/status`,
     FILTER_ORDERS: '/api/orders/admin/filter',
-
 
 
     FORGOT_PASSWORD: '/api/auth/forgot-password',
