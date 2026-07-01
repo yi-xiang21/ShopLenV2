@@ -32,7 +32,7 @@ const defaultFormValues: Product = {
   variants: [],
 };
 
-const AdminManagerAccount = () => {
+const AdminManagerProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [editingId, setEditingId] = useState<number | "">("");
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -342,4 +342,4 @@ const fetchProducts = useCallback(
   );
 };
 
-export default AdminManagerAccount;
+export default AdminManagerProducts;

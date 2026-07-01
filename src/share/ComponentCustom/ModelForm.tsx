@@ -16,7 +16,7 @@ interface FormModalProps<T extends object> {
   title: string;
   fields: FormField<any>[];
   initialValues: T;
-  onSubmit: (values: T) => void;
+  onSubmit?: (values: T) => void;
   loading?: boolean;
   childKey?: keyof T;
   hasChildren?: boolean;
@@ -128,7 +128,7 @@ const FormModal = <T extends object>({
     }
 
     setError({});
-    onSubmit(formData);
+    onSubmit?.(formData);
 };
 
   return (

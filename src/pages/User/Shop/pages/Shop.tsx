@@ -119,14 +119,6 @@ const Shop = () => {
   const pre = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const next = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
-  const sortByPriceDesc = () => {
-    setCurrentPage(1); // Chuyển về trang 1
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      sort_price: "des", // hoặc 'desc' tùy backend
-    }));
-  };
-
   const sortByPriceAsc = () => {
     setCurrentPage(1); // Chuyển về trang 1
     setFilters((prevFilters) => ({
@@ -134,6 +126,8 @@ const Shop = () => {
       sort_price: "asc",
     }));
   };
+
+
 
   return (
     <>
@@ -160,12 +154,7 @@ const Shop = () => {
             >
               Giá tăng dần
             </Button>
-            <Button
-              type={filters.sort_price === "des" ? "primary" : "default"}
-              onClick={sortByPriceDesc}
-            >
-              Giá giảm dần
-            </Button>
+
           </div>
 
           <div className="w-full h-auto p-5 grid grid-cols-3 gap-3">

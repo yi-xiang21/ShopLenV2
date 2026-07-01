@@ -18,6 +18,7 @@ import AdminManagerCategory from '@/pages/Admin/managerCatelogy/pages/AdminManag
 import AdminManagerProducts from '@/pages/Admin/managerProducts/pages/AdminManagerProduct';
 import AdminManagerVouchers from '@/pages/Admin/managerVoucher/pages/AdminManagerVoucher';
 import AdminManagerPromotion from '@/pages/Admin/managerPromotion/pages/AdminManagerPromotion';
+import AdminManagerStock from '@/pages/Admin/managerStock/pages/AdminManagerStock';
 import ShopPage from '@/pages/User/Shop/pages/Shop';
 import WhistlistPage from '@/pages/User/whistlist/pages/wishlist';
 import Detail from '@/pages/User/Shop/pages/Detail';
@@ -156,6 +157,10 @@ export const routes = createBrowserRouter([
                     {
                         path: 'Manager-Promotions',
                         element: <AdminManagerPromotion />,
+                    },
+                    {
+                        path: 'Manager-Stock',
+                        element: <AdminManagerStock />,
                     },
                     {
                         path: 'Manager-Orders',

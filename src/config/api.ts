@@ -54,7 +54,7 @@ export const API_CONFIG = {
     CREATE_USER: '/api/users',
     UPDATE_USER: (id: string) => `/api/users/${id}`,
     DELETE_USER: (id: string) => `/api/users/${id}`,
-      FILTER_USERS: '/api/users/filter',
+    FILTER_USERS: '/api/users/filter',
     
     //admin category
     GET_CATEGORIES: '/api/categories',
@@ -63,8 +63,14 @@ export const API_CONFIG = {
     UPDATE_CATEGORY: (id: string) => `/api/categories/${id}`,
     DELETE_CATEGORY: (id: string) => `/api/categories/${id}`,
     FiLTER_CATEGORIES: '/api/categories/filter',
-    
 
+    //admin stock
+    GET_STOCKS: '/api/variants/stock',
+    POST_FILTER_STOCKS: '/api/inventory/overview',
+    GET_HISTORY_STOCKS: (variant_id: number) => `/api/inventory/${variant_id}/history`,
+    POST_UPDATE_STOCKS: '/api/inventory/adjust',
+
+    
     //admin product
     GET_PRODUCTS: '/api/products',
     GET_PRODUCT: (id: string) => `/api/products/${id}`,
