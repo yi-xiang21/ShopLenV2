@@ -13,6 +13,7 @@ export const API_CONFIG = {
     //user
     PROFILE: '/api/auth/me',
     UPDATE_PROFILE: '/api/users/user/me',
+  
 
     //whistlist
     POST_WISHLIST: '/api/wishlist/toggle',
@@ -39,9 +40,10 @@ export const API_CONFIG = {
     //billing
     CREATE_BILLING: '/api/orders',
     GET_SHIPPING_METHODS: '/api/orders/shipping-fees',
+
     GET_MY_ORDERS: '/api/orders/my-orders',
-    GET_ORDER_DETAIL: (orderId: string) => `/api/orders/${orderId}`,
-    POST_ORDER_REPURCHASE: (orderId: string) => `/api/repurchase/${orderId}`,
+    GET_ORDER_DETAIL: (orderId: string) => `/api/orders/my-orders/${orderId}`,
+    POST_ORDER_REPURCHASE: (orderId: string) => `/api/orders/repurchase/${orderId}`,
 
     //location
     GET_LOCATIONS: '/api/location/cities',
@@ -109,6 +111,15 @@ export const API_CONFIG = {
     GET_ORDER: (id: string) => `/api/orders/admin/${id}`,
     UPDATE_ORDER_STATUS: (id: string) => `/api/orders/admin/${id}/status`,
     FILTER_ORDERS: '/api/orders/admin/filter',
+
+
+    //admin workshop
+    POST_WORKSHOPS: '/api/workshops',
+    GET_DETAIL_WORKSHOP: (id: string) => `/api/workshops/${id}`,
+    PUT_UPDATE_WORKSHOP: (id: string) => `/api/workshops/${id}`,
+    DELETE_WORKSHOP: (id: string) => `/api/workshops/${id}`,
+    POST_FILTER_WORKSHOPS: '/api/workshops/filter',  
+
 
 
     FORGOT_PASSWORD: '/api/auth/forgot-password',

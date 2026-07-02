@@ -27,6 +27,7 @@ import CartPage from '@/pages/User/Cart/page/cart';
 import AdminManagerOrder from '@/pages/Admin/managerOrder/pages/AdminManagerOrder';
 import Order from '@/pages/User/Billing/pages/Billing';
 import BillingSuccess from '@/pages/User/Billing/pages/BillingSucces';
+import AdminManagerWorkshop from '@/pages/Admin/managerWorkshop/pages/AdminManagerProduct';
 
 export const routes = createBrowserRouter([
     {
@@ -165,6 +166,10 @@ export const routes = createBrowserRouter([
                     {
                         path: 'Manager-Orders',
                         element: <AdminManagerOrder />,
+                    },
+                    {
+                        path: 'Manager-Workshops',
+                        element: <AdminManagerWorkshop />,
                     },
                     {
                         path: 'setting',

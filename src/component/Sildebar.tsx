@@ -15,7 +15,7 @@ const menuItems = [
     { name: 'Quản lý danh mục', link: '/admin/Manager-Category' },
     {
     name: 'Quản lý khuyến mãi', link: '/admin/Manager-Promotions' },
-    { name: 'Quản lý workshop', link: '' },
+    { name: 'Quản lý workshop', link: '/admin/Manager-Workshops' },
     { name: 'Quay về trang chủ', link: '/' },
     { name: 'Cài đặt', link: '/admin/setting' }
 ]

@@ -8,3 +8,13 @@ export type user = {
   first_name: string;
   last_name: string;
 }
+import type { OrderStatusValue } from '@/pages/Admin/managerOrder/type/order';
+
+export interface orderUser {
+  order_id: string;
+  status: OrderStatusValue;
+  total_amount: string;
+  discount_amount: string;
+  customer_name: string;
+  shipping_address: string;
+}
