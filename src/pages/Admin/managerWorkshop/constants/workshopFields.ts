@@ -63,7 +63,7 @@ export const workshopFields: FormField<Workshop>[] = [
             }
           ]
   },{
-    key: 'product_status',
+    key: 'status',
     label: 'Trạng thái',
     type: FormFieldType.Select,
     placeholder: 'Chọn trạng thái workshop',

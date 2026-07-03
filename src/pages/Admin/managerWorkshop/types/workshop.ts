@@ -22,7 +22,7 @@ export interface Workshop {
     description: string;
     location: string;
     category_id: number;
-    product_status: "active" | "inactive";
+    status: "active" | "inactive";
     overall_status?: "open" | "closed";
     sessions: WorkshopVariant[];
 }

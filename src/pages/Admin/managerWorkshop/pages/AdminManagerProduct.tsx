@@ -29,7 +29,7 @@ const defaultFormValues: Workshop = {
   category_id: 0,
   workshop_id: 0,
   product_id: 0,
-  product_status: "active",
+  status: "active",
   sessions: [],
 };
 
@@ -115,6 +115,7 @@ const fetchWorkshops = useCallback(
       try {
         const response = await WorkshopApi.getById(record.workshop_id);
         const data = response.data.data.workshop;
+        console.log("Fetched workshop details:", data);
 
         setEditingId(data.workshop_id);
 
@@ -229,13 +230,14 @@ const fetchWorkshops = useCallback(
   };
 
   const columns: TableProps<Workshop>["columns"] = [
-    {title: 'ID', dataIndex: 'workshop_id', key: 'workshop_id' ,width: 70},
-    {title: 'Tiêu đề', dataIndex: 'title', key: 'title' ,width: 350},
-    {title: 'Địa điểm', dataIndex: 'location', key: 'location' , width: 250},
+    {title: 'ID', dataIndex: 'workshop_id', key: 'workshop_id' },
+    {title: 'Tiêu đề', dataIndex: 'title', key: 'title' },
+    {title: 'Địa điểm', dataIndex: 'location', key: 'location' },
     {
       title: 'Trạng thái tổng thể',
       dataIndex: 'overall_status',
       key: 'overall_status',
+      
       render: (status) => (
         <span
           className={`px-2 py-1 rounded ${status === "open" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}
@@ -244,7 +246,7 @@ const fetchWorkshops = useCallback(
         </span>
       )
     },
-    {title: 'Trạng thái', dataIndex: 'product_status', key: 'product_status' ,render: (status) => (
+    {title: 'Trạng thái', dataIndex: 'status', key: 'status',width: 150 ,render: (status) => (
       <span
         className={`px-2 py-1 rounded ${status === "active" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}
       >
@@ -312,7 +314,7 @@ const fetchWorkshops = useCallback(
           onSearch={handleFilter}
           loading={loading}
         />
-        <Table scroll={{ x: 200 , y : 'max-content'}}  columns={columns} dataSource={workshops} rowKey="workshop_id" pagination={
+        <Table columns={columns} dataSource={workshops} rowKey="workshop_id" pagination={
           {
             current: currentPage,
             pageSize: pageSize,

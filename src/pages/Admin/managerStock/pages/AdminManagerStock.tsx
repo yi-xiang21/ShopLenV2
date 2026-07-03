@@ -69,13 +69,16 @@ const fetchStock = useCallback(
             page,
             limit,
           };
+          console.log("Sending filter data:", dataToSend);
           response = await stockApi.filter(dataToSend);
+          setStock(response.data?.data?.inventory ?? []);
         } 
         else {
           response = await stockApi.getAll(page, limit);
+           setStock(response.data?.data?.variantsStock ?? []);
         }
 
-        setStock(response.data?.data?.variantsStock ?? []);
+       
         setTotal(response.data?.data?.pagination?.total ?? 0);
       } catch (error) {
         console.error("Lỗi khi tải danh sách tồn kho:", error);
@@ -221,8 +224,8 @@ const fetchStock = useCallback(
   const columnsHistory: TableProps<StockHistoryItem>["columns"] = [
     {title: 'History ID', dataIndex: 'history_id', key: 'history_id'},
     {title: 'Transaction Type', dataIndex: 'transaction_type', key: 'transaction_type'},
-    {title: 'Quantity Changed', dataIndex: 'quantity_changed', key: 'quantity_changed'},
-    {title: 'Stock After', dataIndex: 'stock_after', key: 'stock_after'},
+    {title: 'Quantity Changed', dataIndex: 'quantity_change', key: 'quantity_change'},
+    {title: 'New Stock', dataIndex: 'new_stock', key: 'new_stock'},
     {title: 'Performed By', dataIndex: 'performed_by', key: 'performed_by'},
     {title: 'Reference Code', dataIndex: 'reference_code', key: 'reference_code'},
   ];

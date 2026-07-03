@@ -14,6 +14,7 @@ export type transaction_type = typeof TRANSACTION_TYPE[number]["value"];
 export interface stock {
   variant_id: number;
   quantity_change?: number;
+  physical_quantity?: number;
   transaction_type?: transaction_type;
   note?: string;
   sku?: string;
@@ -26,9 +27,9 @@ export interface StockHistoryItem {
   history_id : string;
   note : string;
   performed_by : string;
-  quantity_changed :number;
+  quantity_change :number;
   reference_code :string | null;
-  stock_after : number;
+  new_stock : number;
   transaction_type : transaction_type;
 }
 
