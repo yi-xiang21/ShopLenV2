@@ -11,6 +11,9 @@ export const orderFields: FormField<Order>[] = [
   { key: 'total_amount', label: 'Tổng tiền', type: FormFieldType.Input },
   { key: 'payment_method' as any, label: 'Phương thức thanh toán', type: FormFieldType.Input },
   { key: 'payment_status' as any, label: 'Trạng thái thanh toán', type: FormFieldType.Input },
+  { key: 'reference_code' as any, label: 'Mã tham chiếu', type: FormFieldType.Input },
+  { key: 'shipping_fee' as any, label: 'Phí vận chuyển', type: FormFieldType.Input },
+  {key:'discount_amount' as any, label:'Giảm giá', type: FormFieldType.Input},
   {
     key: 'status',
     label: 'Trạng thái đơn hàng',

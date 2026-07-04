@@ -9,11 +9,12 @@ import { useFormModal } from "@/share/hook/useFormModal";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import {  useSearchParams } from "react-router-dom";
+import catSliderAnimation from '@/assets/animation/Cat playing animation.json';
+import Lottie from "lottie-react";
 
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryId = searchParams.get("categoryId");
-  console.log("Category ID from state:", categoryId);
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<any[]>([]);
@@ -126,12 +127,19 @@ const Shop = () => {
       sort_price: "asc",
     }));
   };
-
+  const LottieComponent = Lottie as any;
 
 
   return (
     <>
       <div className="w-full h-100 flex items-center justify-center p-4">
+        <div className="absolute left-10 top-107 w-50 mt-10 z-20">
+          <LottieComponent.default
+                          animationData={catSliderAnimation}
+                          loop
+                          autoplay
+                        />
+        </div>
         <img
           src={Banner}
           alt="Banner"

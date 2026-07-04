@@ -10,7 +10,7 @@ import UserOrderTracking from '@/pages/User/UserProfile/UserOrderTracking';
 import ChangePassword from '@/pages/Login&Register/pages/ChangePassword';
 import ResetPassword from '@/pages/Login&Register/pages/ResetPassword';
 import PurchaseHistoryPage from '@/pages/User/UserProfile/PurchaseHistory';
-import WorkshopPage from '@/pages/User/UserProfile/UserWorkshop';
+import WorkshopHistory from '@/pages/User/UserProfile/UserWorkshop';
 import AccountSettingsPage from '@/pages/User/UserProfile/UserSettingAccount';
 import AboutUs from '@/pages/About';
 import AdminManagerAccount from '@/pages/Admin/managerAccount/pages/AdminManagerAccount';
@@ -27,7 +27,11 @@ import CartPage from '@/pages/User/Cart/page/cart';
 import AdminManagerOrder from '@/pages/Admin/managerOrder/pages/AdminManagerOrder';
 import Order from '@/pages/User/Billing/pages/Billing';
 import BillingSuccess from '@/pages/User/Billing/pages/BillingSucces';
-import AdminManagerWorkshop from '@/pages/Admin/managerWorkshop/pages/AdminManagerProduct';
+import AdminManagerWorkshop from '@/pages/Admin/managerWorkshop/pages/AdminManagerWorkshop';
+import PageNotFound from '@/pages/page404';
+import WorkshopPages from '@/pages/User/Workshop/pages/WorkshopPages';
+import WorkshopDetail from '@/pages/User/Workshop/pages/DetailWorkshop';
+
 
 export const routes = createBrowserRouter([
     {
@@ -55,9 +59,18 @@ export const routes = createBrowserRouter([
                 element: <Detail />,
             },
             {
+                path: '/workshop-detail/:id',
+                element: <WorkshopDetail />,
+            },
+            {
                 path: '/cart',
                 element: <CartPage />,
+            },
+            {
+                path: '/workshop',
+                element: <WorkshopPages />,
             }
+            
         ],  
     },
     {
@@ -102,7 +115,7 @@ export const routes = createBrowserRouter([
                             },
                             {
                                 path: 'workshop',
-                                element: <WorkshopPage />,
+                                element: <WorkshopHistory />,
                             },
                             {
                                 path: 'account',
@@ -178,5 +191,9 @@ export const routes = createBrowserRouter([
                 ],
             },
         ]
+    },
+    {
+        path: '*',
+        element: <PageNotFound />,
     }
 ])

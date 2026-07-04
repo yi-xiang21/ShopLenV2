@@ -4,10 +4,12 @@ import {
   getCart,
   updateCartItem,
 } from "@/pages/User/cart/store/cart_thunck";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setLocalCart } from "@/pages/User/cart/store/cart_slice";
 import { useNavigate } from "react-router-dom";
 import { FaRegTrashAlt } from "react-icons/fa";
+import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
+import Notification from "@/share/ComponentCustom/Notification/Notification";
 
 const Cart = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +17,12 @@ const Cart = () => {
 
   const { items: cartItems } = useAppSelector((state) => state.Cart);
   const { user } = useAppSelector((state) => state.auth);
+  const [notifyData, setNotifyData] = useState<{
+        key: string;
+        type: NotificationType;
+        title: string;
+        message: string;
+      } | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -78,8 +86,29 @@ const Cart = () => {
     0,
   );
 
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      setNotifyData({
+        key: "empty-cart",
+        type: "warning",
+        title: "Giỏ hàng trống",
+        message: "Vui lòng thêm sản phẩm vào giỏ hàng trước khi thanh toán.",
+      });
+      return;
+    }
+    navigate("/billing");
+  }
+
   return (
     <div className="mx-auto max-w-7xl p-6">
+      {notifyData && (
+        <Notification
+          key={notifyData.key}
+          type={notifyData.type}
+          title={notifyData.title}
+          message={notifyData.message}
+        />
+      )}
       <h1 className="mb-6 text-3xl font-bold">Giỏ hàng của bạn</h1>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -201,7 +230,7 @@ const Cart = () => {
           bg-rose-300
           hover:cursor-pointer
           "
-                onClick={() => navigate("/billing")}
+                onClick={handleCheckout}
               >
                 Thanh toán ngay
               </button>

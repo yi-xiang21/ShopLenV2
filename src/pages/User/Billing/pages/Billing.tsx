@@ -176,6 +176,7 @@ const BillingPage = () => {
 
   const handSubmitOrder = async () => {
     try {
+      
 
       const finalPayload = {
         ...formData, 
@@ -200,10 +201,14 @@ const BillingPage = () => {
         });
         return; 
       }
-
       
+
       const respone = await BillingApi.createBilling(finalPayload);
-      console.log("Đơn hàng đã được tạo thành công:", respone.data);
+      if (methodPayment === "MOMO") {
+        const paymentUrl = respone.data.data.payUrl; 
+
+        window.open(paymentUrl, "_blank");
+      }
       
       setNotifyData({
         key: Date.now().toString(),
@@ -213,7 +218,7 @@ const BillingPage = () => {
       });
 
       navigate("/billing-success");
-
+      
     } catch (error: any) {
       setNotifyData({
         key: Date.now().toString(),

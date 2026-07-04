@@ -1,4 +1,6 @@
 import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa'
+import catDanceAnimation from '@/assets/animation/Dance cat.json';
+import Lottie from 'lottie-react';
 
 const footerSections = [
   {
@@ -19,6 +21,7 @@ const footerSections = [
 ]
 
 const Footer = () => {
+  const LottieComponent = Lottie as any;
   return (
     <footer className='bg-[#e7dde4] px-6 py-14 text-left text-[#2e2742] md:px-10'>
       <div className='mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-4 md:gap-12'>
@@ -54,6 +57,13 @@ const Footer = () => {
             </ul>
           </section>
         ))}
+         <div className="absolute right-10  w-50 mt-10 z-20">
+          <LottieComponent.default
+                          animationData={catDanceAnimation}
+                          loop
+                          autoplay
+                        />
+        </div>
       </div>
     </footer>
   )

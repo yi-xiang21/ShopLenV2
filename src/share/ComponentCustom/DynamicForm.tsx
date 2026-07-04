@@ -220,7 +220,8 @@ const DynamicForm = <T extends object>({
         return (
           <TimePicker
             placeholder={field.placeholder}
-            value={parseToDayjs(value)}
+            // Gọi trực tiếp parseToDayjs, không cần qua formatToBE để check điều kiện
+            value={value ? parseToDayjs(value) : null}
             onChange={(time) => onChange(key, formatToBE(time, 'time'))}
             disabled={isFieldDisabled} 
             className="w-full"
@@ -232,7 +233,7 @@ const DynamicForm = <T extends object>({
         return (
           <DatePicker
             placeholder={field.placeholder}
-            value={parseToDayjs(value)}
+            value={formatToBE(value, 'date') ? parseToDayjs(value) : null}
             onChange={(date) => onChange(key, formatToBE(date, 'date'))}
             disabled={isFieldDisabled} 
             className="w-full"

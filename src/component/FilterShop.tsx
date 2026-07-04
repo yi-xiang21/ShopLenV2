@@ -8,11 +8,13 @@ interface FilterShopProps {
   loading?: boolean;
   categories: Category[];
   initialCategoryId?: string | null; // Thêm dòng này
+  disabled?: boolean; // Thêm dòng này
 }
 
 const FilterShop = ({
   onSubmit,
   loading,
+  disabled = false, // Thêm dòng này
   categories = [],
   initialCategoryId = null, // Thêm dòng này
 }: FilterShopProps) => {
@@ -113,7 +115,7 @@ const FilterShop = ({
               return (
                 <div key={parent.id} className="mb-2">
                   <div
-                    className="flex justify-between items-center py-2 cursor-pointer text-gray-600 hover:text-gray-900"
+                    className={`flex justify-between items-center py-2 cursor-pointer text-gray-600 hover:text-gray-900 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                     onClick={() => toggleCategory(parent.id)}
                   >
                     <span className="font-medium text-sm">
@@ -143,6 +145,7 @@ const FilterShop = ({
                             key={child.id}
                             checked={formData.category_id === child.id}
                             onChange={() => handleCategoryCheck(child.id)}
+      
                             className="text-gray-500 text-sm"
                           >
                             {child.category_name}
@@ -150,7 +153,6 @@ const FilterShop = ({
                         ))}
                       </div>
                     )}
-                  {/* Trường hợp danh mục cha mở ra nhưng không có children */}
                   {isExpanded &&
                     (!parent.children || parent.children.length === 0) && (
                       <div className="pl-4 py-1 text-xs text-gray-400 italic">
@@ -161,28 +163,27 @@ const FilterShop = ({
               );
             })}
           </div>
-          
+
+          {!disabled && (
+            <>
+              <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-2 cursor-pointer mt-4">
+                <span className="font-semibold text-gray-700">Loại Sản Phẩm</span>
+              </div>
+              <div className="pl-2 pr-2">
+                <Radio.Group
+                  value={formData.type_ids[0]}
+                  onChange={handleRadioChange}
+                  options={[
+                    { value: 1, label: "Cuộn Len" },
+                    { value: 2, label: "Công Cụ" }
+                  ]}
+                />
+              </div>
+            </>
+          )}
+
           <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-2 cursor-pointer mt-4">
-            <span className="font-semibold text-gray-700">Loại Sản Phẩm</span>
-          </div>
-          <div className="pl-2 pr-2">
-            <Radio.Group
-              
-              value={formData.type_ids[0]} 
-              onChange={handleRadioChange}
-              options={[
-                { value: 1, label: "Cuộn Len" },
-                { value: 2, label: "Công Cụ" }
-              ]}
-            />
-          </div>
-          <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-2 cursor-pointer mt-4">
-            <span className="font-semibold text-gray-700">Khoảng giá</span>
-          </div>
-          <div className="pl-2 pr-2 flex gap-2">
-            <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg mb-2 cursor-pointer mt-4">
             <span className="font-semibold text-gray-700">Mức Giá</span>
-            </div>
           </div>
 
           <div className="pl-2 pr-2 mb-6">
@@ -191,7 +192,7 @@ const FilterShop = ({
               placeholder="Chọn mức giá"
               value={currentPriceValue}
               onChange={handlePriceChange}
-              allowClear 
+              allowClear
               options={[
                 { value: "0-100000", label: "Từ 0đ - 100.000đ" },
                 { value: "100000-200000", label: "Từ 100.000đ - 200.000đ" },

@@ -6,11 +6,15 @@ import {
 } from "@/pages/User/whistlist/store/wishlist_thunck";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 
 const Wishlist = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
+  console.log("wishlistItems", wishlistItems);
 
   useEffect(() => {
     dispatch(getWishlistThunk());
@@ -19,7 +23,7 @@ const Wishlist = () => {
   const removeFromWishlist = (productId: any) => {
     dispatch(toggleWishlistThunk(productId));
   };
-  
+
   
   const formatCurrencyVND = (price: string | number) => {
   const numericPrice = Number(price);
@@ -97,10 +101,12 @@ const Wishlist = () => {
                     </button>
 
                     {/* Nút Thêm vào giỏ */}
-                    <button className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 active:scale-95 focus:outline-none">
-                      
+                    <button 
+                      onClick={() => navigate(`/detail/${item.product_id}`)}
+                      className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 active:scale-95 focus:outline-none"
+                    >
                       <FaShoppingCart />
-                      <span>Thêm vào giỏ</span>
+                      <span>xem chi tiet</span>
                     </button>
                   </div>
                 </div>

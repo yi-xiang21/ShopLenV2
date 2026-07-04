@@ -3,10 +3,16 @@ import dayjs from 'dayjs';
 export const parseToDayjs = (value: any): dayjs.Dayjs | null => {
   if (!value) return null;
   
+  
+  if (typeof value === 'string' && /^\d{2}:\d{2}(:\d{2})?$/.test(value)) {
+    
+    const parsedTime = dayjs(`1970-01-01T${value}`);
+    return parsedTime.isValid() ? parsedTime : null;
+  }
+
   const parsed = dayjs(value);
   return parsed.isValid() ? parsed : null;
 };
-
 
 export const formatToBE = (value: any, type: 'date' | 'time' | 'datetime' = 'datetime'): string | null => {
   if (!value || !dayjs.isDayjs(value)) return value || null;

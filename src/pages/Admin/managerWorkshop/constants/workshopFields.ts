@@ -75,19 +75,6 @@ export const workshopFields: FormField<Workshop>[] = [
       { required: true, message: 'Trạng thái không được để trống' }
     ],
 
-  },
-  {
-    key: 'overall_status',
-    label: 'Trạng thái tổng thể',
-    type: FormFieldType.Select,
-    placeholder: 'Chọn trạng thái tổng thể workshop',
-    options: [
-      { label: 'Mở', value: 'open' },
-      { label: 'Đóng', value: 'closed' },
-    ],
-    rules: [
-      { required: true, message: 'Trạng thái tổng thể không được để trống' }
-    ], 
   }
 ];
 

@@ -233,19 +233,7 @@ const fetchWorkshops = useCallback(
     {title: 'ID', dataIndex: 'workshop_id', key: 'workshop_id' },
     {title: 'Tiêu đề', dataIndex: 'title', key: 'title' },
     {title: 'Địa điểm', dataIndex: 'location', key: 'location' },
-    {
-      title: 'Trạng thái tổng thể',
-      dataIndex: 'overall_status',
-      key: 'overall_status',
-      
-      render: (status) => (
-        <span
-          className={`px-2 py-1 rounded ${status === "open" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}
-        >
-          {status === "open" ? "Mở" : "Đóng"}
-        </span>
-      )
-    },
+    
     {title: 'Trạng thái', dataIndex: 'status', key: 'status',width: 150 ,render: (status) => (
       <span
         className={`px-2 py-1 rounded ${status === "active" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}

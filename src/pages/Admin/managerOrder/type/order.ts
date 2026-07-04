@@ -44,6 +44,7 @@ export interface Order {
   discount_amount?: string | null;
   ward_id?: number;
   shipping_address?: string;
+  shipping_fee?: string;
   items?: OrderItem[];
   payment?: OrderPayment;
 }

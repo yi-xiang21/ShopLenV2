@@ -86,10 +86,12 @@ const AdminManagerOrder = () => {
         const response = await OrderApi.getById(record.order_id);
 
         const data = response.data?.data.order;
+        console.log("Fetched order details:", data);
 
         if (data.payment) {
           data.payment_method = data.payment.payment_method;
           data.payment_status = data.payment.payment_status;
+          data.reference_code = data.payment.reference_code;
         }
 
         setEditingId(data.order_id);

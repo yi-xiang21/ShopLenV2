@@ -38,7 +38,7 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
 },
 {
     key: 'start_date',
-    label: 'Ngày bắt đầu',
+    label: 'Ngày dien ra',
     type: FormFieldType.DatePicker,
     placeholder: 'Chọn ngày bắt đầu',
     rules: [
@@ -60,30 +60,28 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
           ]
 },
 {
-    key: 'end_date',
-    label: 'Ngày kết thúc',
-    type: FormFieldType.DatePicker,
-    placeholder: 'Chọn ngày kết thúc',
+    key: 'start_time',
+    label: 'Thời gian bắt đầu',
+    type: FormFieldType.TimePicker,
+    placeholder: 'Chọn thời gian bắt đầu',
     rules: [
-            {
-              required: true,
-              validator: (formdata: WorkshopVariant) => {
-              if (!formdata.start_date || !formdata.end_date) {
-                return true;
-              }
-    
-              const startDate = new Date(formdata.start_date);
-              const endDate = new Date(formdata.end_date);
-    
-              return endDate > startDate;
-          },
-              message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu.',
-            },
-            {
-              required: true,
-              message: 'Ngày kết thúc không được để trống.',
-            }  
-          ]
+        {
+            required: true,
+            message: 'Thời gian bắt đầu không được để trống.',
+        }
+    ]
+},
+{
+    key: 'end_time',
+    label: 'Thời gian kết thúc',
+    type: FormFieldType.TimePicker,
+    placeholder: 'Chọn thời gian kết thúc',
+    rules: [
+        {
+            required: true,
+            message: 'Thời gian kết thúc không được để trống.',
+        }
+    ]
 },
 {
     key : 'status',
@@ -92,8 +90,8 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     placeholder : 'Chọn trạng thái',
     options : [
         { label: 'Hoạt động', value: 'open' },
-        { label: 'Ngừng hoạt động', value: 'close' },
-        { label: 'Đầy', value: 'full' },
+        { label: 'Ngừng hoạt động', value: 'closed' },
+        { label: 'Đầy', value: 'cancelled' },
     ],
     rules : [
         {
@@ -123,7 +121,7 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     ]
 },
 {
-    key : 'capacity',
+    key : 'total_capacity',
     label : 'Sức chứa',
     type : FormFieldType.Input,
     placeholder : 'Nhập sức chứa',
@@ -131,7 +129,7 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
         {
             required: true,
             validator: (formdata:WorkshopVariant) => {
-                return !!formdata.capacity;
+                return !!formdata.total_capacity?.toString().trim();
             }
             ,
             message: 'Sức chứa là bắt buộc.',
@@ -142,4 +140,16 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
         }
     ]
 },
+{
+    key : 'available_slots',
+    label : 'Số chỗ còn trống',
+    type : FormFieldType.Input,
+    disabled:true,
+},
+{
+    key : 'booked_slots',
+    label : 'Số chỗ đã đặt',
+    type : FormFieldType.Input,
+    disabled:true,
+}
 ];

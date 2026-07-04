@@ -13,6 +13,10 @@ import { categoryApi } from "./Admin/managerCatelogy/api/cate_api";
 import { ProductApi } from "./Admin/managerProducts/api/products_api";
 import CardProducts from "@/component/CardProducts";
 import { useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
+import dogAnimation from '@/assets/animation/Corgi with blue balloon.json';
+import catYarnAnimation from '@/assets/animation/playing cat.json';
+
 
 
 
@@ -75,6 +79,7 @@ const HomePage = () => {
 
   
   const bannerImages = [HomeBanner1, HomeBanner2];
+  const LottieComponent = Lottie as any;
 
 
   return (
@@ -130,6 +135,13 @@ const HomePage = () => {
           </div>
           
         </div>
+        <div className="absolute top-250 w-50 mt-10 z-20">
+          <LottieComponent.default
+                          animationData={dogAnimation}
+                          loop
+                          autoplay
+                        />
+        </div>
           
       </div>
 
@@ -142,7 +154,9 @@ const HomePage = () => {
         </p>
         <ParallaxSection image={WokShopHome}>
           <div className="flex justify-center items-end h-full mt-50">
-            <button className="button_user">Tham Gia Workshop Ngay</button>
+            <button className="button_user" onClick={() => navigate('/workshop')}>
+              Tham Gia Workshop Ngay
+            </button>
           </div>
         </ParallaxSection>
       </div>
@@ -187,6 +201,14 @@ const HomePage = () => {
         </div>
       </section>
 
+      
+      <div className="absolute right-10 top-720 w-50 mt-10 z-20">
+          <LottieComponent.default
+                          animationData={catYarnAnimation}
+                          loop
+                          autoplay
+                        />
+        </div>
       {/* email đăng ký nhận tin */}
       <ParallaxSection image={section1}>
         <div className="text-center">
@@ -194,7 +216,10 @@ const HomePage = () => {
           <p>Explore our wide range of high-quality products.</p>
         </div>
       </ParallaxSection>
+
+     
     </div>
+    
   );
 };
 

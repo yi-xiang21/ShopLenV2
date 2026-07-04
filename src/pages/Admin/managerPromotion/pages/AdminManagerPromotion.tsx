@@ -217,7 +217,13 @@ const AdminManagerPromotion = () => {
     { title: "Tiêu đề", dataIndex: "title", key: "title" },
     { title: "Loại giảm giá", dataIndex: "discount_type", key: "discount_type" },
     { title: "Giá trị", dataIndex: "value", key: "value" },
-    { title: "Giá trị đơn hàng tối thiểu", dataIndex: "min_order_value", key: "min_order_value" },
+     {title: 'Trạng thái', dataIndex: 'status', key: 'status',width: 170 ,render: (status) => (
+      <span
+        className={`px-2 py-1 rounded ${status === "active" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}
+      >
+        {status === "active" ? "Hoạt động" : "Không hoạt động"}
+      </span>
+    )},
     { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
     { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
     {
