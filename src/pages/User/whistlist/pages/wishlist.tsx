@@ -7,6 +7,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import type { WishlistItem } from "../types/wishlist";
 
 
 const Wishlist = () => {
@@ -32,6 +33,14 @@ const Wishlist = () => {
 
   return new Intl.NumberFormat('vi-VN').format(numericPrice);
 };
+const handleDetail = (item:WishlistItem) => {
+  if (item.type_id ===3) {
+    navigate(`/workshop-detail/${item.workshop_id}`);
+  } else {
+    navigate(`/detail/${item.product_id}`);
+  }
+  
+}
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
@@ -102,7 +111,7 @@ const Wishlist = () => {
 
                     {/* Nút Thêm vào giỏ */}
                     <button 
-                      onClick={() => navigate(`/detail/${item.product_id}`)}
+                      onClick={() => handleDetail(item)}
                       className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-xl shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 active:scale-95 focus:outline-none"
                     >
                       <FaShoppingCart />

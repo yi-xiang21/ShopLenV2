@@ -5,4 +5,7 @@ export interface WishlistItem {
   min_price: string;
   image_url: string;
   final_price?: string;
+  type_id:number;
+  type_name:string;
+  workshop_id?: number;
 }
