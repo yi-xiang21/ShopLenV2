@@ -74,12 +74,13 @@ const fetchStock = useCallback(
           setStock(response.data?.data?.inventory ?? []);
         } 
         else {
-          response = await stockApi.getAll(page, limit);
-           setStock(response.data?.data?.variantsStock ?? []);
+          response = await stockApi.filter({ page, limit });
+          console.log("Fetched stock data:", response.data);
+           setStock(response.data?.data?.inventory ?? []);
         }
 
        
-        setTotal(response.data?.data?.pagination?.total ?? 0);
+        setTotal(response.data?.data?.pagination?.total_items ?? 0);
       } catch (error) {
         console.error("Lỗi khi tải danh sách tồn kho:", error);
       } finally {
@@ -133,6 +134,7 @@ const fetchStock = useCallback(
         setHistoryLoading(true);
         const response = await stockApi.getHistory(variantId, page, limit);
         const data = response.data?.data;
+        
 
         setStockHistory(data?.history ?? []);
         setHistoryTotal(data?.pagination?.total_items ?? 0);
@@ -157,6 +159,7 @@ const fetchStock = useCallback(
   const handleSubmitForm = async (values: stock) => {
     try {
       setLoading(true);
+      console.log("Submitting form values:", values);
       values.quantity_change = Number(values.quantity_change);
       const respone = await stockApi.updateStock(values);
       console.log("Update stock response:", respone);

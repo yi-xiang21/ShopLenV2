@@ -12,7 +12,6 @@ const HeaderMobileMenu = ({
   isOpen,
   menuItems,
   activeMenu,
-  onCloseMenu,
 }: HeaderMobileMenuProps) => {
   if (!isOpen) {
     return null

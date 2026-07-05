@@ -166,11 +166,11 @@ const About = () => {
         <div className="mx-auto max-w-4xl rounded-[40px] px-8 py-16 text-center"
        
         >
-          <h2 className="mb-4 text-4xl">
+          <h2 className="mb-4 text-4xl text-white font-light">
             Cùng tạo nên những điều đẹp đẽ từ sợi len
           </h2>
 
-          <p className="mb-8 ">
+          <p className="mb-8 text-black text-lg leading-8 ">
             Khám phá các sản phẩm mới nhất hoặc tham gia cộng đồng của chúng tôi.
           </p>
 

@@ -4,6 +4,7 @@
 import type { Billing  } from '@/pages/User/Billing/type/billing';
 import { API_CONFIG } from "@/config/api";
 import {callAPI} from "@/share/lib/axios";
+import type { orderWorkShop } from '@/pages/User/Workshop/types/order_workshop';
 
 export const BillingApi = {
     createBilling: async (payload: Billing) => {
@@ -27,5 +28,8 @@ export const BillingApi = {
     getCityWards: async (city_code: string) => {
         return callAPI.get(API_CONFIG.ENDPOINTS.GET_CITY_WARDS(city_code));
     },
+    createOrderBuyNow: async (payload: orderWorkShop) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.CREATE_ORDER_BUY_NOW, payload);
+    }
 }
 

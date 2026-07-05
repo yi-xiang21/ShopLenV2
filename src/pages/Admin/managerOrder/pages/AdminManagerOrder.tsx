@@ -62,7 +62,7 @@ const AdminManagerOrder = () => {
           response = await OrderApi.filter({ ...currentFilters, page, limit });
         } else {
           response = await OrderApi.getAll(page, limit);
-          console.log("Fetched orders:", response.data.data.orders);
+          console.log("Fetched orders:", response.data);
         }
 
         setOrders(response.data?.data.orders ?? []);

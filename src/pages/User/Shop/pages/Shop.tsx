@@ -8,7 +8,7 @@ import type { Product } from "@/pages/Admin/managerProducts/type/products";
 import { useFormModal } from "@/share/hook/useFormModal";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import {  useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import catSliderAnimation from '@/assets/animation/Cat playing animation.json';
 import Lottie from "lottie-react";
 
@@ -52,32 +52,35 @@ const Shop = () => {
         setLoading(true);
         let response;
        
-          const cleanedFilters = Object.fromEntries(
-            Object.entries(currentFilters).filter(([_, value]) => {
-              if (Array.isArray(value)) return value.length > 0;
-              return value !== null && value !== undefined && value !== "";
-            }),
-          );
-          if (categoryId!=undefined) {
-            cleanedFilters.category_id = categoryId;
-          }
+        const cleanedFilters = Object.fromEntries(
+          Object.entries(currentFilters).filter(([_, value]) => {
+            if (Array.isArray(value)) return value.length > 0;
+            return value !== null && value !== undefined && value !== "";
+          }),
+        );
+        
+        // Dùng if (categoryId) sẽ an toàn hơn để loại bỏ cả null hoặc chuỗi rỗng
+        if (categoryId) {
+          cleanedFilters.category_id = categoryId;
+        }
 
-          if (Object.keys(cleanedFilters).length > 0) {
-            const dataToSend = {
-              ...cleanedFilters,
-              status: "active",
-              page,
-              limit,
-            };
-            console.log("Sending filter data:", dataToSend);
-            response = await ProductApi.filter(dataToSend);
-            console.log("Filtered products response:", response.data);
-          } else {
-            response = await ProductApi.getAll(page, limit);
-            response.data.data.products = response.data.data.products.filter(
-              (product: Product) => product.product_status === "active",
-            );
-          }
+        if (Object.keys(cleanedFilters).length > 0) {
+          const dataToSend = {
+            ...cleanedFilters,
+            status: "active",
+            page,
+            limit,
+          };
+          console.log("Sending filter data:", dataToSend);
+          response = await ProductApi.filter(dataToSend);
+          console.log("Filtered products response:", response.data);
+        } else {
+          response = await ProductApi.getAll(page, limit);
+          response.data.data.products = response.data.data.products.filter(
+            (product: Product) => product.product_status === "active",
+          );
+        }
+        
         setProducts(response.data?.data?.products ?? []);
         setTotal(response.data?.data?.pagination?.total_items ?? 0);
       } catch (error) {
@@ -93,28 +96,26 @@ const Shop = () => {
     void fetchProducts(currentPage, pageSize, filters);
   }, [currentPage, pageSize, filters, fetchProducts, categoryId]);
 
- 
-
   const handleFilterSubmit = async (data: any) => {
-  // Tạo bản sao của URL hiện tại
-  const newParams = new URLSearchParams(searchParams);
+    // Tạo bản sao của URL hiện tại
+    const newParams = new URLSearchParams(searchParams);
 
-  if (data.category_id) {
-    newParams.set("categoryId", data.category_id);
-  } else {
-    newParams.delete("categoryId"); // Chỉ xóa mỗi categoryId nếu user bấm Reset
-  }
-  
-  setSearchParams(newParams); // Cập nhật URL một cách an toàn
+    if (data.category_id) {
+      newParams.set("categoryId", data.category_id);
+    } else {
+      newParams.delete("categoryId"); // Chỉ xóa mỗi categoryId nếu user bấm Reset
+    }
+    
+    setSearchParams(newParams); // Cập nhật URL một cách an toàn
 
-  setFilters({
-    min_price: data.min_price,
-    max_price: data.max_price,
-    type_ids: data.type_ids,
-  });
-  
-  setCurrentPage(1);
-};
+    setFilters({
+      min_price: data.min_price,
+      max_price: data.max_price,
+      type_ids: data.type_ids,
+    });
+    
+    setCurrentPage(1);
+  };
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const pre = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
@@ -129,16 +130,15 @@ const Shop = () => {
   };
   const LottieComponent = Lottie as any;
 
-
   return (
     <>
       <div className="w-full h-100 flex items-center justify-center p-4">
         <div className="absolute left-10 top-107 w-50 mt-10 z-20">
           <LottieComponent.default
-                          animationData={catSliderAnimation}
-                          loop
-                          autoplay
-                        />
+            animationData={catSliderAnimation}
+            loop
+            autoplay
+          />
         </div>
         <img
           src={Banner}
@@ -146,6 +146,7 @@ const Shop = () => {
           className="w-full h-full object-cover rounded-lg"
         />
       </div>
+      
       <div className="w-full h-auto grid grid-cols-4 gap-2 p-4">
         <FilterShop
           onSubmit={handleFilterSubmit}
@@ -154,18 +155,18 @@ const Shop = () => {
           initialCategoryId={categoryId}
         />
 
-        <div className="w-full h-full bg-white col-span-3 rounded-xl shadow-sm border border-gray-100">
-          <div className="w-full h-auto p-2 flex items-center gap-2">
+        <div className="w-full h-full bg-white col-span-3 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+          <div className="w-full h-auto p-4 flex items-center gap-2 border-b border-gray-50">
             <Button
               type={filters.sort_price === "asc" ? "primary" : "default"}
               onClick={sortByPriceAsc}
             >
               Giá tăng dần
             </Button>
-
           </div>
 
-          <div className="w-full h-auto p-5 grid grid-cols-3 gap-3">
+          {/* CHÚ Ý: Bắt đầu khu vực Grid 3 cột chứa Sản phẩm */}
+          <div className="w-full h-auto p-5 grid grid-cols-3 gap-3 flex-grow">
             {products.length > 0 ? (
               products.map((product) => (
                 <CardProducts key={product.product_id} data={product} />
@@ -175,29 +176,41 @@ const Shop = () => {
                 Không tìm thấy sản phẩm nào phù hợp.
               </div>
             )}
+          </div>
+          {/* Kết thúc Grid sản phẩm */}
 
-            <div className="flex items-center justify-center w-full h-full col-span-3 mt-4">
+          {/* CHÚ Ý: Đã đưa khối Phân Trang ra ngoài Grid 3 cột */}
+          {products.length > 0 && (
+            <div className="flex items-center justify-center w-full py-6">
               <button
-                className={`px-4 py-2 rounded-md mr-2 ${currentPage <= 1 ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-gray-200 hover:bg-gray-300"}`}
+                className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+                  currentPage <= 1 
+                    ? "bg-slate-100 text-slate-400 cursor-not-allowed" 
+                    : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                }`}
                 disabled={currentPage <= 1}
                 onClick={pre}
               >
-                truớc
+                Trang trước
               </button>
 
-              <span className="mx-4 font-medium">
+              <span className="mx-6 font-medium text-slate-600">
                 Trang {currentPage} / {totalPages}
               </span>
 
               <button
-                className={`px-4 py-2 rounded-md ml-2 ${currentPage >= totalPages ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-gray-200 hover:bg-gray-300"}`}
+                className={`px-5 py-2.5 rounded-full font-medium transition-all ${
+                  currentPage >= totalPages 
+                    ? "bg-slate-100 text-slate-400 cursor-not-allowed" 
+                    : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                }`}
                 disabled={currentPage >= totalPages}
                 onClick={next}
               >
-                kế tiếp
+                Trang tiếp
               </button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

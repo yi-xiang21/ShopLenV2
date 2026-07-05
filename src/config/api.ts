@@ -40,6 +40,7 @@ export const API_CONFIG = {
     //billing
     CREATE_BILLING: '/api/orders',
     GET_SHIPPING_METHODS: '/api/orders/shipping-fees',
+    CREATE_ORDER_BUY_NOW:'/api/orders/buy-now',
 
     GET_MY_ORDERS: '/api/orders/my-orders',
     GET_ORDER_DETAIL: (orderId: string) => `/api/orders/my-orders/${orderId}`,
@@ -111,6 +112,7 @@ export const API_CONFIG = {
     GET_ORDER: (id: string) => `/api/orders/admin/${id}`,
     UPDATE_ORDER_STATUS: (id: string) => `/api/orders/admin/${id}/status`,
     FILTER_ORDERS: '/api/orders/admin/filter',
+    
 
 
     //admin workshop

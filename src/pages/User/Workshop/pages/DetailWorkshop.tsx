@@ -1,6 +1,6 @@
 import { WorkshopApi } from "@/pages/Admin/managerWorkshop/api/workShop_api";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Workshop, WorkshopVariant } from "@/pages/Admin/managerWorkshop/types/workshop";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -9,10 +9,11 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { MapPin, Users, Calendar, Clock, Ticket, Tag, CheckCircle2, AlertCircle } from "lucide-react";
 
 import { toggleWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck"; 
-import Notification, { type NotificationType } from "@/share/ComponentCustom/Notification/Notification";
+
 import { parseToDayjs } from "@/share/ComponentCustom/FormatTime";
 
 const DetailWorkshop = () => {
+  const navigation = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Workshop | null>(null);
   const [activeImage, setActiveImage] = useState(0);
@@ -21,12 +22,6 @@ const DetailWorkshop = () => {
   const [quantity, setQuantity] = useState(1);
   const [stock, setStock] = useState<number>(0);
   const dispatch = useAppDispatch(); 
-  const [notifyData, setNotifyData] = useState<{
-      key: string;
-      type: NotificationType;
-      title: string;
-      message: string;
-    } | null>(null);
 
   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
 
@@ -63,7 +58,7 @@ const DetailWorkshop = () => {
   const handleSelectVariant = (variant: WorkshopVariant) => {
     setActiveVariant(variant);
     setStock(variant.available_slots || 0);
-    setQuantity(1); // Reset số lượng khi đổi ca học
+    setQuantity(1); 
 
     if (variant.images && variant.images.length > 0) {
       const firstImageUrl = variant.images[0].image_url;
@@ -85,7 +80,7 @@ const DetailWorkshop = () => {
     }
   };
 
-  // Helper hiển thị trạng thái của ca học
+  
   const renderVariantStatus = (status: string) => {
     switch (status) {
       case "open": return <span className="text-green-600 bg-green-50 px-2 py-0.5 rounded text-xs font-semibold border border-green-200">Mở đăng ký</span>;
@@ -97,18 +92,11 @@ const DetailWorkshop = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-8 px-4 flex flex-col items-center">
-      {notifyData && (
-        <Notification
-          key={notifyData.key}
-          type={notifyData.type}
-          title={notifyData.title}
-          message={notifyData.message}
-        />
-      )}
+
       
       <div className="w-full max-w-7xl bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:flex-row">
         
-        {/* ================= LEFT COLUMN: IMAGES ================= */}
+        \
         <div className="w-full lg:w-1/2 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col">
           {/* Main Image */}
           <div className="overflow-hidden rounded-2xl mb-4 relative aspect-4/3 bg-slate-100 flex items-center justify-center">
@@ -327,7 +315,10 @@ const DetailWorkshop = () => {
                 Ca học này đã kín chỗ hoặc đã đóng
               </button>
             ) : (
-              <button className="w-full rounded-2xl bg-violet-600 py-4 text-white font-bold text-lg hover:bg-violet-700 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-[0.98]">
+              <button 
+                 onClick={() => navigation(`/workshop-billing/${id}/${quantity}`)}
+                className="w-full rounded-2xl bg-violet-600 py-4 text-white font-bold text-lg hover:bg-violet-700 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+              >
                 Đăng ký ngay suất học
               </button>
             )}

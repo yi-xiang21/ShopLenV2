@@ -31,6 +31,7 @@ import AdminManagerWorkshop from '@/pages/Admin/managerWorkshop/pages/AdminManag
 import PageNotFound from '@/pages/page404';
 import WorkshopPages from '@/pages/User/Workshop/pages/WorkshopPages';
 import WorkshopDetail from '@/pages/User/Workshop/pages/DetailWorkshop';
+import BillingWorkShopPage from '@/pages/User/Workshop/pages/OrderWorkshop';
 
 
 export const routes = createBrowserRouter([
@@ -138,9 +139,12 @@ export const routes = createBrowserRouter([
                     {
                         path: 'billing-success',
                         element: <BillingSuccess />,
+                    },
+                    {
+                        path: 'workshop-billing/:id?/:quantity?',
+                        element: <BillingWorkShopPage />,
                     }
                 ],
-                
             },
         ]
     },
