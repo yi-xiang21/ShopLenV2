@@ -46,6 +46,11 @@ export const API_CONFIG = {
     GET_ORDER_DETAIL: (orderId: string) => `/api/orders/my-orders/${orderId}`,
     POST_ORDER_REPURCHASE: (orderId: string) => `/api/orders/repurchase/${orderId}`,
 
+
+    //history user
+    GET_HISTORY_ORDERS: '/api/orders/my-orders',
+    GET_HISTORY_ORDER_DETAIL: (orderId: string) => `/api/orders/my-orders/${orderId}`,
+
     //location
     GET_LOCATIONS: '/api/location/cities',
     GET_CITY_WARDS: (city_code: string) => `/api/location/cities/${city_code}/wards`,

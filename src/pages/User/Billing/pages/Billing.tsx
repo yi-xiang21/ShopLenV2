@@ -49,7 +49,7 @@ const BillingPage = () => {
     phuong_xa_id: 0,
     dia_chi_giao_hang: "",
     ten_nguoi_nhan: "",
-    sdt_nguoi_nhan: "",
+    sdt_nguoi_nhan: user?.phone_number || "",
     phieu_giam_gia_code: "",
     phuong_thuc_thanh_toan: "",
     shipping_method_id: "",
