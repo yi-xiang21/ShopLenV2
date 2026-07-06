@@ -75,9 +75,9 @@ const fetchProducts = useCallback(
             page,
             limit,
           };
-          console.log("Dữ liệu gửi đi:", dataToSend);
+
           response = await ProductApi.filter(dataToSend);
-          console.log("Dữ liệu nhận về:", response.data?.data?.products);
+
         } 
         else {
           response = await ProductApi.getAll(page, limit);

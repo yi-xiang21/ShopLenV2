@@ -49,7 +49,7 @@ const LoginAndRegister = () => {
       const userId = searchParams.get("user_id") || undefined;
       const error = searchParams.get("error");
       const message = searchParams.get("message");
-      console.log("Google OAuth callback params:", { token, refreshToken, role, userId, error, message });
+
       const isPopup = window.opener && window.opener !== window;
 
       if (error) {

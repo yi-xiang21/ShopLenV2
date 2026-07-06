@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { historyOrderApi } from '@/pages/User/UserProfile/api/historyOrder_api';
 import { ArrowLeft, MapPin, CreditCard, PackageOpen } from 'lucide-react';
 import type { OrderDetailData } from '@/pages/User/UserProfile/types/history-oder';
@@ -7,6 +7,7 @@ import { parseToDayjs } from "@/share/ComponentCustom/FormatTime";
 
 
 const OrderDetailHistory = () => {
+  const navigate=useNavigate();
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<OrderDetailData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,7 @@ const OrderDetailHistory = () => {
         setLoading(true);
         if (id) {
           const response = await historyOrderApi.getHistoryOrderDetail(id);
-          console.log("Chi tiết đơn hàng:", response.data?.data);
+
           setOrder(response.data?.data.order );
         }
       } catch (error) {
@@ -55,9 +56,9 @@ const OrderDetailHistory = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/profile/purchase-history" className="p-2 bg-white rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
+          <button onClick={() => navigate(-1)} className="p-2 bg-white rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
             <ArrowLeft size={20} className="text-slate-600" />
-          </Link>
+          </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-800">Chi tiết đơn hàng</h2>
             <p className="text-sm text-slate-500">{order.order_id} {parseToDayjs(order.created_at)?.format('HH:mm - DD/MM/YYYY')}</p>
@@ -67,7 +68,7 @@ const OrderDetailHistory = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Box Thông tin giao hàng */}
+
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col gap-4">
           <div className="flex items-center gap-2 text-slate-800 font-semibold border-b border-slate-100 pb-3">
             <MapPin size={20} className="text-blue-500" /> Địa chỉ nhận hàng
@@ -103,15 +104,10 @@ const OrderDetailHistory = () => {
     <PackageOpen size={20} className="text-amber-500" /> Sản phẩm đã đặt ({order.items?.length || 0})
   </div>
   
-  {/* Thêm max-h-[450px], overflow-y-auto và CSS tùy chỉnh cho thanh cuộn */}
-  <div className="p-5 flex flex-col gap-4 max-h-[450px] overflow-y-auto 
-    [&::-webkit-scrollbar]:w-1.5 
-    [&::-webkit-scrollbar-track]:bg-transparent 
-    [&::-webkit-scrollbar-thumb]:bg-slate-200 
-    [&::-webkit-scrollbar-thumb]:rounded-full 
-    hover:[&::-webkit-scrollbar-thumb]:bg-slate-300"
+
+  <div className="p-5 flex flex-col gap-4 max-h-100 overflow-y-auto "
   >
-    {/* Kiểm tra items có tồn tại trước khi map */}
+    
     {order.items?.map((item) => (
       <div key={item.item_id} className="flex gap-4 items-start py-4 border-b border-dashed border-slate-100 last:border-0 last:pb-0">
         <img src={item.image_url} alt={item.product_name} className="w-20 h-20 shrink-0 object-cover rounded-xl bg-slate-100 border border-slate-200" />

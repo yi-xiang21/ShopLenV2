@@ -5,6 +5,7 @@ const menuItems = [
   { label: 'Theo dõi đơn hàng', to: 'order-tracking' },
   { label: 'Lịch sử mua hàng', to: 'purchase-history' },
   { label: 'Workshop', to: 'workshop' },
+  { label: 'Voucher', to: 'vouchers' },
   { label: 'Tài khoản', to: 'account' },
 ]
 

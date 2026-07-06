@@ -6,6 +6,8 @@ export interface HistoryOrder {
   customer_name: string;
   shipping_address: string;
   created_at: string;
+  payment_method: string;
+  payment_status: string;
 }
 
 export interface OrderItem {

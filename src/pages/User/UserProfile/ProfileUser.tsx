@@ -101,13 +101,11 @@ const ProfileUser = () => {
     }
   };
 
-  // ========== GỬI DATA TRỰC TIẾP TỪ STATE ==========
+
   const handleUpdateProfile = async () => {
     try {
       setIsUpdating(true);
       
-      // Gửi thẳng Object (JSON) profileForm lên API
-      console.log('Dữ liệu chuẩn bị gửi:', profileForm);
       await userApi.updateProfile(profileForm);
       
       setNotifyData({

@@ -76,14 +76,14 @@ const fetchWorkshops = useCallback(
             page,
             limit,
           };
-          console.log("Dữ liệu gửi đi:", dataToSend);
+
           response = await WorkshopApi.getAll(dataToSend);
-          console.log("Dữ liệu nhận về:", response.data?.data?.workshops);
+
         } 
         
         else {
           response = await WorkshopApi.getAll({page, limit});
-          console.log("Dữ liệu nhận về:", response.data);
+
         }
 
         setWorkshops(response.data?.data?.workshops ?? []);
@@ -115,7 +115,7 @@ const fetchWorkshops = useCallback(
       try {
         const response = await WorkshopApi.getById(record.workshop_id);
         const data = response.data.data.workshop;
-        console.log("Fetched workshop details:", data);
+
 
         setEditingId(data.workshop_id);
 
@@ -145,7 +145,7 @@ const fetchWorkshops = useCallback(
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
         
-        console.log("Payload for creating workshop:", payloadCreate);
+
         await WorkshopApi.create(payloadCreate);
         setNotifyData({
           key: Date.now().toString(),

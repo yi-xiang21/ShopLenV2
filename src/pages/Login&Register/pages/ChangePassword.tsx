@@ -44,7 +44,7 @@ const ChangePassword = () => {
 
   })
       .then((response) => {
-        console.log("Password changed successfully:", response.data);
+
         setApiMessage(response.data?.message );
         if (response.data?.message === "Đổi mật khẩu thành công") {
           setCurrentPassword("");

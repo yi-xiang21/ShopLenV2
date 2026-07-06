@@ -10,7 +10,7 @@ export const callAPI = axios.create({
   },
 });
 
-// Add a request interceptor to include the access token in headers
+
 callAPI.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken');
@@ -109,10 +109,7 @@ callAPI.interceptors.response.use(
           authorization: `Bearer ${accessToken}`,
         };
 
-        console.log('✓ Retrying original request:', originalRequest.url, {
-          requestHeaders: originalRequest.headers,
-          localStorageAccessToken: localStorage.getItem('accessToken'),
-        });
+
 
         return callAPI(originalRequest);
       } catch (refreshError) {

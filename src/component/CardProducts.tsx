@@ -19,7 +19,6 @@ interface CardProductsProps {
 }
 
 const CardProducts = ({ data }: CardProductsProps) => {
-  console.log("data", data);
   const dispatch = useAppDispatch();
   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
   const variants: Variant[] = data.variants || [];

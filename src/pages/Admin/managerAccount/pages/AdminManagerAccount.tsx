@@ -72,9 +72,9 @@ const AdminManagerAccount = () => {
   
           if (Object.keys(currentFilters).length > 0) {
            
-            console.log("Fetching accounts with filters:",currentFilters, "page:", page, "limit:", limit);
+
             response = await AccountApi.filter({ ...currentFilters, page, limit });
-            console.log("Filtered accounts fetched:", response.data);
+
           } 
           else {
             response = await AccountApi.getAll(page, limit);
@@ -109,7 +109,7 @@ const AdminManagerAccount = () => {
       try {
         const response = await AccountApi.getById(record.user_id);
         const data = response.data;
-        console.log("Fetched account details:", data);
+
 
         setEditingId(data.user_id);
         delete data.password;

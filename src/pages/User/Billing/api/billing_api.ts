@@ -30,6 +30,9 @@ export const BillingApi = {
     },
     createOrderBuyNow: async (payload: orderWorkShop) => {
         return callAPI.post(API_CONFIG.ENDPOINTS.CREATE_ORDER_BUY_NOW, payload);
+    },
+    postOrderCancel: async (orderId: string) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.POST_ORDER_CANCEL(orderId));
     }
 }
 

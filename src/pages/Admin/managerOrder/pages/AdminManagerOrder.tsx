@@ -62,7 +62,7 @@ const AdminManagerOrder = () => {
           response = await OrderApi.filter({ ...currentFilters, page, limit });
         } else {
           response = await OrderApi.getAll(page, limit);
-          console.log("Fetched orders:", response.data);
+
         }
 
         setOrders(response.data?.data.orders ?? []);
@@ -86,7 +86,7 @@ const AdminManagerOrder = () => {
         const response = await OrderApi.getById(record.order_id);
 
         const data = response.data?.data.order;
-        console.log("Fetched order details:", data);
+
 
         if (data.payment) {
           data.payment_method = data.payment.payment_method;

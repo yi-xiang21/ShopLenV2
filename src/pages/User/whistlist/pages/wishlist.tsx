@@ -15,7 +15,6 @@ const Wishlist = () => {
   const navigate = useNavigate();
 
   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
-  console.log("wishlistItems", wishlistItems);
 
   useEffect(() => {
     dispatch(getWishlistThunk());

@@ -71,9 +71,9 @@ const Shop = () => {
             page,
             limit,
           };
-          console.log("Sending filter data:", dataToSend);
+
           response = await ProductApi.filter(dataToSend);
-          console.log("Filtered products response:", response.data);
+
         } else {
           response = await ProductApi.getAll(page, limit);
           response.data.data.products = response.data.data.products.filter(

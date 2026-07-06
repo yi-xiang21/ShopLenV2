@@ -74,9 +74,9 @@ const AdminManagerVoucher = () => {
   
           if (Object.keys(currentFilters).length > 0) {
           
-            console.log("Fetching vouchers with filters:", currentFilters, "Page:", page, "Limit:", limit);
+
             response = await vouchersApi.filter({ ...currentFilters, page, limit });
-            console.log("Filtered vouchers response:", response.data);
+
         
           } 
           else {
@@ -112,7 +112,7 @@ const AdminManagerVoucher = () => {
       try {
         const response = await vouchersApi.getById(record.voucher_id);
         const data = response.data.data?.voucher;
-        console.log("Fetched voucher details:", data);
+
         setEditingId(data.voucher_id);
         
 
@@ -151,7 +151,7 @@ const AdminManagerVoucher = () => {
       } else {
         const payloadUpdate = { ...values };
 
-        console.log("Updating voucher with ID:", editingId, "Payload:", payloadUpdate);
+
 
         await vouchersApi.update(editingId, payloadUpdate);
         setNotifyData({

@@ -33,6 +33,7 @@ import WorkshopPages from "@/pages/User/Workshop/pages/WorkshopPages";
 import WorkshopDetail from "@/pages/User/Workshop/pages/DetailWorkshop";
 import BillingWorkShopPage from "@/pages/User/Workshop/pages/OrderWorkshop";
 import OrderDetailHistory from "@/pages/User/UserProfile/HistoryOrderDetail";
+import UserVouchers from "@/pages/User/UserProfile/UserVouchers";
 
 export const routes = createBrowserRouter([
   {
@@ -104,15 +105,33 @@ export const routes = createBrowserRouter([
               },
               {
                 path: "order-tracking",
-                element: <UserOrderTracking />,
+                children: [
+                  {
+                    index: true, 
+                    element: <UserOrderTracking /> 
+                  },
+                  {
+                    path: "order-detail/:id", 
+                    element: <OrderDetailHistory />
+                  }
+                ]
               },
               {
                 path: "purchase-history",
-                element: <PurchaseHistoryPage />,
+                children: [
+                  {
+                    index: true,
+                    element: <PurchaseHistoryPage />
+                  },
+                  {
+                    path: "order-detail/:id",
+                    element: <OrderDetailHistory />
+                  }
+                ]
               },
               {
-                path: "order-detail/:id",
-                element: <OrderDetailHistory />,
+                path: "vouchers",
+                element: <UserVouchers />,
               },
               {
                 path: "workshop",

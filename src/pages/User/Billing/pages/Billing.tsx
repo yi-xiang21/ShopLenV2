@@ -286,11 +286,11 @@ const BillingPage = () => {
       code: selectedVoucher?.code || "", 
       order_value: subtotal 
     };
-    console.log("Payload gửi lên API để áp dụng voucher:", payload);
+
 
     try {
-      const response = await vouchersApi.applyVoucher(payload);
-      console.log("Áp dụng voucher thành công:", response.data);
+      await vouchersApi.applyVoucher(payload);
+
       setAppliedVoucher(selectedVoucher || null);
       setIsModalVoucherOpen(false); 
     } catch (error :any) {

@@ -46,6 +46,8 @@ export const API_CONFIG = {
     GET_ORDER_DETAIL: (orderId: string) => `/api/orders/my-orders/${orderId}`,
     POST_ORDER_REPURCHASE: (orderId: string) => `/api/orders/repurchase/${orderId}`,
 
+    POST_ORDER_CANCEL: (orderId: string) => `/api/orders/my-orders/${orderId}/cancel`,
+
 
     //history user
     GET_HISTORY_ORDERS: '/api/orders/my-orders',

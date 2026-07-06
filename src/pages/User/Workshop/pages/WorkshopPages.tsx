@@ -29,7 +29,6 @@ const WorkshopPages = () => {
             limit, 
             status: "active"
         });
-        console.log("Danh sách sản phẩm:", response.data?.data?.workshops);
             
         setWorkshops(response.data?.data?.workshops ?? []);
         setTotal(response.data?.data?.pagination?.total_items ?? 0);

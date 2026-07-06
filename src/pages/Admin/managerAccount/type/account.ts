@@ -16,5 +16,6 @@ export interface account {
     phone_number: string,
     status?: status,
     role: role,
+    loyalty_points?: number,
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { historyOrderApi } from '@/pages/User/UserProfile/api/historyOrder_api'; 
 import type { HistoryOrder } from '@/pages/User/UserProfile/types/history-oder'; 
 import { Package, ChevronRight, ShoppingCart } from 'lucide-react';
@@ -54,10 +54,7 @@ const PurchaseHistory = () => {
           type: 'success',
           title: 'Thành công',
           message: 'Đã thêm các sản phẩm vào giỏ hàng thành công!',
-        });
-        
-        // (Tùy chọn) Chuyển hướng người dùng đến giỏ hàng sau khi Mua lại
-        // navigate('/cart'); 
+        }); 
       }
     } catch (error: any) {
       console.error("Lỗi khi mua lại:", error);
@@ -116,7 +113,7 @@ const PurchaseHistory = () => {
                 <div className='flex items-center gap-3'>
                   <Package size={18} className="text-slate-400" />
                   <span className='font-bold text-slate-700'>{order.order_id}</span>
-                  {/* Sử dụng parseToDayjs để format ngày */}
+                 
                   <span className='text-xs text-slate-400 hidden sm:inline'>
                     • {parseToDayjs(order.created_at)?.format('HH:mm - DD/MM/YYYY')}
                   </span>
@@ -139,13 +136,13 @@ const PurchaseHistory = () => {
                   <div className='mt-3 flex flex-col sm:flex-row gap-2 w-full sm:w-auto'>
                     <button
                       onClick={() => handleBuyAgain(order.order_id)}
-                      className='flex items-center justify-center gap-1.5 px-4 py-2 bg-rose-500 text-white font-semibold text-sm rounded-lg hover:bg-rose-600 transition-colors w-full sm:w-auto'
+                      className='flex items-center justify-center gap-1.5 px-4 py-2 bg-black text-white! font-semibold text-sm rounded-lg hover:bg-rose-600 transition-colors w-full sm:w-auto hover:cursor-pointer'
                     >
                       <ShoppingCart size={16} /> Mua lại
                     </button>
 
                     <Link 
-                      to={`/profile/order-detail/${order.order_id}`} 
+                      to={`/profile/purchase-history/order-detail/${order.order_id}`} 
                       className='flex items-center justify-center gap-1 px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 transition-colors w-full sm:w-auto'
                     >
                       Xem chi tiết <ChevronRight size={16} />
@@ -163,7 +160,6 @@ const PurchaseHistory = () => {
           </div>
         )}
 
-        {/* Phân trang */}
         {!loading && total > limit && (
           <div className='flex items-center justify-center gap-4 mt-4'>
             <button

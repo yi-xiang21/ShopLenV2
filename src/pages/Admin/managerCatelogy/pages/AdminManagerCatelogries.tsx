@@ -103,7 +103,7 @@ const AdminManagerCatelogries = () => {
       try {
         const response = await categoryApi.getById(record.id);
         const data = response.data;
-        console.log("Fetched category details:", data);
+
 
         setEditingId(data.id);
 
@@ -145,11 +145,11 @@ const AdminManagerCatelogries = () => {
   const handleSubmitForm = async (values: CategoryFormValues) => {
     try {
       setLoading(true);
-      console.log("Form values on submit:", values);
+
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
         delete payloadCreate.id;
-        console.log("Payload for creating category:", payloadCreate);
+
 
         await categoryApi.create(payloadCreate);
         setNotifyData({

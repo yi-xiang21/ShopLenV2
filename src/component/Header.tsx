@@ -41,7 +41,7 @@ const Header = () => {
         }
         ProductApi.filter(res)
           .then((response) => {
-            console.log("Filtered products:", response.data);
+            
             setProducts(response.data.data.products || [] );
           })
           .catch((error) => {
@@ -68,7 +68,7 @@ const handleLoginSuccess = useCallback(async () => {
             quantity: item.quantity,
           })),
       };
-      console.log("Sync payload:", syncPayload);
+      
       await dispatch(syncCart(syncPayload)).unwrap();
       localStorage.removeItem('localCart');
     } else {

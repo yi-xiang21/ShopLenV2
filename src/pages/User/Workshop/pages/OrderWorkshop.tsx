@@ -169,7 +169,7 @@ const BillingWorkShopPage = () => {
         });
         return; 
       }
-      console.log("Payload gửi đi:", finalPayload);
+
 
       const respone = await BillingApi.createOrderBuyNow(finalPayload);
       
