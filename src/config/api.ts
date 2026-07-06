@@ -129,6 +129,14 @@ export const API_CONFIG = {
     DELETE_WORKSHOP: (id: string) => `/api/workshops/${id}`,
     POST_FILTER_WORKSHOPS: '/api/workshops/filter',  
 
+    // shipper portal
+    GET_AVAILABLE_ORDERS: '/api/shipper/available-orders',
+    ACCEPT_ORDER: (orderId: string) => `/api/shipper/orders/${orderId}/accept`,
+    GET_MY_DELIVERIES: '/api/shipper/my-deliveries',
+    GET_SHIPPER_ORDER_DETAIL: (orderId: string) => `/api/shipper/orders/${orderId}`,
+    UPDATE_DELIVERY_STATUS: (orderId: string) => `/api/shipper/orders/${orderId}/delivery-status`,
+    GET_SHIPPER_PROFILE: '/api/shipper/profile',
+    UPDATE_SHIPPER_PROFILE: '/api/shipper/profile',
 
 
     FORGOT_PASSWORD: '/api/auth/forgot-password',

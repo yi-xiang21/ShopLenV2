@@ -24,6 +24,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+
   const { items: wishlistItems } = useAppSelector((state) => state.wishlist);
   const { items: cartItems } = useAppSelector((state) => state.Cart);
 
@@ -88,7 +89,9 @@ const handleLoginSuccess = useCallback(async () => {
   const router = () => {
     if (!user) return "/auth/login";
 
-    return user.role === "admin" ? "/admin" : "/profile";
+    if (user.role === "admin") return "/admin";
+    else if (user.role === "shipper") return "/shipper";
+    return "/user";
   };
 
   const location = useLocation();

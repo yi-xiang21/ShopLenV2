@@ -7,16 +7,16 @@ interface FilterShopProps {
   onSubmit: (data: any) => void;
   loading?: boolean;
   categories: Category[];
-  initialCategoryId?: string | null; // Thêm dòng này
-  disabled?: boolean; // Thêm dòng này
+  initialCategoryId?: string | null; 
+  disabled?: boolean; 
 }
 
 const FilterShop = ({
   onSubmit,
   loading,
-  disabled = false, // Thêm dòng này
+  disabled = false, 
   categories = [],
-  initialCategoryId = null, // Thêm dòng này
+  initialCategoryId = null, 
 }: FilterShopProps) => {
   const [formData, setFormData] = useState<any>({
     category_id: initialCategoryId ? initialCategoryId : undefined, 

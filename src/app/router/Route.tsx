@@ -34,6 +34,13 @@ import WorkshopDetail from "@/pages/User/Workshop/pages/DetailWorkshop";
 import BillingWorkShopPage from "@/pages/User/Workshop/pages/OrderWorkshop";
 import OrderDetailHistory from "@/pages/User/UserProfile/HistoryOrderDetail";
 import UserVouchers from "@/pages/User/UserProfile/UserVouchers";
+import ShipperLayout from "@/layout/ShipperLayout";
+import ShipperProfile from "@/pages/Shipper/pages/ShipperProfile";
+import AvailableOrders from "@/pages/Shipper/pages/AvailableOrders";
+import MyDeliveries from "@/pages/Shipper/pages/MyDeliveries";
+import DeliveryHistory from "@/pages/Shipper/pages/DeliveryHistory";
+import OrderDetail from "@/pages/Shipper/pages/OrderDetail";
+import { ShipperSetting } from "@/pages/Shipper/pages/ShipperSetting";
 
 export const routes = createBrowserRouter([
   {
@@ -215,6 +222,40 @@ export const routes = createBrowserRouter([
       },
     ],
   },
+  {
+        element: <ProtectedRoute requireAuth={true} requireShipper={true} />,
+        children: [
+            {
+                path: '/shipper',
+                element: <ShipperLayout />,
+                children: [
+                    {
+                        path: 'profile',
+                        element: <ShipperProfile />,
+                    },
+                    {
+                        path: 'available-orders',
+                        element: <AvailableOrders />,
+                    },
+                    { 
+                        path: 'my-deliveries', 
+                        element: <MyDeliveries /> 
+                    },
+                    {
+                        path: 'delivery-history',
+                        element: <DeliveryHistory />,
+                    },
+                    { 
+                        path: 'orders/:id', 
+                        element: <OrderDetail /> },
+                    {
+                        path: 'setting',
+                        element: <ShipperSetting />
+                    }
+                ],
+            },
+        ],
+    },
   {
     path: "*",
     element: <PageNotFound />,
