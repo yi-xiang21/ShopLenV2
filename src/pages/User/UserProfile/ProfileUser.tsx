@@ -1,14 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { user } from '@/pages/User/UserProfile/types/user-type';
 import { userApi } from '@/pages/User/UserProfile/api/user-api';
 import { useAppSelector } from '@/app/redux/hooks';
 import type { NotificationType } from '@/share/ComponentCustom/Notification/Notification';
 import Notification from '@/share/ComponentCustom/Notification/Notification';
-
-// Import thư viện Crop ảnh
-import Cropper from 'react-easy-crop';
-import { Modal, Slider } from 'antd';
-import { getCroppedImg } from '@/share/ComponentCustom/CropIMG/cropimg';
+import ImageCropModal from '@/share/ComponentCustom/CropIMG/ImageCropModal'; 
 
 const ProfileUser = () => {
   const { error, loading, user } = useAppSelector((state) => state.auth);
@@ -33,12 +29,8 @@ const ProfileUser = () => {
 
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // ========== STATE CHO CROP ẢNH ==========
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
 
   useEffect(() => {
@@ -54,67 +46,30 @@ const ProfileUser = () => {
     fetchProfile();
   }, [user?.user_id, user]);
 
+  // Đọc file và ném src vào Modal
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.addEventListener('load', () => {
         setImageSrc(reader.result as string);
-        setIsCropModalOpen(true); // Mở Modal crop khi chọn xong ảnh
+        setIsCropModalOpen(true);
       });
       reader.readAsDataURL(file);
-      e.target.value = ''; // Reset input để có thể chọn lại
+      e.target.value = ''; 
     }
   };
-
-  const onCropComplete = useCallback((_croppedArea: any, croppedAreaPixels: any) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
-  const handleConfirmCrop = async () => {
-    if (!imageSrc || !croppedAreaPixels) return;
-    try {
-      // Gọi hàm cắt ảnh và nhận về đối tượng File
-      const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
-      
-      // Chuyển File thành chuỗi Base64 để lưu vào state và gửi JSON
-      const reader = new FileReader();
-      reader.readAsDataURL(croppedFile);
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        
-        // Lưu chuỗi base64 thẳng vào trường avatar của state
-        setProfileForm((prev) => ({ ...prev, avatar: base64String }));
-        
-        // Đóng modal
-        setIsCropModalOpen(false);
-        setImageSrc(null);
-      };
-    } catch (e) {
-      console.error(e);
-      setNotifyData({
-        key: Date.now().toString(),
-        type: 'error',
-        title: 'Lỗi cắt ảnh',
-        message: 'Có lỗi xảy ra khi xử lý hình ảnh.',
-      });
-    }
-  };
-
 
   const handleUpdateProfile = async () => {
     try {
       setIsUpdating(true);
-      
       await userApi.updateProfile(profileForm);
-      
       setNotifyData({
         key: Date.now().toString(),
         type: 'success',
         title: 'Thành công',
         message: 'Cập nhật thông tin thành công!',
       });
-      
     } catch (error) {
       setNotifyData({
         key: Date.now().toString(),
@@ -125,12 +80,6 @@ const ProfileUser = () => {
     } finally {
       setIsUpdating(false);
     }
-  };
-
-  // Hàm huỷ preview nếu đổi ý
-  const handleCancelCrop = () => {
-    setIsCropModalOpen(false);
-    setImageSrc(null);
   };
 
   return (
@@ -144,7 +93,6 @@ const ProfileUser = () => {
         />
       )}
 
-      {/* Input File ẩn đi */}
       <input 
         type="file" 
         accept="image/*" 
@@ -153,41 +101,17 @@ const ProfileUser = () => {
         onChange={onFileChange} 
       />
 
-      {/* Modal Crop Ảnh */}
-      <Modal
-        title="Chỉnh sửa ảnh đại diện"
-        open={isCropModalOpen}
-        onOk={handleConfirmCrop}
-        onCancel={handleCancelCrop}
-        okText="Xác nhận ảnh"
-        cancelText="Hủy"
-        destroyOnClose
-      >
-        <div className="relative w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
-          {imageSrc && (
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              zoom={zoom}
-              aspect={1} 
-              cropShape="round" 
-              onCropChange={setCrop}
-              onCropComplete={onCropComplete}
-              onZoomChange={setZoom}
-            />
-          )}
-        </div>
-        <div className="mt-4 px-4">
-          <p className="text-sm text-gray-500 mb-2">Thu phóng:</p>
-          <Slider
-            min={1}
-            max={3}
-            step={0.1}
-            value={zoom}
-            onChange={(value) => setZoom(value)}
-          />
-        </div>
-      </Modal>
+      {/* Gọi Component tách rời vào đây */}
+      <ImageCropModal 
+        isOpen={isCropModalOpen}
+        imageSrc={imageSrc}
+        onClose={() => {
+          setIsCropModalOpen(false);
+          setImageSrc(null);
+        }}
+        onConfirm={(base64String) => setProfileForm({ ...profileForm, avatar: base64String })}
+        onError={(msg) => setNotifyData({ key: Date.now().toString(), type: 'error', title: 'Lỗi', message: msg })}
+      />
       
       <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
         <div>
@@ -204,7 +128,6 @@ const ProfileUser = () => {
               alt="Avatar" 
               className='h-16 w-16 rounded-full object-cover bg-amber-950 border-2 border-transparent group-hover:border-amber-400 transition-all' 
             />
-            {/* Lớp phủ mờ hiển thị dòng chữ khi hover */}
             <div className="absolute inset-0 bg-black/40 rounded-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity">
               <span className="text-[10px] text-white font-bold text-center">Đổi ảnh</span>
             </div>
@@ -214,7 +137,6 @@ const ProfileUser = () => {
 
       <div className='p-5'>
         <div className='rounded-2xl border border-amber-100 bg-[#8fbbbb55] p-5'>
-
           {loading ? (
             <p className='mt-3 text-sm text-[#675f80]'>Đang tải dữ liệu người dùng...</p>
           ) : null}

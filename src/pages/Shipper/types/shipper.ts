@@ -18,6 +18,7 @@ export interface ShipperProfileUpdate {
   personal_address: string;
   cccd: string;
   license_plate: string;
+  avatar:string;
 }
 
 export interface AvailableOrder {
