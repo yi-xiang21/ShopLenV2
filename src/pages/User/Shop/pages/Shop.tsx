@@ -128,6 +128,14 @@ const Shop = () => {
       sort_price: "asc",
     }));
   };
+  const sortByPriceDesc = () => {
+    setCurrentPage(1); // Chuyển về trang 1
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      sort_price: "desc",
+    }));
+  };
+  
   const LottieComponent = Lottie as any;
 
   return (
@@ -157,12 +165,18 @@ const Shop = () => {
 
         <div className="w-full h-full bg-white col-span-3 rounded-xl shadow-sm border border-gray-100 flex flex-col">
           <div className="w-full h-auto p-4 flex items-center gap-2 border-b border-gray-50">
-            <Button
-              type={filters.sort_price === "asc" ? "primary" : "default"}
+            <button
+              className="button_user hover:text-red-500!"
               onClick={sortByPriceAsc}
             >
               Giá tăng dần
-            </Button>
+            </button>
+            <button
+              className="button_user hover:text-red-500!"
+              onClick={sortByPriceDesc}
+            >
+              Giá giảm dần
+            </button>
           </div>
 
           {/* CHÚ Ý: Bắt đầu khu vực Grid 3 cột chứa Sản phẩm */}

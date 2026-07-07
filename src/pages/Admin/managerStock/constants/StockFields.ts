@@ -33,7 +33,7 @@ export const stockFields: FormField<stock>[] = [
     label: 'Quantity Change',
     type: FormFieldType.Input,
     rules: [
-        { required: true, message: 'Bắt buộc nhập số lượng thay đổi' },
+        { required: true, message: 'Bắt buộc nhập số lượng thay đổi' ,disabled: (values) => values?.transaction_type === 'kiem_kho'},
         { pattern: /^-?[0-9]+$/, message: 'Số lượng phải là số nguyên, có thể âm' },
     ],
     disabled: (values) => values?.transaction_type === 'kiem_kho',
@@ -43,7 +43,7 @@ export const stockFields: FormField<stock>[] = [
     label: 'Physical Quantity',
     type: FormFieldType.Input,
     rules: [
-        { required: true, message: 'Bắt buộc nhập số lượng thực tế' },
+        { required: true, message: 'Bắt buộc nhập số lượng vật lý' , disabled: (values) => values?.transaction_type !== 'kiem_kho'},
         { pattern: /^[0-9]+$/, message: 'Số lượng phải là số nguyên dương' },
     ],
     disabled: (values) => values?.transaction_type !== 'kiem_kho',

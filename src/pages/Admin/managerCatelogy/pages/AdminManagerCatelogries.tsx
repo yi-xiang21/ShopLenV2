@@ -301,7 +301,7 @@ const AdminManagerCatelogries = () => {
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Quản lý danh mục</h2>
         <button
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="button_user"
           onClick={() => handleAction(FormModalMode.CREATE)}
         >
           Thêm danh mục
@@ -343,6 +343,7 @@ const AdminManagerCatelogries = () => {
         initialValues={selectedCategory || defaultFormValues}
         onSubmit={handleSubmitForm}
         hasChildren={true}
+        tabNamePrefix="danh mục"
         nestedLimit={1}
       />
     </div>

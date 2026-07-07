@@ -356,67 +356,69 @@ const BillingWorkShopPage = () => {
         </div>
       </Modal>
 
-      <p className="text-xl font-bold">Hóa Đơn Thanh Toán</p>
+      <div className="mb-8 text-center mt-6">
+        <h1 className="text-3xl font-semibold">Hóa Đơn Thanh Toán</h1>
+        <p className="text-gray-500 mt-2 text-sm md:text-base">Kiểm tra thông tin và hoàn tất đơn hàng của bạn</p>
+      </div>
       
-      <div className="grid grid-cols-6 p-4 h-full w-full justify-center gap-4">
-        <div className="col-span-4 flex flex-col gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-8 h-full w-full max-w-7xl mx-auto justify-center gap-6 pb-12">
+        <div className="lg:col-span-5 flex flex-col gap-6">
           
-          {/* Block: Thông tin giao hàng */}
-          <div className="flex flex-col gap-4 bg-blue-200 rounded-3xl h-auto p-4 shadow-md">
-            <div className="flex items-center gap-4">
-              <p className="rounded-full bg-white p-2 w-fit text-blue-500">
-                <IoHomeOutline />
-              </p>
-              <h2 className="text-2xl">Thông tin khách hàng</h2>
+          {/* Block: Thông tin khách hàng */}
+          <div className="flex flex-col gap-6 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-4 pb-4 border-b border-gray-50">
+              <div className="rounded-full bg-blue-50 p-3 w-fit text-blue-600">
+                <IoHomeOutline size={24} />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-800 tracking-tight">Thông tin khách hàng</h2>
             </div>
-            <div className="flex flex-col gap-2 pr-10 pl-10">
-              <div className="flex flex-col gap-2">
-                <span>
-                  Họ và tên:{" "}
-                  <span className="mt-0.5 text-[15px] font-light text-gray-600">
+            <div className="flex flex-col gap-4 px-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="flex flex-col bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                  <span className="text-[13px] font-medium text-gray-500 mb-1">Họ và tên</span>
+                  <span className="text-[15px] font-semibold text-gray-900">
                     {firstName || lastName
                       ? `${firstName} ${lastName}`.trim()
                       : `${user?.first_name} ${user?.last_name}`}
                   </span>
-                </span>
-                <span>
-                  Số điện thoại:{" "}
-                  <span className="mt-0.5 text-[15px] font-light text-gray-600">
+                </div>
+                <div className="flex flex-col bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                  <span className="text-[13px] font-medium text-gray-500 mb-1">Số điện thoại</span>
+                  <span className="text-[15px] font-semibold text-gray-900">
                     {formData.sdt_nguoi_nhan
                       ? formData.sdt_nguoi_nhan
                       : user?.phone_number}
                   </span>
-                </span>
-                
+                </div>
               </div>
-            </div>
-            <div>
-              <button
-                className="bg-rose-300 text-white p-2 rounded w-full hover:bg-rose-400 hover:shadow-md transition-all duration-300 ease-out hover:-translate-y-0.5 hover:cursor-pointer"
-                onClick={showModalUser}
-              >
-                Cập nhật thông tin
-              </button>
+              <div>
+                <button
+                  className="bg-rose-50 text-rose-500 font-medium px-4 py-2 rounded-xl border border-rose-100 hover:bg-rose-500 hover:text-white transition-all duration-300 w-full md:w-auto"
+                  onClick={showModalUser}
+                >
+                  Cập nhật thông tin
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Block: Phương thức thanh toán */}
-          <div className="flex flex-col gap-4 bg-purple-100 rounded-3xl h-auto p-4 shadow-md">
-            <div className="flex items-center gap-4">
-              <p className="rounded-full bg-white p-2 w-fit text-purple-500">
-                <MdPayments />
-              </p>
-              <h2 className="text-2xl">Phương Thức Thanh Toán</h2>
+          <div className="flex flex-col gap-6 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
+            <div className="flex items-center gap-4 pb-4 border-b border-gray-50">
+              <div className="rounded-full bg-purple-50 p-3 w-fit text-purple-600">
+                <MdPayments size={24} />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-800 tracking-tight">Phương Thức Thanh Toán</h2>
             </div>
-            <div className="flex flex-col gap-2 pr-10 pl-10">
-              <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4 px-2">
+              <div className="grid grid-cols-1 gap-4">
                 <div
-                  className="group relative flex cursor-default items-center justify-between rounded-3xl p-4 transition-all duration-300 ease-out border border-transparent bg-[#faeee0] shadow-sm"
+                  className="group relative flex cursor-default items-center justify-between rounded-2xl p-4 transition-all duration-300 ease-out border border-orange-500 bg-orange-50 shadow-sm"
                 >
                   <div className="flex items-center gap-4">
                     <div className="h-2.5 w-2.5 rounded-full transition-colors duration-300 bg-[#fb923c]"></div>
                     <div className="flex flex-col">
-                      <span className="text-[15px] text-gray-700 transition-colors group-hover:text-gray-900 font-semibold">
+                      <span className="text-[15px] text-gray-900 font-semibold">
                         Ví MOMO (Mặc định)
                       </span>
                     </div>
@@ -428,31 +430,30 @@ const BillingWorkShopPage = () => {
         </div>
 
         {/* Cột Tóm tắt đơn hàng */}
-        <div className="col-span-2 bg-white rounded-3xl h-auto p-2 shadow-md">
-          <div className="flex flex-col gap-2 rounded-3xl h-auto p-2">
-            <div className="flex items-center gap-4">
-              <p className="rounded-full p-2 w-fit text-yellow-500">
-                <CiShoppingBasket />
-              </p>
-              <h2 className="text-2xl">Tóm Tắt Đơn Hàng</h2>
+        <div className="lg:col-span-3">
+          <div className="flex flex-col gap-4 bg-white rounded-3xl p-6 shadow-sm border border-gray-100 lg:sticky lg:top-24 h-fit">
+            <div className="flex items-center gap-3 pb-4 border-b border-gray-50">
+              <div className="rounded-full bg-rose-50 p-3 w-fit text-rose-500">
+                <CiShoppingBasket size={24} />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-800 tracking-tight">Tóm Tắt Đơn Hàng</h2>
             </div>
             
             {/* Thông tin khóa học */}
-            <div>
+            <div className="mt-2">
               {product ? (
-                <div className="flex flex-col gap-2 overflow-auto h-auto max-h-80 p-2 border-b border-gray-100 pb-4">
-                  <div className="flex items-center justify-between gap-4 shadow rounded-2xl p-4 hover:shadow-md transition-all duration-300 ease-out">
+                <div className="flex flex-col gap-3 overflow-auto max-h-150 pr-2 no-scrollbar">
+                  <div className="flex items-center justify-between gap-4 border border-gray-100 shadow-sm rounded-2xl p-4 hover:shadow-md transition-all duration-300 ease-out bg-white">
                     <div className="flex items-center gap-4 w-full">
                       <img
                         src={firstSession?.images?.[0]?.image_url || ""}
                         alt={product.title}
                         className="h-12 w-12 rounded object-cover bg-gray-50 shrink-0"
                       />
-                      <div className="flex flex-col gap-2 overflow-hidden">
-                        
-                          <span className="text-[15px] text-gray-700 transition-colors group-hover:text-gray-900 truncate font-medium">
-                            {product.title}
-                          </span>
+                      <div className="flex flex-col gap-1 overflow-hidden w-full">
+                        <span className="text-[15px] text-gray-700 transition-colors group-hover:text-gray-900 font-medium line-clamp-2">
+                          {product.title}
+                        </span>
                         <div className="flex items-center justify-between gap-4">
                           <span className="mt-0.5 text-[13px] font-light text-gray-500">
                             Ca học: {firstSession?.session_name || "Mặc định"} | SL: {orderQty}
@@ -465,8 +466,6 @@ const BillingWorkShopPage = () => {
                         </div>
                       </div>
                     </div>
-                    
-                    
                   </div>
                 </div>
               ) : (
@@ -474,49 +473,50 @@ const BillingWorkShopPage = () => {
               )}
             </div>
 
+            <div className="h-px bg-gray-100 my-2"></div>
+
             {/* Áp dụng khuyến mãi */}
-            <div className="flex items-center justify-between gap-4 rounded-2xl p-2 mt-2">
-              <span className="text-gray-700">Mã giảm giá</span>
-              <span
-                className="mt-0.5 text-[15px] font-semibold text-blue-600 hover:cursor-pointer hover:text-blue-800"
+            <div className="flex items-center justify-between gap-4 py-2">
+              <span className="text-[15px] font-medium text-gray-700">Mã giảm giá</span>
+              <button
+                className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors bg-blue-50 px-3 py-1.5 rounded-full"
                 onClick={() => showModalVoucher()}
               >
-                {appliedVoucher ? "Đổi Voucher >" : "Chọn Voucher >"}
-              </span>
+                {appliedVoucher ? "Đổi mã khác" : "Chọn mã"}
+              </button>
             </div>
             
             {/* Tổng kết giá */}
-            <div className="flex flex-col gap-2 p-2">
+            <div className="flex flex-col gap-3 py-3 border-t border-gray-50 mt-2">
               <div className="flex items-center justify-between gap-4">
-                <span className="text-[15px] font-medium text-gray-700">Tạm tính</span>
-                <span className="text-[15px] font-light text-gray-800">
+                <span className="text-[15px] text-gray-600">Tạm tính</span>
+                <span className="text-[15px] font-medium text-gray-800">
                   {Number(subtotal).toLocaleString("vi-VN")}₫
                 </span>
               </div>
 
               <div className="flex items-center justify-between gap-4">
-                <span className="text-[15px] font-medium text-gray-700">Giảm giá</span>
-                <span className="text-[15px] font-light text-green-600">
+                <span className="text-[15px] text-gray-600">Giảm giá</span>
+                <span className="text-[15px] font-medium text-green-600">
                   - {Number(discountAmount).toLocaleString("vi-VN")}₫
                 </span>
               </div>
             </div>
             
-            <hr className="my-2" />
+            <div className="h-px bg-gray-100 my-1"></div>
 
             {/* Tổng cộng */}
-            <div className="flex items-center justify-between gap-4 p-2 pb-4">
-              <span className="text-[16px] font-bold text-gray-800">Tổng tiền</span>
-              <span className="text-[18px] font-bold text-red-600">
+            <div className="flex items-center justify-between gap-4 py-3">
+              <span className="text-[16px] font-semibold text-gray-900">Tổng tiền</span>
+              <span className="text-[20px] font-bold text-rose-600">
                 {Number(totalAmount).toLocaleString("vi-VN")}₫
               </span>
             </div>
             
             {/* Đặt hàng */}
-            <div>
+            <div className="mt-2">
               <button
-              
-                className="bg-rose-500 text-white! p-3 rounded-2xl w-full text-lg font-bold hover:bg-rose-600 hover:shadow-lg transition-all duration-300 ease-out hover:-translate-y-0.5 hover:cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 rounded-2xl bg-rose-500 py-4 text-[15px] font-semibold text-white shadow-lg shadow-rose-200 transition-all duration-300 hover:bg-rose-600 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
                 onClick={handSubmitOrder}
               >
                 Tiến Hành Thanh Toán

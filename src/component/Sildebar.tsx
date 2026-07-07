@@ -23,6 +23,7 @@ interface SidebarProps {
 const menuItems = [
     { name: 'Dashboard', link: '/admin', icon: LayoutDashboard },
     { name: 'Quản lý người dùng', link: '/admin/Manager-Account', icon: Users },
+    { name: 'Quản lý shipper', link: '/admin/Manager-Shipper', icon: Users },
     { name: 'Quản lý đơn hàng', link: '/admin/Manager-Orders', icon: ShoppingCart },
     { name: 'Quản lý sản phẩm', link: '/admin/Manager-Products', icon: Package },
     { name: 'Quản lý Kho', link: '/admin/Manager-Stock', icon: Warehouse },

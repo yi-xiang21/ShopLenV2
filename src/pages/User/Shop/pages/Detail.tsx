@@ -348,8 +348,8 @@ const Detail = () => {
                 onClick={handleAddToCart}
                 disabled={stock === 0}
                 className={`
-                  flex-1 w-full h-14 rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all
-                  ${stock === 0 
+                  button_user flex gap-2 items-center justify-center w-full 
+                  ${stock === 0  
                     ? "bg-slate-200 text-slate-400 cursor-not-allowed" 
                     : "bg-violet-600 text-white hover:bg-violet-700 hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] cursor-pointer"}
                 `}

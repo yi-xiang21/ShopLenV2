@@ -217,38 +217,14 @@ const Cart = () => {
             </div>
             <div className="mt-6 flex flex-col gap-3">
               <button
-                className="
-          mt-6
-          mb-3
-          w-full
-          rounded-xl
-          py-3
-          font-medium
-          text-white
-          hover:bg-rose-500
-          shadow-sm
-          bg-rose-300
-          hover:cursor-pointer
-          "
+                className="button_checkout"
                 onClick={handleCheckout}
               >
                 Thanh toán ngay
               </button>
 
               <button
-                className="
-          mt-3
-          w-full
-          rounded-xl
-
-          shadow-sm
-          py-3
-        bg-amber-100
-          hover:bg-amber-500
-          font-medium
-          text-amber-200
-          hover:cursor-pointer
-          "
+                className="button_shopping"
                 onClick={() => (window.location.href = "/shop")}
               >
                 Tiếp tục mua sắm

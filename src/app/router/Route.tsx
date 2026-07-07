@@ -41,6 +41,8 @@ import MyDeliveries from "@/pages/Shipper/pages/MyDeliveries";
 import DeliveryHistory from "@/pages/Shipper/pages/DeliveryHistory";
 import OrderDetail from "@/pages/Shipper/pages/OrderDetail";
 import { ShipperSetting } from "@/pages/Shipper/pages/ShipperSetting";
+import DashboardManager from "@/pages/Admin/managerDasboard/pages/dashboardManager";
+import AdminManagerShipper from "@/pages/Admin/managerShipper/pages/AdminManagerShipper"
 
 export const routes = createBrowserRouter([
   {
@@ -183,8 +185,15 @@ export const routes = createBrowserRouter([
         children: [
           {
             index: true,
+            element: <DashboardManager />,
+          },
+          {
             path: "Manager-Account",
             element: <AdminManagerAccount />,
+          },
+          {
+            path:"Manager-Shipper",
+            element: <AdminManagerShipper />,
           },
           {
             path: "Manager-Category",

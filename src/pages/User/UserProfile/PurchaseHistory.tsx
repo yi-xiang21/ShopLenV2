@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 import { historyOrderApi } from '@/pages/User/UserProfile/api/historyOrder_api'; 
 import type { HistoryOrder } from '@/pages/User/UserProfile/types/history-oder'; 
 import { Package, ChevronRight, ShoppingCart } from 'lucide-react';
-
-import { parseToDayjs } from "@/share/ComponentCustom/FormatTime"; 
 import type { NotificationType } from '@/share/ComponentCustom/Notification/Notification';
 import Notification from '@/share/ComponentCustom/Notification/Notification';
 import {BillingApi} from "@/pages/User/Billing/api/billing_api";
+import CardOrder from '@/component/CardOrder';
+import { useAppDispatch } from '@/app/redux/hooks';
+import { getCart } from '../cart/store/cart_thunck';
 const PurchaseHistory = () => {
   const [orders, setOrders] = useState<HistoryOrder[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState<number>(0);
   const limit = 5;
+   const dispatch = useAppDispatch();
 
 
   const [notifyData, setNotifyData] = useState<{
@@ -55,6 +57,7 @@ const PurchaseHistory = () => {
           title: 'Thành công',
           message: 'Đã thêm các sản phẩm vào giỏ hàng thành công!',
         }); 
+        dispatch(getCart());
       }
     } catch (error: any) {
       console.error("Lỗi khi mua lại:", error);
@@ -67,18 +70,7 @@ const PurchaseHistory = () => {
     }
   };
 
-  const formatCurrency = (amount: string | number) => {
-    return Number(amount).toLocaleString('vi-VN') + '₫';
-  };
 
-  const getStatusBadge = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'completed': return <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-green-100 text-green-700 uppercase tracking-wider">Hoàn thành</span>;
-      case 'cancelled': return <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-red-100 text-red-700 uppercase tracking-wider">Đã hủy</span>;
-      case 'refunded': return <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-orange-100 text-orange-700 uppercase tracking-wider">Hoàn tiền</span>;
-      default: return <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-gray-100 text-gray-700 uppercase tracking-wider">{status}</span>;
-    }
-  };
 
   const totalPages = Math.ceil(total / limit);
 
@@ -104,54 +96,29 @@ const PurchaseHistory = () => {
           </div>
         ) : orders.length > 0 ? (
           orders.map((order) => (
-            <div 
+            <CardOrder 
               key={order.order_id} 
-              className='bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col'
-            >
-             
-              <div className='bg-slate-50 px-5 py-3 border-b border-slate-100 flex justify-between items-center'>
-                <div className='flex items-center gap-3'>
-                  <Package size={18} className="text-slate-400" />
-                  <span className='font-bold text-slate-700'>{order.order_id}</span>
-                 
-                  <span className='text-xs text-slate-400 hidden sm:inline'>
-                    • {parseToDayjs(order.created_at)?.format('HH:mm - DD/MM/YYYY')}
-                  </span>
-                </div>
-                {getStatusBadge(order.status)}
-              </div>
-
-              {/* Card Body */}
-              <div className='p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
-                <div className='text-sm text-slate-600 flex flex-col gap-1.5 flex-1'>
-                  <p><span className="text-slate-400 w-20 ">Người nhận:</span> <span className="font-semibold text-slate-800">{order.customer_name}</span></p>
-                  <p className="line-clamp-1"><span className="text-slate-400 w-20 ">Giao đến:</span> {order.shipping_address || "Không có địa chỉ"}</p>
-                </div>
-
-                <div className='flex flex-col items-start sm:items-end w-full sm:w-auto border-t sm:border-t-0 pt-4 sm:pt-0 border-slate-100'>
-                  <span className='text-xs text-slate-400 font-medium mb-0.5'>Tổng thanh toán</span>
-                  <span className='text-xl font-extrabold text-rose-600'>{formatCurrency(order.total_amount)}</span>
-                  
-                  {/* Container cho 2 nút bấm: Mua lại và Xem chi tiết */}
-                  <div className='mt-3 flex flex-col sm:flex-row gap-2 w-full sm:w-auto'>
-                    <button
-                      onClick={() => handleBuyAgain(order.order_id)}
-                      className='flex items-center justify-center gap-1.5 px-4 py-2 bg-black text-white! font-semibold text-sm rounded-lg hover:bg-rose-600 transition-colors w-full sm:w-auto hover:cursor-pointer'
-                    >
-                      <ShoppingCart size={16} /> Mua lại
-                    </button>
-
-                    <Link 
-                      to={`/profile/purchase-history/order-detail/${order.order_id}`} 
-                      className='flex items-center justify-center gap-1 px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 transition-colors w-full sm:w-auto'
-                    >
-                      Xem chi tiết <ChevronRight size={16} />
-                    </Link>
-                  </div>
-
-                </div>
-              </div>
-            </div>
+              order={order} 
+              actionButtons={
+                <>
+                
+                {order.type != "workshop" && (
+                  <button
+                    onClick={() => handleBuyAgain(order.order_id)}
+                    className='flex items-center justify-center gap-1.5 px-4 py-2 bg-red-300 text-white font-semibold text-sm rounded-lg hover:bg-rose-600 transition-colors w-full sm:w-auto hover:cursor-pointer'
+                  >
+                    <ShoppingCart size={16} /> Mua lại
+                  </button>
+                )}
+                  <Link 
+                    to={`/profile/purchase-history/order-detail/${order.order_id}`} 
+                    className='flex items-center justify-center gap-1 px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 transition-colors w-full sm:w-auto'
+                  >
+                    Xem chi tiết <ChevronRight size={16} />
+                  </Link>
+                </>
+              } 
+            />
           ))
         ) : (
           <div className='flex flex-col items-center justify-center py-16 bg-white rounded-2xl border border-dashed border-slate-300'>

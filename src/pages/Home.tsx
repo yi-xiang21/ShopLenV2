@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import dogAnimation from '@/assets/animation/Corgi with blue balloon.json';
 import catYarnAnimation from '@/assets/animation/playing cat.json';
-
+import { FaArrowUp } from "react-icons/fa";
 
 
 
@@ -26,9 +26,26 @@ const HomePage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [productTop, setProductTop] = useState<any[]>([]);
   const navigate = useNavigate();
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
-  
-  
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -217,7 +234,16 @@ const HomePage = () => {
         </div>
       </ParallaxSection>
 
-     
+      {/* Nút cuộn lên đầu trang */}
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-8 right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-rose-300 text-white shadow-lg shadow-rose-200 hover:bg-rose-400 hover:cursor-pointer hover:-translate-y-1 transition-all duration-300 ${
+          showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
+        }`}
+        aria-label="Scroll to top"
+      >
+        <FaArrowUp className="w-5 h-5" />
+      </button>
     </div>
     
   );

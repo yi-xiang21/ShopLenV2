@@ -32,3 +32,18 @@ export interface Product {
     type_name?: string,
     variants: Variant[]
 }
+
+export interface ProductSearch{
+    product_id?: number,
+    type_id?: number,
+    category_id?: number,
+    product_name: string,
+    description: string,
+    product_status: string,
+    category_name?: string,
+    type_name?: string,
+    variants: Variant[],
+    workshop_name?: string,
+    workshop_id?: number,
+    title?:string
+}

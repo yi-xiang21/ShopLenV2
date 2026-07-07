@@ -9,10 +9,13 @@ const validateForm = <
 
   fields.forEach((field) => {
     const value = values[field.key];
+    const isRuleDisabled = field.rules?.map((rule) => rule.disabled);
+    console.log(isRuleDisabled);
 
     field.rules?.forEach((rule) => {
       if(
         rule.required &&
+        !isRuleDisabled &&
         (value === undefined || value === null || String(value).trim() === '')
       ) {
         errors[String(field.key)] =
@@ -22,6 +25,7 @@ const validateForm = <
 
       if (
         rule.pattern &&
+        !isRuleDisabled &&
         value &&
         !rule.pattern.test(String(value))
       ) {
@@ -30,6 +34,7 @@ const validateForm = <
       }
 
       if (
+        !isRuleDisabled &&
         rule.validator &&
         !rule.validator(values)
       ) {

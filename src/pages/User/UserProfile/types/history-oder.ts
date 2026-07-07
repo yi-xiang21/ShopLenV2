@@ -8,6 +8,7 @@ export interface HistoryOrder {
   created_at: string;
   payment_method: string;
   payment_status: string;
+  type:string;
 }
 
 export interface OrderItem {

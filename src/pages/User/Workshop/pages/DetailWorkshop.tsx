@@ -308,7 +308,7 @@ const DetailWorkshop = () => {
           </div>
 
           
-          <div className="mt-auto">
+          <div className="mt-auto flex items-center justify-center">
             {stock === 0 || activeVariant?.status !== 'open' ? (
               <button disabled className="w-full rounded-2xl bg-slate-300 py-4 text-white font-bold text-lg flex items-center justify-center gap-2 cursor-not-allowed">
                 <AlertCircle size={20} />
@@ -317,7 +317,7 @@ const DetailWorkshop = () => {
             ) : (
               <button 
                  onClick={() => navigation(`/workshop-billing/${id}/${quantity}`)}
-                className="w-full rounded-2xl bg-violet-600 py-4 text-white font-bold text-lg hover:bg-violet-700 hover:shadow-lg hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                className="button_user w-full"
               >
                 Đăng ký ngay suất học
               </button>

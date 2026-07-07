@@ -14,10 +14,11 @@ import HeaderMobileMenu from "@/component/HeaderMobileMenu";
 import Badge from "antd/es/badge/Badge";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { getWishlistThunk } from "@/pages/User/whistlist/store/wishlist_thunck";
-import type { Product } from "@/pages/Admin/managerProducts/type/products";
+import type { ProductSearch } from "@/pages/Admin/managerProducts/type/products";
 import {ProductApi} from "@/pages/Admin/managerProducts/api/products_api";
 import { getCart, syncCart } from "@/pages/User/cart/store/cart_thunck";
 import type { cart ,CartSync} from "@/pages/User/Cart/types/cart";
+import { WorkshopApi } from "@/pages/Admin/managerWorkshop/api/workShop_api";
 export type ActiveMenuKey = "home" | "shop" | "about" | "workshop";
 
 const Header = () => {
@@ -30,7 +31,7 @@ const Header = () => {
 
   const [keyword, setKeyword] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ProductSearch[]>([]);
   useEffect(() => {
     const timer = setTimeout(() => {
       if (keyword.trim()) {
@@ -38,24 +39,39 @@ const Header = () => {
         {
           keyword: keyword.trim(),
           page: 1,
-          limit: 1000
+          limit: 20
         }
         ProductApi.filter(res)
           .then((response) => {
+          
             
             setProducts(response.data.data.products || [] );
           })
           .catch((error) => {
             console.error("Error fetching products:", error);
           });
+        WorkshopApi.getAll(res)
+        .then((response) => {
+          
+          setProducts((prev)=>[...prev, ...response.data.data.workshops || []]);
+        })
+        .catch((error) => {
+          console.error("Error fetching workshops:", error);
+        });
+        
+        
       } else {
         setProducts([]);
       }
+      
     }, 1000);
+    
 
     return () => clearTimeout(timer);
   } 
   , [keyword]);
+
+
 const handleLoginSuccess = useCallback(async () => {
   try {
     const localCartStr = localStorage.getItem('localCart');
@@ -91,7 +107,7 @@ const handleLoginSuccess = useCallback(async () => {
 
     if (user.role === "admin") return "/admin";
     else if (user.role === "shipper") return "/shipper";
-    return "/user";
+    return "/profile";
   };
 
   const location = useLocation();
@@ -123,6 +139,8 @@ const handleLoginSuccess = useCallback(async () => {
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
   };
+
+
 
   return (
     <>
@@ -157,7 +175,7 @@ const handleLoginSuccess = useCallback(async () => {
               <div>
                 <input
                   className={`w-full border border-gray-300 bg-gray-50 py-1.5 pl-9 pr-4 text-xs outline-none transition-all duration-200 focus:bg-white focus:shadow-sm md:text-sm ${
-                    keyword.trim()
+                    keyword.trim() && isFocused
                       ? "rounded-t-2xl rounded-b-none"
                       : "rounded-full"
                   }`}
@@ -176,7 +194,7 @@ const handleLoginSuccess = useCallback(async () => {
                 </span>
               </div>
               {isFocused  && keyword.trim() && (
-                <div className=" h-auto rounded-bl-2xl rounded-br-2xl w-2xl absolute flex items-center bg-white shadow-md z-10">
+                <div className="max-h-80 overflow-y-auto rounded-b-2xl w-full absolute top-full left-0 bg-white shadow-lg z-10 border-x border-b border-gray-200 flex flex-col">
                   {products.length > 0 ? (
                     <ul className="py-2 w-full">
                       {products.map((product) => (
@@ -184,13 +202,18 @@ const handleLoginSuccess = useCallback(async () => {
                           key={product.product_id}
                           className="px-4 py-2 w-full hover:bg-gray-200 hover:cursor-pointer"
                           onMouseDown={() => {
-                            navigate(`/detail/${product.product_id}`);
+                            if(product.workshop_id)
+                            {
+                              navigate(`/workshop-detail/${product.workshop_id}`);
+                            }else{
+                                navigate(`/detail/${product.product_id}`);
+                            }
                             setIsFocused(false);
                             setKeyword("");
                           }
                           }
                         >
-                          {product.product_name}
+                          {product.workshop_id ? product.title : product.product_name} 
                         </li>
                       ))}
                     </ul>

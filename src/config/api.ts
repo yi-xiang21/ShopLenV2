@@ -53,9 +53,15 @@ export const API_CONFIG = {
     GET_HISTORY_ORDERS: '/api/orders/my-orders',
     GET_HISTORY_ORDER_DETAIL: (orderId: string) => `/api/orders/my-orders/${orderId}`,
 
+    //history workshop
+    GET_HISTORY_WORKSHOP:'/api/workshops/my-workshops',
+
     //location
     GET_LOCATIONS: '/api/location/cities',
     GET_CITY_WARDS: (city_code: string) => `/api/location/cities/${city_code}/wards`,
+
+    //admin dashboard
+    GET_DASHBOARD_OVERVIEW: '/api/admin/dashboard',
 
 
     //admin account
@@ -128,6 +134,12 @@ export const API_CONFIG = {
     PUT_UPDATE_WORKSHOP: (id: string) => `/api/workshops/${id}`,
     DELETE_WORKSHOP: (id: string) => `/api/workshops/${id}`,
     POST_FILTER_WORKSHOPS: '/api/workshops/filter',  
+
+    //admin shipper
+    GET_SHIPPER:'/api/admin/shippers',
+    POST_CREATE_SHIPPER:'/api/admin/shippers',
+    PUT_UPDATE_SHIPPER_LOCATION: (shipper_id: string) => `/api/admin/shippers/${shipper_id}/location`,
+    PATCH_UPDATE_STATUS_SHIPPER: (shipper_id: string) => `/api/admin/shippers/${shipper_id}/status`,
 
     // shipper portal
     GET_AVAILABLE_ORDERS: '/api/shipper/available-orders',

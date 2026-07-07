@@ -297,7 +297,7 @@ const fetchProducts = useCallback(
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Quản lý sản phẩm</h2>
         <button
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="button_user"
           onClick={() => handleAction(FormModalMode.CREATE)}
         >
           Thêm sản phẩm
@@ -336,6 +336,7 @@ const fetchProducts = useCallback(
         childFields={getVariantFieldsByMode(childrenProductsFields, modalMode)}
         initialValues={selectedProduct || defaultFormValues}
         onSubmit={handleSubmitForm}
+        tabNamePrefix="biến thể"
         hasChildren={true}
       />
     </div>

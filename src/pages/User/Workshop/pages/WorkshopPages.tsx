@@ -65,9 +65,9 @@ const WorkshopPages = () => {
         <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-100 p-6">
         
 
-          {/* Grid Hiển Thị Data */}
+      
           {loading ? (
-            // Trạng thái Loading
+            
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {[...Array(8)].map((_, index) => (
                 <div key={index} className="flex flex-col gap-3">
@@ -77,14 +77,14 @@ const WorkshopPages = () => {
               ))}
             </div>
           ) : workshops.length > 0 ? (
-            // Trạng thái Có Data
+           
             <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-3 gap-6">
               {workshops.map((workshop) => (
                 <CardWorkshop key={workshop.workshop_id} data={workshop} />
               ))}
             </div>
           ) : (
-            // Trạng thái Trống (Empty)
+           
             <div className="py-20 flex justify-center w-full">
               <Empty 
                 description={<span className="text-slate-400">Hiện chưa có khóa học nào</span>} 
@@ -92,7 +92,7 @@ const WorkshopPages = () => {
             </div>
           )}
 
-          {/* Phân Trang */}
+       
           {workshops.length > 0 && (
             <div className="flex items-center justify-center w-full mt-10">
               <button
