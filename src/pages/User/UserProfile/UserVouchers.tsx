@@ -104,7 +104,7 @@ const UserVouchers = () => {
         </div>
         
         <div className="flex items-center gap-6">
-          <Link to="/profile/my-vouchers" className="flex flex-col items-center gap-1.5 group cursor-pointer">
+          <Link to="/profile/vouchers/my-voucher" className="flex flex-col items-center gap-1.5 group cursor-pointer">
             <div className="p-2.5 bg-slate-50 text-slate-600 rounded-xl group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
               <Ticket size={20} />
             </div>

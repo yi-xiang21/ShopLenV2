@@ -84,18 +84,16 @@ const UserHistoryRedeemVoucher = () => {
 
   return (
     <section className='space-y-6'>
+      <div className='mb-6 flex items-center justify-between'>
         <button 
           onClick={() => navigate(-1)} 
-          className='flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-[#b95b2d] transition-colors'
-        >
+          className='flex items-center gap-2 text-sm font-medium rounded-full bg-white border border-slate-200  px-4 py-2 text-slate-500 hover:text-[#b95b2d]! hover:border-[#b95b2d]  transition-colors cursor-pointer'
+        > 
             <ArrowLeft size={16} />
             Quay lại
         </button>
-      <div>
         <p className='text-sm font-bold uppercase tracking-[0.2em] text-[#b95b2d]'>Lịch sử điểm thưởng</p>
-        <h2 className='mt-1 text-3xl font-extrabold text-slate-800'>Biến động điểm</h2>
       </div>
-      
       <div className='flex flex-col gap-4'>
         {loading ? (
           <div className='flex justify-center items-center py-10'>

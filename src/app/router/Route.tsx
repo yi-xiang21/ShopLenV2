@@ -45,7 +45,7 @@ import DashboardManager from "@/pages/Admin/managerDasboard/pages/dashboardManag
 import AdminManagerShipper from "@/pages/Admin/managerShipper/pages/AdminManagerShipper"
 import AdminManagerRewards from "@/pages/Admin/managerExchangePoint/pages/AdminManagerRewards"
 import UserHistoryRedeemVoucher from "@/pages/User/UserProfile/UserHistoryRedeemVoucher";
-
+import UserMyVoucher from "@/pages/User/UserProfile/UserMyVoucher";
 export const routes = createBrowserRouter([
   {
     element: <UserLayout />,
@@ -150,6 +150,10 @@ export const routes = createBrowserRouter([
                   {
                     path:"history-redeem",
                     element:<UserHistoryRedeemVoucher />
+                  },
+                  {
+                    path:"my-voucher",
+                    element:<UserMyVoucher />
                   }
                 ]
               },
