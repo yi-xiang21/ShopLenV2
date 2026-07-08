@@ -43,6 +43,8 @@ import OrderDetail from "@/pages/Shipper/pages/OrderDetail";
 import { ShipperSetting } from "@/pages/Shipper/pages/ShipperSetting";
 import DashboardManager from "@/pages/Admin/managerDasboard/pages/dashboardManager";
 import AdminManagerShipper from "@/pages/Admin/managerShipper/pages/AdminManagerShipper"
+import AdminManagerRewards from "@/pages/Admin/managerExchangePoint/pages/AdminManagerRewards"
+import UserHistoryRedeemVoucher from "@/pages/User/UserProfile/UserHistoryRedeemVoucher";
 
 export const routes = createBrowserRouter([
   {
@@ -140,7 +142,16 @@ export const routes = createBrowserRouter([
               },
               {
                 path: "vouchers",
-                element: <UserVouchers />,
+                children:[
+                  {
+                    index:true,
+                    element:<UserVouchers />
+                  },
+                  {
+                    path:"history-redeem",
+                    element:<UserHistoryRedeemVoucher />
+                  }
+                ]
               },
               {
                 path: "workshop",
@@ -206,6 +217,10 @@ export const routes = createBrowserRouter([
           {
             path: "Manager-Vouchers",
             element: <AdminManagerVouchers />,
+          },
+          {
+            path:"Manager-Rewards",
+            element: <AdminManagerRewards />
           },
           {
             path: "Manager-Promotions",

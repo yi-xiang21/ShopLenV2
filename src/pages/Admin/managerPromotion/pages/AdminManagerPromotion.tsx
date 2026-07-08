@@ -75,8 +75,9 @@ const AdminManagerPromotion = () => {
         
           } 
           else {
-            
+
             response = await promotionApi.getAll(page, limit);
+
           }
   
           setPromotions(response.data?.data?.promotions ?? []);

@@ -82,6 +82,7 @@ const BillingPage = () => {
     const fetchVouchers = async () => {
       try {
         const response = await vouchersApi.getMyVouchers();
+        console.log(response.data.data.vouchers)
         setDiscountCode(response.data.data.vouchers);
       } catch (error) {
         console.error("Error fetching vouchers:", error);
@@ -264,7 +265,8 @@ const BillingPage = () => {
   const handleApply = async () => {
     
     if (selectedVoucherId === null) {
-      console.warn("Chưa chọn voucher");
+      setAppliedVoucher(null);
+      setIsModalVoucherOpen(false);
       return; 
     }
 
@@ -272,8 +274,6 @@ const BillingPage = () => {
       (v) => v.voucher_id === selectedVoucherId
     );
     const minOrderValue = Number(selectedVoucher?.minimum_value || 0);
-
-
     
     if (subtotal < minOrderValue) { 
       setNotifyData({
@@ -286,13 +286,14 @@ const BillingPage = () => {
     }
     const payload = { 
       code: selectedVoucher?.code || "", 
-      order_value: subtotal 
+      order_value: subtotal ,
+      shipping_method_id: selectedMethod.method_id
     };
+    console.log(payload)
 
 
     try {
       await vouchersApi.applyVoucher(payload);
-
       setAppliedVoucher(selectedVoucher || null);
       setIsModalVoucherOpen(false); 
     } catch (error :any) {
@@ -395,7 +396,7 @@ const BillingPage = () => {
         onOk={handleApply}
         onCancel={handleCancelVoucher}
       >
-        <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
+        <div className="flex flex-col gap-4 w-full max-w-md mx-auto overflow-auto max-h-[300px]">
       {discountCode.length > 0 ? (
         discountCode.map((voucher) => {
           const isSelected = selectedVoucherId === voucher.voucher_id;

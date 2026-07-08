@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useFormModal } from '@/share/hook/useFormModal';
 import { Link } from 'react-router-dom';
 import { historyOrderApi } from '@/pages/User/UserProfile/api/historyOrder_api'; 
 import type { HistoryOrder } from '@/pages/User/UserProfile/types/history-oder'; 
@@ -11,10 +12,11 @@ import CardOrder from '@/component/CardOrder';
 
 const UserOrderTracking = () => {
     const [orders, setOrders] = useState<HistoryOrder[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(1);
-    const [total, setTotal] = useState<number>(0);
-    const limit = 5;
+    const {
+      loading, setLoading,
+      currentPage: page, setCurrentPage: setPage,
+      total, setTotal , pageSize: limit
+    } = useFormModal<HistoryOrder>(5);
   
   
     const [notifyData, setNotifyData] = useState<{
@@ -24,7 +26,7 @@ const UserOrderTracking = () => {
           message: string;
         } | null>(null);
   
-    const fetchHistoryOrders = async () => {
+    const fetchHistoryOrders = async (page: number, limit: number) => {
       try {
         setLoading(true);
         const response = await historyOrderApi.getHistoryOrders(page, limit, 'ongoing');
@@ -40,8 +42,8 @@ const UserOrderTracking = () => {
     };
   
     useEffect(() => {
-      fetchHistoryOrders();
-    }, [page]);
+      fetchHistoryOrders(page, limit);
+    }, [page, limit]);
   
    
     const handleCancel = async (orderId: string) => {
@@ -57,6 +59,7 @@ const UserOrderTracking = () => {
             message: 'Đã hủy đơn hàng thành công!',
           }); 
         }
+        await fetchHistoryOrders(page, limit)
       } catch (error: any) {
         console.error("Lỗi khi hủy đơn hàng:", error);
         setNotifyData({
@@ -102,7 +105,7 @@ const UserOrderTracking = () => {
                         onClick={() => handleCancel(order.order_id)}
                         className='flex items-center justify-center gap-1.5 px-4 py-2 bg-rose-500 text-white font-semibold text-sm rounded-lg hover:bg-rose-600 transition-colors w-full sm:w-auto'
                       >
-                        <ShoppingCart size={16} /> {order.payment_method === 'cod' ? 'Hủy đơn' : 'Hủy đơn và yêu cầu hoàn tiền '}
+                        <ShoppingCart size={16} /> {order.payment_method === 'COD' ? 'Hủy đơn' : 'Hủy đơn và yêu cầu hoàn tiền '}
                       </button>
                     )}
                    

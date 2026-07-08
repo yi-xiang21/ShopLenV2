@@ -12,7 +12,8 @@ import {
     Home, 
     Settings, 
     Menu, 
-    X 
+    X, 
+    Star
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -28,6 +29,7 @@ const menuItems = [
     { name: 'Quản lý sản phẩm', link: '/admin/Manager-Products', icon: Package },
     { name: 'Quản lý Kho', link: '/admin/Manager-Stock', icon: Warehouse },
     { name: 'Quản lý vouchers', link: '/admin/Manager-Vouchers', icon: Ticket },
+    { name: 'Quản lý đổi thưởng',link: '/admin/Manager-Rewards', icon: Star },
     { name: 'Quản lý danh mục', link: '/admin/Manager-Category', icon: FolderOpen },
     { name: 'Quản lý khuyến mãi', link: '/admin/Manager-Promotions', icon: Zap },
     { name: 'Quản lý workshop', link: '/admin/Manager-Workshops', icon: BookOpen },

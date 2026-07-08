@@ -21,14 +21,18 @@ export const vouchersApi = {
     filter: async (filter: any) => {
         return callAPI.post(API_CONFIG.ENDPOINTS.FILTER_VOUCHERS, filter );
     },
+    // user
     getMyVouchers: async () => {
         return callAPI.get(API_CONFIG.ENDPOINTS.GET_VOUCHERS_USER);
     },
     saveVoucher: async (voucherId: number) => {
         return callAPI.post(API_CONFIG.ENDPOINTS.POST_VOUCHER_USER, { voucher_id: voucherId });
     },
-    applyVoucher: async (voucherCode: voucherApply) => {
-        return callAPI.post(API_CONFIG.ENDPOINTS.POST_VOUCHER_APPLY, { code: voucherCode });
+    applyVoucher: async (data: voucherApply) => {
+        return callAPI.post(API_CONFIG.ENDPOINTS.POST_VOUCHER_APPLY, data);
+    },
+    getActiveVouchers: async (page:number, limit:number) => {
+        return callAPI.get(API_CONFIG.ENDPOINTS.GET_VOUCHER_ACTIVE ,{ params: { page, limit } });
     },
 
 }

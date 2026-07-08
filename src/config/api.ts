@@ -35,6 +35,7 @@ export const API_CONFIG = {
     GET_VOUCHERS_USER: '/api/vouchers/my-vouchers',
     POST_VOUCHER_USER: '/api/vouchers/save',
     POST_VOUCHER_APPLY: '/api/vouchers/apply',
+    GET_VOUCHER_ACTIVE:'/api/vouchers',
 
 
     //billing
@@ -60,6 +61,19 @@ export const API_CONFIG = {
     GET_LOCATIONS: '/api/location/cities',
     GET_CITY_WARDS: (city_code: string) => `/api/location/cities/${city_code}/wards`,
 
+    //REWARDS VOUCHER USER
+    GET_HISTORY_LOYALTYPOINT:'/api/loyalty/history',
+    POST_REDEEM_VOUCHER:'/api/loyalty/redeem',
+    GET_CAN_REDEEM:'/api/loyalty/rewards',
+
+
+    //admin exchange point
+    POST_LOYALTY_REWARDS: '/api/loyalty/admin/rewards',
+    GET_LOYALTY_REWARDS: '/api/loyalty/admin/rewards',
+    PUT_UPDATE_REWARDS: (reward_id: string) => `/api/loyalty/admin/rewards/${reward_id}/status`,
+    DELETE_LOYALTY_REWARDS:(reward_id: string) => `/api/loyalty/admin/rewards/${reward_id}`,
+
+    
     //admin dashboard
     GET_DASHBOARD_OVERVIEW: '/api/admin/dashboard',
 
@@ -105,8 +119,6 @@ export const API_CONFIG = {
     UPDATE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
     DELETE_VOUCHER: (id: string) => `/api/vouchers/vouchers/${id}`,
     FILTER_VOUCHERS: '/api/vouchers/vouchers/filter',
-
-
 
 
     //admin promotion

@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { FormModalMode, type FormModalModeType } from '@/share/types/type-form-mode';
 
 
-export const useFormModal = <T>() => {
+export const useFormModal = <T>(initialPageSize: number = 6) => {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<FormModalModeType>(FormModalMode.CREATE);
   const [selectedRecord, setSelectedRecord] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(6);
+  const [pageSize, setPageSize] = useState(initialPageSize);
   const [total, setTotal] = useState(0);
 
 

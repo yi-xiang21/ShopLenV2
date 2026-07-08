@@ -7,6 +7,7 @@ export type user = {
   role: string;
   first_name: string;
   last_name: string;
+  loyalty_points?: number,
 }
 import type { OrderStatusValue } from '@/pages/Admin/managerOrder/type/order';
 
