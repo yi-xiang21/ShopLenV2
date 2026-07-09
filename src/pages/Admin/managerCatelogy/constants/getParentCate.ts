@@ -20,20 +20,23 @@ export const getParentCategories = (categories: Category[]) => {
 export const getLeafCategories = (categories: any[]) => {
   const result: { label: string; value: number }[] = [];
 
-  const traverse = (nodes: any[]) => {
+  const traverse = (nodes: any[], isRoot: boolean) => {
     nodes.forEach((node) => {
       if (!node.children || node.children.length === 0) {
-        result.push({
-          label: node.category_name,
-          value: node.id,
-        });
+        // Chỉ lấy những danh mục lá không phải là danh mục gốc (isRoot = false)
+        if (!isRoot) {
+          result.push({
+            label: node.category_name,
+            value: node.id || node.category_id,
+          });
+        }
       } else {
-        traverse(node.children);
+        traverse(node.children, false);
       }
     });
   };
 
-  traverse(categories);
+  traverse(categories, true);
 
   return result;
 };

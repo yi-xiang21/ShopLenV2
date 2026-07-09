@@ -11,7 +11,7 @@ export interface voucher {
 }
 export interface Variant {
     variant_id?: number,
-    sku: string,
+    sku?: string,
     slug?: string,
     price: string,
     color: string,
@@ -32,6 +32,8 @@ export interface Product {
     type_name?: string,
     variants: Variant[]
 }
+
+
 
 export interface ProductSearch{
     product_id?: number,

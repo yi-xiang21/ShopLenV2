@@ -9,8 +9,9 @@ export const ProductApi = {
     getById: async (id: any) => {
         return callAPI.get(API_CONFIG.ENDPOINTS.GET_PRODUCT( id));
     },
-    create: async (data:Product) => {
-        return callAPI.post(API_CONFIG.ENDPOINTS.CREATE_PRODUCT, data);
+    create: async (data:Product | Product[]) => {
+        const payload = Array.isArray(data) ? data : [data];
+        return callAPI.post(API_CONFIG.ENDPOINTS.CREATE_PRODUCT, payload);
     },
     update: async (id: any, data: Product) => {
         return callAPI.put(API_CONFIG.ENDPOINTS.UPDATE_PRODUCT(id ), data);

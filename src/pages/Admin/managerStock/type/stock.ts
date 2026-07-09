@@ -4,8 +4,6 @@ export const TRANSACTION_TYPE = [
   { label: 'Kiểm kho (Stock Check)', value: 'kiem_kho' },
   {
     label: 'Hoàn trả (Stock refund)', value: 'hoan_tra'
-  },{
-    label: 'Khac', value: 'Khac'
   }
 
 ] as const;
@@ -18,7 +16,7 @@ export interface stock {
   transaction_type?: transaction_type;
   note?: string;
   sku?: string;
-  
+  reference_code?: string;
 }
 
 

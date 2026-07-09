@@ -10,8 +10,9 @@ export const stockApi = {
     getHistory: async (variant_id: number , page:number, limit:number) => {
         return callAPI.get(API_CONFIG.ENDPOINTS.GET_HISTORY_STOCKS(variant_id), { params: { page, limit } });
     },
-    updateStock: async (stockData: stock) => {
-        return callAPI.post(API_CONFIG.ENDPOINTS.POST_UPDATE_STOCKS, stockData);
+    updateStock: async (stockData: stock | stock[]) => {
+        const payload = Array.isArray(stockData) ? stockData : [stockData];
+        return callAPI.post(API_CONFIG.ENDPOINTS.POST_UPDATE_STOCKS, payload);
     }
     
 }

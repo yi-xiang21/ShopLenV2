@@ -17,6 +17,7 @@ import {getStockFieldsByMode} from "@/pages/Admin/managerStock/constants/sortFie
 import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
 import { filterStocks } from "@/pages/Admin/managerStock/constants/StockFilter";
 import { TRANSACTION_TYPE } from '@/pages/Admin/managerStock/type/stock';
+import { importStockFromExcel, downloadStockTemplate } from '@/share/utils/excelImportStock';
 const defaultFormValues: stock = {
   variant_id: 0,
   quantity_change: 0,
@@ -104,16 +105,11 @@ const fetchStock = useCallback(
         setHistoryPage(1);
         setStockHistory(data.history ?? []);
         setHistoryTotal(data.pagination?.total_items ?? 0);
-        console.log("Stock history data:", data);
-
-
         setIsViewingHistory(mode === FormModalMode.VIEW);
-
 
         if (mode === FormModalMode.CREATE) {
           setIsViewingHistory(false);
           defaultFormValues.variant_id = record.variant_id;
-          console.log("Opening modal for variant_id:", defaultFormValues);
           openCreate();
         }
       } catch (error) {
@@ -134,7 +130,7 @@ const fetchStock = useCallback(
         setHistoryLoading(true);
         const response = await stockApi.getHistory(variantId, page, limit);
         const data = response.data?.data;
-        
+
 
         setStockHistory(data?.history ?? []);
         setHistoryTotal(data?.pagination?.total_items ?? 0);
@@ -159,10 +155,8 @@ const fetchStock = useCallback(
   const handleSubmitForm = async (values: stock) => {
     try {
       setLoading(true);
-      console.log("Submitting form values:", values);
       values.quantity_change = Number(values.quantity_change);
-      const respone = await stockApi.updateStock(values);
-      console.log("Update stock response:", respone);
+      await stockApi.updateStock(values);
       await fetchStock(currentPage, pageSize, filters);
       setNotifyData({
         key: Date.now().toString(),
@@ -192,6 +186,42 @@ const fetchStock = useCallback(
   const handleFilter = (newFilters: Record<string, any>) => {
     setFilters(newFilters); 
     setCurrentPage(1);     
+  };
+
+  const handleUploadExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        setLoading(true);
+        const stockPayloads = await importStockFromExcel(file);
+        if (stockPayloads.length > 0) {
+          await stockApi.updateStock(stockPayloads);
+        }
+
+        setNotifyData({
+          key: Date.now().toString(),
+          type: "success",
+          title: "Thành công",
+          message: "Import tồn kho thành công!",
+        });
+        await fetchStock(currentPage, pageSize, filters);
+      } catch (error: any) {
+        console.error("Lỗi đọc file:", error);
+        let message = "Lỗi import tồn kho!";
+        if (error.isAxiosError && error.response?.data?.message) {
+          message = error.response.data.message;
+        }
+        setNotifyData({
+          key: Date.now().toString(),
+          type: "error",
+          title: "Thất bại",
+          message: message,
+        });
+      } finally {
+        setLoading(false);
+        e.target.value = ''; // Đặt lại input để có thể upload lại cùng 1 file nếu cần
+      }
+    }
   };
 
   const columns: TableProps<stock>["columns"] = [
@@ -230,6 +260,7 @@ const fetchStock = useCallback(
     {title: 'Quantity Changed', dataIndex: 'quantity_change', key: 'quantity_change'},
     {title: 'New Stock', dataIndex: 'new_stock', key: 'new_stock'},
     {title: 'Performed By', dataIndex: 'performed_by', key: 'performed_by'},
+    {title: 'Note', dataIndex: 'note', key: 'note'},
     {title: 'Reference Code', dataIndex: 'reference_code', key: 'reference_code'},
   ];
   const modalTitle =
@@ -246,6 +277,31 @@ const fetchStock = useCallback(
           message={notifyData.message}
         />
       )}
+
+      <div className="flex justify-between items-center mt-2 mb-4">
+        <h2 className="text-2xl font-bold">Quản lý tồn kho</h2>
+        {!isViewingHistory && (
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={downloadStockTemplate}
+              className="px-4 py-2 bg-emerald-50 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200 cursor-pointer text-sm shadow-sm"
+            >
+              Tải File Mẫu
+            </button>
+            
+            <label className="cursor-pointer px-4 py-2 bg-blue-50 text-blue-600 font-semibold rounded-lg hover:bg-blue-100 transition-colors border border-blue-200 text-sm shadow-sm flex items-center justify-center">
+              Upload Excel
+              <input 
+                type="file" 
+                accept=".xlsx, .xls" 
+                onChange={handleUploadExcel} 
+                title="Import dữ liệu Excel"
+                className="hidden"
+              />
+            </label>
+          </div>
+        )}
+      </div>
 
       <div className="mt-5 bg-slate-200 p-10 rounded-lg">
         {

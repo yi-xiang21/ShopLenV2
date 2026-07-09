@@ -21,6 +21,8 @@ import {getProductFieldsByMode,getVariantFieldsByMode} from "@/pages/Admin/manag
 import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
 import { filterProducts } from "../constants/filterProducts";
 
+import { importProductsFromExcel, downloadProductTemplate } from '@/share/utils/excelImport';
+
 
 const defaultFormValues: Product = {
   product_id: 0,
@@ -230,6 +232,63 @@ const fetchProducts = useCallback(
     setCurrentPage(1);     
   };
 
+  const handleUploadExcel = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = Array.from(e.target.files || []);
+  if (files.length === 0) return;
+
+  const excelFile = files.find(f => f.name.endsWith('.xlsx') || f.name.endsWith('.xls'));
+  const imageFiles = files.filter(f => f.type.startsWith('image/'));
+
+  if (!excelFile) {
+    setNotifyData({
+      key: Date.now().toString(),
+      type: "error",
+      title: "Thất bại",
+      message: "Vui lòng chọn file Excel (.xlsx hoặc .xls)",
+    });
+    return;
+  }
+
+  try {
+    // Chuyển đổi các file ảnh được tải lên thành chuỗi base64
+    const base64ImageMap: Record<string, string> = {};
+    for (const img of imageFiles) {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(img);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = error => reject(error);
+      });
+      base64ImageMap[img.name] = base64;
+    }
+
+    const productsData = await importProductsFromExcel(excelFile, base64ImageMap);
+    console.log(productsData)
+    if(productsData.length > 0){
+      const res = await ProductApi.create(productsData);
+        console.log(res)
+      }
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "success",
+        title: "Thành công",
+        message: "Import sản phẩm thành công!",
+      });
+      await fetchProducts(currentPage, pageSize, filters);
+    } catch (error:any) {
+        let message = "Lỗi đọc file!";
+        if (error.isAxiosError && error.response?.data?.message) {
+          message = error.response.data.message;
+        }
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "error",
+        title: "Thất bại",
+        message: message,
+      });
+    }
+  };
+
   const columns: TableProps<Product>["columns"] = [
     {title: 'ID', dataIndex: 'product_id', key: 'product_id'},
     { title: "Tên sản phẩm", dataIndex: "product_name", key: "product_name" },
@@ -296,12 +355,33 @@ const fetchProducts = useCallback(
       )}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Quản lý sản phẩm</h2>
-        <button
-          className="button_user"
-          onClick={() => handleAction(FormModalMode.CREATE)}
-        >
-          Thêm sản phẩm
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={downloadProductTemplate}
+            className="px-4 py-2 bg-emerald-50 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-100 transition-colors border border-emerald-200 cursor-pointer text-sm shadow-sm"
+          >
+            Tải File Mẫu
+          </button>
+          
+          <label className="cursor-pointer px-4 py-2 bg-blue-50 text-blue-600 font-semibold rounded-lg hover:bg-blue-100 transition-colors border border-blue-200 text-sm shadow-sm flex items-center justify-center">
+            Upload Excel & Ảnh
+            <input 
+              type="file" 
+              accept=".xlsx, .xls, image/*" 
+              multiple
+              onChange={handleUploadExcel} 
+              title="Import dữ liệu Excel và Ảnh"
+              className="hidden"
+            />
+          </label>
+          
+          <button
+            className="button_user"
+            onClick={() => handleAction(FormModalMode.CREATE)}
+          >
+            Thêm sản phẩm
+          </button>
+        </div>
       </div>
 
       <div className="mt-5 bg-slate-200 p-10 rounded-lg">
