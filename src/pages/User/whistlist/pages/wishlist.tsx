@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import type { WishlistItem } from "../types/wishlist";
+import Lottie from "lottie-react";
+import catAnimation from '@/assets/animation/cat with letter.json';
 
 
 const Wishlist = () => {
@@ -40,6 +42,7 @@ const handleDetail = (item:WishlistItem) => {
   }
   
 }
+  const LottieComponent = Lottie as any;
 
   return (
     <div className="min-h-screen bg-[#fcfcfc] pb-12">
@@ -60,6 +63,13 @@ const handleDetail = (item:WishlistItem) => {
 
         {/* Wishlist Content */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+          <div className="absolute top-130 w-50 mt-10 z-20">
+          <LottieComponent.default
+                          animationData={catAnimation}
+                          loop
+                          autoplay
+                        />
+        </div>
 
           {!wishlistItems || wishlistItems.length === 0 ? (
             <div className="text-center py-12 text-gray-500">

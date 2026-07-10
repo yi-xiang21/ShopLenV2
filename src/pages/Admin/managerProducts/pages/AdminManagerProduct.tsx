@@ -250,7 +250,7 @@ const fetchProducts = useCallback(
   }
 
   try {
-    // Chuyển đổi các file ảnh được tải lên thành chuỗi base64
+
     const base64ImageMap: Record<string, string> = {};
     for (const img of imageFiles) {
       const base64 = await new Promise<string>((resolve, reject) => {
@@ -364,13 +364,27 @@ const fetchProducts = useCallback(
           </button>
           
           <label className="cursor-pointer px-4 py-2 bg-blue-50 text-blue-600 font-semibold rounded-lg hover:bg-blue-100 transition-colors border border-blue-200 text-sm shadow-sm flex items-center justify-center">
-            Upload Excel & Ảnh
+            Upload Excel & Ảnh (File)
             <input 
               type="file" 
               accept=".xlsx, .xls, image/*" 
               multiple
               onChange={handleUploadExcel} 
               title="Import dữ liệu Excel và Ảnh"
+              className="hidden"
+            />
+          </label>
+
+          <label className="cursor-pointer px-4 py-2 bg-purple-50 text-purple-600 font-semibold rounded-lg hover:bg-purple-100 transition-colors border border-purple-200 text-sm shadow-sm flex items-center justify-center">
+            Upload Excel & Ảnh (Folder)
+            <input 
+              type="file" 
+              /* @ts-ignore */
+              webkitdirectory="true"
+              directory="true"
+              multiple
+              onChange={handleUploadExcel} 
+              title="Import dữ liệu Excel và Ảnh từ Folder"
               className="hidden"
             />
           </label>
