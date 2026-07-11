@@ -159,14 +159,14 @@ const CardWorkshop = ({ data }: CardWorkshopProps) => {
                 <>
                   <div className="flex items-center gap-1.5">
                     <span className="font-medium text-slate-700">
-                      {parseToDayjs(firstSession.start_date)?.format("DD/MM/YYYY")}
+                      {parseToDayjs(firstSession.start_date)}
                     </span>
                     <Calendar size={14} className="text-orange-500 shrink-0" />
                   </div>
                   <div className="flex items-center gap-1.5 bg-slate-50 px-2 py-0.5 rounded text-[11px]">
                     <span className="font-medium">
-                      {parseToDayjs(firstSession.start_date)?.format("HH:mm")}
-                      {firstSession.end_time ? ` - ${parseToDayjs(firstSession.end_time)?.format("HH:mm")}` : ""}
+                      {parseToDayjs(firstSession.start_date, "HH:mm")}
+                      {firstSession.end_time ? ` - ${parseToDayjs(firstSession.end_time, "HH:mm")}` : ""}
                     </span>
                     <Clock size={12} className="text-blue-400 shrink-0" />
                   </div>

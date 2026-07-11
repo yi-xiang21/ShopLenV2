@@ -194,6 +194,7 @@ const fetchStock = useCallback(
       try {
         setLoading(true);
         const stockPayloads = await importStockFromExcel(file);
+        console.log("Stock Payloads from Excel:", stockPayloads);
         if (stockPayloads.length > 0) {
           await stockApi.updateStock(stockPayloads);
         }

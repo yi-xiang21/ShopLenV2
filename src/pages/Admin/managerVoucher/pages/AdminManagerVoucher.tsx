@@ -227,8 +227,8 @@ const AdminManagerVoucher = () => {
     { title: "Loại giảm giá", dataIndex: "discount_type", key: "discount_type" },
     { title: "Giá trị giảm giá", dataIndex: "value", key: "value" },
     { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
-    { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
-    { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
+    { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" , render: (text) => parseToDayjs(text, "YYYY-MM-DD") || text },
+    { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" , render: (text) => parseToDayjs(text, "YYYY-MM-DD") || text },
     {
       title: "Action",
       key: "action",

@@ -71,9 +71,7 @@ const AdminManagerShipper = () => {
             page,
             limit,
           };
-          console.log("Sending filter data:", dataToSend);
           response = await ShipperApi.getAll(dataToSend);
-          console.log(response.data.data)
           setShippers(response.data?.data ?? []);
         }
         else {
@@ -173,9 +171,7 @@ const AdminManagerShipper = () => {
   const columns: TableProps<shipper>["columns"] = [
     { title: "Mã Shipper", dataIndex: "shipper_id", key: "shipper_id" },
     { title: "Họ và Tên", dataIndex: "full_name", key: "full_name" },
-    { title: "Email", dataIndex: "email", key: "email" },
     { title: "Số Điện Thoại", dataIndex: "phone", key: "phone" },
-    { title: "Thành phố làm việc", dataIndex: "working_city_id", key: "working_city_id" },
     {
       title: "Trạng Thái",
       dataIndex: "status",

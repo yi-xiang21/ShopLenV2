@@ -245,11 +245,11 @@ const DetailWorkshop = () => {
                     <div className="flex flex-col gap-1.5 text-sm w-full">
                       <div className="flex items-center gap-2 text-slate-600">
                         <Calendar size={14} className="text-orange-500" />
-                        <span>{parseToDayjs(variant.start_date)?.format("DD/MM/YYYY")}</span>
+                        <span>{parseToDayjs(variant.start_date)}</span>
                       </div>
                       <div className="flex items-center gap-2 text-slate-600">
                         <Clock size={14} className="text-blue-500" />
-                        <span>{parseToDayjs(`1970-01-01T${variant.start_time}`)?.format("HH:mm")} - {parseToDayjs(`1970-01-01T${variant.end_time}`)?.format("HH:mm")}</span>
+                        <span>{parseToDayjs(`1970-01-01T${variant.start_time}`, "HH:mm")} - {parseToDayjs(`1970-01-01T${variant.end_time}`, "HH:mm")}</span>
                       </div>
                     </div>
                     

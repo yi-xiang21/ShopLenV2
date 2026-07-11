@@ -66,8 +66,12 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     placeholder: 'Chọn thời gian bắt đầu',
     rules: [
         {
-            required: true,
-            message: 'Thời gian bắt đầu không được để trống.',
+            validator: (formdata: WorkshopVariant) => {
+                const startDateTime = new Date(`${formdata.start_date}T${formdata.start_time}`);
+                const endDateTime = new Date(`${formdata.start_date}T${formdata.end_time}`);
+                return startDateTime < endDateTime;
+            },
+            message: 'Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc.',
         }
     ]
 },
@@ -78,8 +82,12 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     placeholder: 'Chọn thời gian kết thúc',
     rules: [
         {
-            required: true,
-            message: 'Thời gian kết thúc không được để trống.',
+            validator: (formdata: WorkshopVariant) => {
+                const startDateTime = new Date(`${formdata.start_date}T${formdata.start_time}`);
+                const endDateTime = new Date(`${formdata.start_date}T${formdata.end_time}`);
+                return startDateTime < endDateTime;
+            },
+            message: 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu.',
         }
     ]
 },
@@ -91,18 +99,20 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     options : [
         { label: 'Hoạt động', value: 'open' },
         { label: 'Ngừng hoạt động', value: 'closed' },
-        { label: 'Đầy', value: 'cancelled' },
+        {label: 'hết chỗ', value: 'full' },
+        { label: 'Hủy', value: 'cancelled' },
     ],
-    rules : [
-        {
-            required: true,
-            validator: (formdata:WorkshopVariant) => {
-                return !!formdata.status;
-            }
-            ,
-            message: 'Trạng thái là bắt buộc.',
-        }
-    ]
+    disabled:true,
+    // rules : [
+    //     {
+    //         required: true,
+    //         validator: (formdata:WorkshopVariant) => {
+    //             return !!formdata.status;
+    //         }
+    //         ,
+    //         message: 'Trạng thái là bắt buộc.',
+    //     }
+    // ]
 },
 {
     key : 'session_name',

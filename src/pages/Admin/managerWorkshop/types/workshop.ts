@@ -15,7 +15,7 @@ export type WorkshopVariant = {
     start_time: string;
     end_time: string;
     final_price?: string;
-    status: "open" | "closed" | "full";
+    status: "open" | "closed" | "cancelled" | "full";
     discount?:voucher,
     sku?: string;
     slug?: string;

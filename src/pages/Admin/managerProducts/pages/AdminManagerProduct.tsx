@@ -153,11 +153,8 @@ const fetchProducts = useCallback(
         });
       } else {
         const payloadUpdate = { ...values };
-
-        payloadUpdate.variants = payloadUpdate.variants?.map(variant => {
-          delete variant.slug;
-          return variant;
-        });
+        
+        console.log("data upload gui len " ,payloadUpdate);
         await ProductApi.update(editingId, payloadUpdate);
         setNotifyData({
           key: Date.now().toString(),

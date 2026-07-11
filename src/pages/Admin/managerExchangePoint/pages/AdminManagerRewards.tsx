@@ -184,7 +184,7 @@ const AdminManagerRewards = () => {
       title: "Ngày tạo", 
       dataIndex: "created_at", 
       key: "created_at",
-      render: (text) => parseToDayjs(text)?.format("DD/MM/YYYY HH:mm") || text 
+      render: (text) => parseToDayjs(text, "DD/MM/YYYY HH:mm") || text 
     },
     {
       title: "Action",

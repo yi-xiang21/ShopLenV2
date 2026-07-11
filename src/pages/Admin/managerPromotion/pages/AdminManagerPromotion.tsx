@@ -225,8 +225,8 @@ const AdminManagerPromotion = () => {
         {status === "active" ? "Hoạt động" : "Không hoạt động"}
       </span>
     )},
-    { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
-    { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" , render: (text) => parseToDayjs(text)?.format("YYYY-MM-DD") || text },
+    { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" , render: (text) => parseToDayjs(text, "YYYY-MM-DD") || text },
+    { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" , render: (text) => parseToDayjs(text, "YYYY-MM-DD") || text },
     {
       title: "Action",
       key: "action",

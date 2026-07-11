@@ -44,44 +44,59 @@ const FilterHeader: React.FC<FilterHeaderProps> = ({
   };
 
   return (
-    <div className="bg-white p-4 rounded-md shadow-sm mb-4 border border-gray-100 ">
+    <div className="bg-white p-4 rounded-md shadow-sm  mb-4 border border-gray-100 ">
       <Form
         form={form}
         layout="inline"
         onFinish={handleFinish}
         className="gap-y-3"
       >
-        {fields.map((field) => (
-          <Form.Item key={field.key} name={field.key} label={field.label}>
-            {field.type === FormFieldType.Input && (
-              <Input
-                placeholder={field.placeholder}
-                allowClear
-                style={{ width: field.width || 200 }}
-              />
-            )}
+      <div className="flex justify-between gap-3 w-full">
+        <div className="flex flex-wrap gap-3 w-full">
+          {fields.map((field) => (
+            <Form.Item key={field.key} name={field.key} label={field.label}>
+              {field.type === FormFieldType.Input && (
+                <Input
+                  placeholder={field.placeholder}
+                  allowClear
+                  style={{ width: field.width || 200 }}
+                />
+              )}
 
-            {field.type === FormFieldType.Select && (
-              <Select
-                mode={field.mode}
-                placeholder={field.placeholder}
-                options={field.options}
-                allowClear
-                style={{ width: field.width || 200 }}
-              />
-            )}
-            {field.type === FormFieldType.SelectFetch && (
-              <SelectFetchCustom
-                placeholder={field.placeholder}
-                fetchOptions={field.fetchOptions}
-                mode={field.mode}
-                style={{ width: field.width || 200 }}
-              />
-            )}
-          </Form.Item>
-        ))}
+              {field.type === FormFieldType.Select && (
+                <Select
+                  mode={field.mode}
+                  placeholder={field.placeholder}
+                  options={field.options}
+                  allowClear
+                  style={{ width: field.width || 200 }}
+                />
+              )}
+              {field.type === FormFieldType.SelectFetch && (
+                <SelectFetchCustom
+                  placeholder={field.placeholder}
+                  fetchOptions={field.fetchOptions}
+                  mode={field.mode}
+                  style={{ width: field.width || 200 }}
+                />
+              )}
+            </Form.Item>
+          ))}
+        </div>
+        <Form.Item>
+          <Space>
 
-        {/* Nút Tìm kiếm và Reset */}
+            <Button
+              onClick={handleReset}
+              icon={<ReloadOutlined />}
+              disabled={loading}
+            >
+              Làm mới
+            </Button>
+          </Space>
+        </Form.Item>
+      </div>
+      <div className="flex justify-center gap-3 mt-3 w-full">
         <Form.Item>
           <Space>
             <Button
@@ -92,15 +107,9 @@ const FilterHeader: React.FC<FilterHeaderProps> = ({
             >
               Tìm kiếm
             </Button>
-            <Button
-              onClick={handleReset}
-              icon={<ReloadOutlined />}
-              disabled={loading}
-            >
-              Làm mới
-            </Button>
           </Space>
         </Form.Item>
+      </div>
       </Form>
     </div>
   );

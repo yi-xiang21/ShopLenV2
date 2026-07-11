@@ -32,7 +32,7 @@ const CardOrder = ({ order, actionButtons }: CardOrderProps) => {
           <Package size={18} className="text-slate-400" />
           <span className='font-bold text-slate-700'>{order.order_id}</span>
           <span className='text-xs text-slate-400 hidden sm:inline'>
-            • {parseToDayjs(order.created_at)?.format('HH:mm - DD/MM/YYYY')}
+            • {parseToDayjs(order.created_at, 'HH:mm - DD/MM/YYYY')}
           </span>
         </div>
         {getStatusBadge(order.status)}

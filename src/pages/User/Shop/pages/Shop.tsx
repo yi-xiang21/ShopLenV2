@@ -122,14 +122,14 @@ const Shop = () => {
   const next = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
   const sortByPriceAsc = () => {
-    setCurrentPage(1); // Chuyển về trang 1
+    setCurrentPage(1); 
     setFilters((prevFilters) => ({
       ...prevFilters,
       sort_price: "asc",
     }));
   };
   const sortByPriceDesc = () => {
-    setCurrentPage(1); // Chuyển về trang 1
+    setCurrentPage(1); 
     setFilters((prevFilters) => ({
       ...prevFilters,
       sort_price: "desc",

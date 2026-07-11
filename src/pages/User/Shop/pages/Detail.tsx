@@ -363,7 +363,6 @@ const Detail = () => {
         </div>
       </div>
 
-      {/* ================= BOTTOM: DESCRIPTION & RELATED ================= */}
       <div className="w-full max-w-7xl mt-6 flex flex-col gap-6">
         
         {/* Description */}

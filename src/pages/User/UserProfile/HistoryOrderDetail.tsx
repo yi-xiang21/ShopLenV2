@@ -61,7 +61,7 @@ const OrderDetailHistory = () => {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-slate-800">Chi tiết đơn hàng</h2>
-            <p className="text-sm text-slate-500">{order.order_id} {parseToDayjs(order.created_at)?.format('HH:mm - DD/MM/YYYY')}</p>
+            <p className="text-sm text-slate-500">{order.order_id} {parseToDayjs(order.created_at, 'HH:mm - DD/MM/YYYY')}</p>
           </div>
         </div>
         {getStatusBadge(order.status)}

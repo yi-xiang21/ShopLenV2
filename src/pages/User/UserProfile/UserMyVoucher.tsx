@@ -69,7 +69,7 @@ const UserMyVoucher = () => {
       <Spin spinning={loading}>
         {vouchers.length > 0 ? (
           <div className="flex flex-col gap-5">
-            {vouchers.map((v) => (
+            {vouchers.map((v: voucher) => (
               <VoucherCard key={v.voucher_id} voucher={v} />
             ))}
           </div>

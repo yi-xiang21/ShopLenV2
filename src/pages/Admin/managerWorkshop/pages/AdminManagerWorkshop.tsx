@@ -155,6 +155,7 @@ const fetchWorkshops = useCallback(
         });
       } else {
         const payloadUpdate = { ...values };
+        console.log("Updating workshop with Payload:", payloadUpdate);
         await WorkshopApi.update(editingId, payloadUpdate);
         setNotifyData({
           key: Date.now().toString(),

@@ -2,7 +2,7 @@ import type { FormField } from "@/share/types/form-field";
 import { FormFieldType } from "@/share/types/type-form-field";
 import { DatePicker, Input, Select, TimePicker } from "antd";
 import SelectFetchCustom from "@/share/ComponentCustom/select/SelectFetchCustom";
-import { formatToBE, parseToDayjs } from "./FormatTime";
+import { formatToBE, parseToDayjsObj } from "./FormatTime";
 
 type DynamicFormProps<T extends object> = {
   fields: FormField<T>[];
@@ -221,7 +221,7 @@ const DynamicForm = <T extends object>({
           <TimePicker
             placeholder={field.placeholder}
             // Gọi trực tiếp parseToDayjs, không cần qua formatToBE để check điều kiện
-            value={value ? parseToDayjs(value) : null}
+            value={value ? parseToDayjsObj(value) : null}
             onChange={(time) => onChange(key, formatToBE(time, 'time'))}
             disabled={isFieldDisabled} 
             className="w-full"
@@ -233,7 +233,7 @@ const DynamicForm = <T extends object>({
         return (
           <DatePicker
             placeholder={field.placeholder}
-            value={formatToBE(value, 'date') ? parseToDayjs(value) : null}
+            value={formatToBE(value, 'date') ? parseToDayjsObj(value) : null}
             onChange={(date) => onChange(key, formatToBE(date, 'date'))}
             disabled={isFieldDisabled} 
             className="w-full"

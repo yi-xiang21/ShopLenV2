@@ -11,6 +11,7 @@ interface VoucherCardProps {
 const VoucherCard: React.FC<VoucherCardProps> = ({ voucher: v }) => {
   const navigate = useNavigate();
 
+
   const getDiscountText = (v: voucher) => {
     if (v.discount_type === 'percent') {
       return `Giảm ${Number(v.value)}%`;
@@ -42,7 +43,7 @@ const VoucherCard: React.FC<VoucherCardProps> = ({ voucher: v }) => {
         <div className="absolute -bottom-3 -right-3 w-6 h-6 rounded-full bg-[#f8fafc] shadow-inner"></div>
         
         {/* Perforated line */}
-        <div className="absolute right-0 top-4 bottom-4 w-[2px] bg-white/30 border-r-2 border-dashed border-transparent mix-blend-overlay"></div>
+        <div className="absolute right-0 top-4 bottom-4 w-0.5 bg-white/30 border-r-2 border-dashed border-transparent mix-blend-overlay"></div>
 
         <Ticket size={36} className="mb-2 opacity-90 drop-shadow-md group-hover:scale-110 transition-transform duration-500" strokeWidth={1.5} />
         <span className="text-xs font-black uppercase tracking-widest text-center drop-shadow-sm">
@@ -81,10 +82,10 @@ const VoucherCard: React.FC<VoucherCardProps> = ({ voucher: v }) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1.5 text-slate-500 text-[12px] font-medium bg-orange-50 px-2 py-1 rounded-md text-orange-600 border border-orange-100/50">
+          <div className="flex items-center gap-1.5 text-orange-500-500 text-[12px] font-medium bg-orange-50 px-2 py-1 rounded-md text-orange-600 border border-orange-100/50">
             <CalendarClock size={14} />
             <span>
-              HSD: {parseToDayjs(v.end_date).format("DD/MM/YYYY")}
+              HSD: {parseToDayjs(v.end_date)}
             </span>
           </div>
           <button
