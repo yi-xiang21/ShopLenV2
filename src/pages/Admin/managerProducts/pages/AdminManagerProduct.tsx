@@ -376,13 +376,12 @@ const fetchProducts = useCallback(
             Upload Excel & Ảnh (Folder)
             <input 
               type="file" 
-              /* @ts-ignore */
-              webkitdirectory="true"
-              directory="true"
+              
               multiple
               onChange={handleUploadExcel} 
               title="Import dữ liệu Excel và Ảnh từ Folder"
               className="hidden"
+              {...{ webkitdirectory: "", directory: "" } as any} 
             />
           </label>
           

@@ -44,6 +44,7 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     rules: [
             {
               validator: (formdata: WorkshopVariant) => {
+              if (!formdata.start_date) return true;
               const today = new Date();
               today.setHours(0, 0, 0, 0);
     
@@ -66,9 +67,22 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     placeholder: 'Chọn thời gian bắt đầu',
     rules: [
         {
+            required: true,
+            message: 'Thời gian bắt đầu không được để trống.',
+        },
+        {
             validator: (formdata: WorkshopVariant) => {
-                const startDateTime = new Date(`${formdata.start_date}T${formdata.start_time}`);
-                const endDateTime = new Date(`${formdata.start_date}T${formdata.end_time}`);
+                if (!formdata.start_time || !formdata.end_time) return true;
+                const startTimeStr = String(formdata.start_time).trim();
+                const endTimeStr = String(formdata.end_time).trim();
+                
+                const startDateTime = new Date(`1970-01-01T${startTimeStr}`);
+                const endDateTime = new Date(`1970-01-01T${endTimeStr}`);
+                
+                if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+                    return startTimeStr < endTimeStr;
+                }
+                
                 return startDateTime < endDateTime;
             },
             message: 'Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc.',
@@ -82,9 +96,22 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
     placeholder: 'Chọn thời gian kết thúc',
     rules: [
         {
+            required: true,
+            message: 'Thời gian kết thúc không được để trống.',
+        },
+        {
             validator: (formdata: WorkshopVariant) => {
-                const startDateTime = new Date(`${formdata.start_date}T${formdata.start_time}`);
-                const endDateTime = new Date(`${formdata.start_date}T${formdata.end_time}`);
+                if (!formdata.start_time || !formdata.end_time) return true;
+                const startTimeStr = String(formdata.start_time).trim();
+                const endTimeStr = String(formdata.end_time).trim();
+                
+                const startDateTime = new Date(`1970-01-01T${startTimeStr}`);
+                const endDateTime = new Date(`1970-01-01T${endTimeStr}`);
+                
+                if (isNaN(startDateTime.getTime()) || isNaN(endDateTime.getTime())) {
+                    return startTimeStr < endTimeStr;
+                }
+                
                 return startDateTime < endDateTime;
             },
             message: 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu.',
@@ -103,16 +130,7 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
         { label: 'Hủy', value: 'cancelled' },
     ],
     disabled:true,
-    // rules : [
-    //     {
-    //         required: true,
-    //         validator: (formdata:WorkshopVariant) => {
-    //             return !!formdata.status;
-    //         }
-    //         ,
-    //         message: 'Trạng thái là bắt buộc.',
-    //     }
-    // ]
+
 },
 {
     key : 'session_name',

@@ -220,7 +220,6 @@ const DynamicForm = <T extends object>({
         return (
           <TimePicker
             placeholder={field.placeholder}
-            // Gọi trực tiếp parseToDayjs, không cần qua formatToBE để check điều kiện
             value={value ? parseToDayjsObj(value) : null}
             onChange={(time) => onChange(key, formatToBE(time, 'time'))}
             disabled={isFieldDisabled} 

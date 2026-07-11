@@ -86,49 +86,72 @@ const FormModal = <T extends object>({
     });
   };
 
-  const handleSubmit = () => {
-    // 1. Khởi tạo mảng fields mặc định để validate
-    let fieldsToValidate = fields;
-    let childFieldsToValidate = activeChildFields;
+//   const handleSubmit = () => {
 
-    // 2. Xử lý riêng cho chế độ EDIT
-    if (mode === FormModalMode.EDIT) {
-      // Khai báo các type (hoặc name) của field thời gian mà bạn muốn bỏ qua
-      // NOTE: Bạn hãy điều chỉnh mảng này khớp với định nghĩa trong FormField của bạn
-      const timeFieldTypes = ['time', 'date', 'datetime', 'datePicker', 'timePicker'];
+//     let fieldsToValidate = fields;
+//     let childFieldsToValidate = activeChildFields;
 
-      // Lọc bỏ các field thời gian khỏi danh sách validate của cha
-      fieldsToValidate = fields.filter(
-        (field) => !timeFieldTypes.includes(field.type as string)
-      );
 
-      // Lọc bỏ các field thời gian khỏi danh sách validate của con (nếu có)
-      if (hasChildren && activeChildFields) {
-        childFieldsToValidate = activeChildFields.filter(
-          (field) => !timeFieldTypes.includes(field.type as string)
-        );
-      }
-    }
+//     if (mode === FormModalMode.EDIT) {
+    
+//       const timeFieldTypes = ['time', 'date', 'datetime', 'datePicker', 'timePicker'];
 
-    // 3. Truyền danh sách fields đã được lọc vào hàm validate
-    const parentErrors = validateForm(formData, fieldsToValidate);
 
-    const childErrors = hasChildren 
-      ? validateChildren(formData[activeChildKey] || [], childFieldsToValidate, activeChildKey)
-      : {};
+//       fieldsToValidate = fields.filter(
+//         (field) => !timeFieldTypes.includes(field.type as string)
+//       );
 
-    const validationErrors = {
-      ...parentErrors,
-      ...childErrors,
-    };
 
-    if (Object.keys(validationErrors).length > 0) {
-      setError(validationErrors);
-      return;
-    }
+//       if (hasChildren && activeChildFields) {
+//         childFieldsToValidate = activeChildFields.filter(
+//           (field) => !timeFieldTypes.includes(field.type as string)
+//         );
+//       }
+//     }
 
-    setError({});
-    onSubmit?.(formData);
+
+//     const parentErrors = validateForm(formData, fieldsToValidate);
+
+//     const childErrors = hasChildren 
+//       ? validateChildren(formData[activeChildKey] || [], childFieldsToValidate, activeChildKey)
+//       : {};
+
+//     const validationErrors = {
+//       ...parentErrors,
+//       ...childErrors,
+//     };
+
+//     if (Object.keys(validationErrors).length > 0) {
+//       setError(validationErrors);
+//       return;
+//     }
+
+//     setError({});
+//     onSubmit?.(formData);
+// };
+
+const handleSubmit = () => {
+  // Validate toàn bộ Parent
+  const parentErrors = validateForm(formData, fields);
+
+  // Validate toàn bộ Children
+  const childErrors = hasChildren 
+    ? validateChildren(formData[activeChildKey] || [], activeChildFields, activeChildKey)
+    : {};
+
+  // Gộp lỗi
+  const validationErrors = {
+    ...parentErrors,
+    ...childErrors,
+  };
+
+  if (Object.keys(validationErrors).length > 0) {
+    setError(validationErrors);
+    return;
+  }
+
+  setError({});
+  onSubmit?.(formData);
 };
 
   return (

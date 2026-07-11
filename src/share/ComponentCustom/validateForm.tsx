@@ -9,10 +9,10 @@ const validateForm = <
 
   fields.forEach((field) => {
     const value = values[field.key];
-    const isRuleDisabled = field.rules?.map((rule) => rule.disabled);
-    console.log(isRuleDisabled);
 
     field.rules?.forEach((rule) => {
+      const isRuleDisabled = typeof rule.disabled === 'function' ? rule.disabled(values) : rule.disabled;
+
       if(
         rule.required &&
         !isRuleDisabled &&
