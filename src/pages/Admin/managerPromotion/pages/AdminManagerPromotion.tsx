@@ -6,7 +6,7 @@ import { useFormModal } from "@/share/hook/useFormModal";
 import Notification from "@/share/ComponentCustom/Notification/Notification";
 import { promotionApi } from "@/pages/Admin/managerPromotion/api/promotion_api";
 import { filterPromotions } from "@/pages/Admin/managerPromotion/constants/promotionFilter";
-import { promotionFields } from "@/pages/Admin/managerPromotion/constants/promotionFields";
+import { getPromotionFields } from "@/pages/Admin/managerPromotion/constants/promotionFields";
 import {
   FormModalMode,
   type FormModalModeType,
@@ -316,7 +316,7 @@ const AdminManagerPromotion = () => {
         loading={loading}
         mode={modalMode}
         title={modalTitle}
-        fields={getPromotionFieldsByMode(promotionFields, modalMode)}
+        fields={getPromotionFieldsByMode(getPromotionFields(selectedPromotion), modalMode)}
         initialValues={selectedPromotion || defaultFormValues}
         onSubmit={handleSubmitForm}
         hasChildren={true}

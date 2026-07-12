@@ -5,7 +5,7 @@ import type { promotion } from '@/pages/Admin/managerPromotion/type/promotion';
 
 
 
-export const promotionFields: FormField<promotion>[] = [
+export const getPromotionFields = (initialValues?: promotion | null): FormField<promotion>[] => [
   {
     key: 'title',
     label: 'Tiêu đề',
@@ -54,6 +54,9 @@ export const promotionFields: FormField<promotion>[] = [
       rules: [
         {
           validator: (formdata: promotion) => {
+          if (initialValues?.promotion_id && formdata.start_date === initialValues.start_date) {
+            return true;
+          }
           const today = new Date();
           today.setHours(0, 0, 0, 0);
 

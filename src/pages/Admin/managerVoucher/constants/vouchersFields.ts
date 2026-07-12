@@ -4,7 +4,7 @@ import type { voucher } from '../type/vouchers';
 
 
 
-export const voucherFields: FormField<voucher>[] = [
+export const getVoucherFields = (initialValues?: voucher | null): FormField<voucher>[] => [
   {
     key: 'voucher_id',
     label: 'ID voucher',
@@ -150,6 +150,9 @@ export const voucherFields: FormField<voucher>[] = [
       {
         required: true,
         validator: (formdata:voucher) => {
+          if (initialValues?.voucher_id && formdata.start_date === initialValues.start_date) {
+            return true;
+          }
           const today = new Date();
           today.setHours(0, 0, 0, 0);
 

@@ -4,7 +4,7 @@ import type { TableProps } from "antd/es/table";
 
 import { useFormModal } from "@/share/hook/useFormModal";
 import Notification from "@/share/ComponentCustom/Notification/Notification";
-import {voucherFields} from "@/pages/Admin/managerVoucher/constants/vouchersFields";
+import {getVoucherFields} from "@/pages/Admin/managerVoucher/constants/vouchersFields";
 import {filterVouchers} from "@/pages/Admin/managerVoucher/constants/vouchersFilter";
 import { vouchersApi } from "@/pages/Admin/managerVoucher/api/vouchers_api";
 import {
@@ -50,7 +50,7 @@ const AdminManagerVoucher = () => {
     open: isModalOpen,
     mode: modalMode,
     loading,
-    selectedRecord: selecteVoucher,
+    selectedRecord: selectedVoucher,
     currentPage,
     pageSize,
     total,
@@ -318,8 +318,8 @@ const AdminManagerVoucher = () => {
         loading={loading}
         mode={modalMode}
         title={modalTitle}
-        fields={getVoucherFieldsByMode(voucherFields, modalMode)}
-        initialValues={selecteVoucher || defaultFormValues}
+        fields={getVoucherFieldsByMode(getVoucherFields(selectedVoucher), modalMode)}
+        initialValues={selectedVoucher || defaultFormValues}
         onSubmit={handleSubmitForm}
         hasChildren={false}
       />
