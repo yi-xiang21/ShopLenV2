@@ -82,9 +82,10 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
       {dataList.length > 0 ? (
         <Tabs
           type="card"
-          items={dataList.map((item: any, index: number) => ({
-           
-            key: item.id?.toString() || index.toString(),
+          items={dataList.map((item: any, index: number) => {
+            const pk = item.id ?? item.variant_id ?? item.product_id ?? item.reward_id;
+            return {
+            key: pk != null ? `saved-${pk}` : `new-${index}`,
             label: `${tabNamePrefix} ${index + 1}`,
             children: (
               <div className="p-4 bg-white border border-t-0 border-slate-200 flex flex-col gap-4">
@@ -119,7 +120,8 @@ const ChildTabs: React.FC<ChildTabsProps> = ({
                 )}
               </div>
             ),
-          }))}
+          };
+          })}
         />
       ) : (
         <p className="text-gray-400 italic text-sm"> Bấm nút thêm để bắt đầu.</p>
