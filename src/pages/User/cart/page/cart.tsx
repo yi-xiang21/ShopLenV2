@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegTrashAlt } from "react-icons/fa";
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
 import Notification from "@/share/ComponentCustom/Notification/Notification";
+import { Popconfirm } from "antd";
 
 const Cart = () => {
   const dispatch = useAppDispatch();
@@ -184,13 +185,20 @@ const Cart = () => {
                     </button>
                   </div>
 
-                  <button
-                    className="text-gray-300 transition-colors hover:bg-amber-50 rounded-full p-2 hover:cursor-pointer "
-                    onClick={() => handleDeleteItem(item.variant_id || 0)}
-                    title="Xóa sản phẩm"
+                  <Popconfirm
+                    title="Xác nhận xóa"
+                    description="Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?"
+                    onConfirm={() => handleDeleteItem(item.variant_id || 0)}
+                    okText="Đồng ý"
+                    cancelText="Hủy"
                   >
-                    <FaRegTrashAlt />
-                  </button>
+                    <button
+                      className="text-gray-300 transition-colors hover:bg-amber-50 rounded-full p-2 hover:cursor-pointer "
+                      title="Xóa sản phẩm"
+                    >
+                      <FaRegTrashAlt />
+                    </button>
+                  </Popconfirm>
                 </div>
               </div>
             ))

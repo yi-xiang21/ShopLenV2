@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import type { TableProps } from "antd/es/table";
 
 import { useFormModal } from "@/share/hook/useFormModal";
@@ -182,7 +182,6 @@ const AdminManagerPromotion = () => {
   };
 
   const handleDeletePromotion = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa promotion này?")) {
       try {
         setLoading(true);
         await promotionApi.delete(id);
@@ -209,7 +208,6 @@ const AdminManagerPromotion = () => {
       } finally {
         setLoading(false);
       }
-    }
   };
 
 
@@ -244,13 +242,17 @@ const AdminManagerPromotion = () => {
           >
             Update
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDeletePromotion(record.promotion_id as number)}
+          <Popconfirm
+            title="Xác nhận xóa"
+            description="Bạn có chắc chắn muốn xóa promotion này?"
+            onConfirm={() => handleDeletePromotion(record.promotion_id as number)}
+            okText="Đồng ý"
+            cancelText="Hủy"
           >
-            Delete
-          </Button>
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

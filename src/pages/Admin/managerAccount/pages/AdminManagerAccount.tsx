@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import type { TableProps } from "antd/es/table";
 
 import { filterAccount } from "@/pages/Admin/managerAccount/constants/accountFilter";
@@ -187,7 +187,6 @@ const AdminManagerAccount = () => {
   };
 
   const handleDeleteAccount = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa tài khoản này?")) {
       try {
         setLoading(true);
         await AccountApi.delete(id);
@@ -214,7 +213,6 @@ const AdminManagerAccount = () => {
       } finally {
         setLoading(false);
       }
-    }
   };
 
 
@@ -252,13 +250,17 @@ const AdminManagerAccount = () => {
           >
             Update
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDeleteAccount(record.user_id as number)}
+          <Popconfirm
+            title="Xác nhận xóa"
+            description="Bạn có chắc chắn muốn xóa tài khoản này?"
+            onConfirm={() => handleDeleteAccount(record.user_id as number)}
+            okText="Đồng ý"
+            cancelText="Hủy"
           >
-            Delete
-          </Button>
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

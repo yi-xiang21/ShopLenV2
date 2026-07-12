@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import type { TableProps } from "antd/es/table";
 import type {
   Category,
@@ -194,7 +194,6 @@ const AdminManagerCatelogries = () => {
   };
 
   const handleDeleteCategory = async (id: string) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa danh mục này?")) {
       try {
         setLoading(true);
         await categoryApi.delete(id);
@@ -219,7 +218,6 @@ const AdminManagerCatelogries = () => {
       } finally {
         setLoading(false);
       }
-    }
   };
 
   const handleFilter = (newFilters: Record<string, any>) => {
@@ -269,13 +267,17 @@ const AdminManagerCatelogries = () => {
           >
             Update
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDeleteCategory(record.id)}
+          <Popconfirm
+            title="Xác nhận xóa"
+            description="Bạn có chắc chắn muốn xóa danh mục này?"
+            onConfirm={() => handleDeleteCategory(record.id)}
+            okText="Đồng ý"
+            cancelText="Hủy"
           >
-            Delete
-          </Button>
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

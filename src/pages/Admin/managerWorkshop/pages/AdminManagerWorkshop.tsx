@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import type { TableProps } from "antd/es/table";
 
 
@@ -18,7 +18,7 @@ import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
 import type { Workshop } from "@/pages/Admin/managerWorkshop/types/workshop";
 import {getWorkshopFieldsByMode} from "@/pages/Admin/managerWorkshop/constants/sortField";
 import {workshopFields} from "@/pages/Admin/managerWorkshop/constants/workshopFields";
-import {workshopChildrenFields} from "@/pages/Admin/managerWorkshop/constants/workshopChilrenFields";
+import {getWorkshopChildrenFields} from "@/pages/Admin/managerWorkshop/constants/workshopChilrenFields";
 import {WorkshopApi} from "@/pages/Admin/managerWorkshop/api/workShop_api";
 
 import { filterWorkshop } from "@/pages/Admin/managerWorkshop/constants/workshopFilter";
@@ -192,7 +192,6 @@ const fetchWorkshops = useCallback(
   };
 
   const handleDeleteWorkshop = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa workshop này?")) {
       try {
         setLoading(true);
         await WorkshopApi.delete(id);
@@ -219,7 +218,6 @@ const fetchWorkshops = useCallback(
       } finally {
         setLoading(false);
       }
-    }
   };
 
 
@@ -259,13 +257,17 @@ const fetchWorkshops = useCallback(
           >
             Update
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDeleteWorkshop(record.workshop_id as number)}
+          <Popconfirm
+            title="Xác nhận xóa"
+            description="Bạn có chắc chắn muốn xóa workshop này?"
+            onConfirm={() => handleDeleteWorkshop(record.workshop_id as number)}
+            okText="Đồng ý"
+            cancelText="Hủy"
           >
-            Delete
-          </Button>
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },
@@ -326,7 +328,7 @@ const fetchWorkshops = useCallback(
         mode={modalMode}
         title={modalTitle}
         fields={getWorkshopFieldsByMode(workshopFields, modalMode)}
-        childFields={getWorkshopFieldsByMode(workshopChildrenFields, modalMode)}
+        childFields={getWorkshopFieldsByMode(getWorkshopChildrenFields(selectedWorkshop), modalMode)}
         initialValues={selectedWorkshop || defaultFormValues}
         onSubmit={handleSubmitForm}
         hasChildren={true}

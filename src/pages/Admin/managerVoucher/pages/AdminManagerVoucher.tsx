@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import type { TableProps } from "antd/es/table";
 
 import { useFormModal } from "@/share/hook/useFormModal";
@@ -189,7 +189,6 @@ const AdminManagerVoucher = () => {
   };
 
   const handleDeleteVoucher = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa voucher này?")) {
       try {
         setLoading(true);
         await vouchersApi.delete(id);
@@ -216,7 +215,6 @@ const AdminManagerVoucher = () => {
       } finally {
         setLoading(false);
       }
-    }
   };
 
 
@@ -246,13 +244,17 @@ const AdminManagerVoucher = () => {
           >
             Update
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDeleteVoucher(record.voucher_id as number)}
+          <Popconfirm
+            title="Xác nhận xóa"
+            description="Bạn có chắc chắn muốn xóa voucher này?"
+            onConfirm={() => handleDeleteVoucher(record.voucher_id as number)}
+            okText="Đồng ý"
+            cancelText="Hủy"
           >
-            Delete
-          </Button>
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

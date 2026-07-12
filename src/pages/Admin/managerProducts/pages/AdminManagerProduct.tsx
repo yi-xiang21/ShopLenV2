@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import type { TableProps } from "antd/es/table";
 
 import { productFields } from "@/pages/Admin/managerProducts/constants/ProductsFields";
@@ -191,7 +191,6 @@ const fetchProducts = useCallback(
   };
 
   const handleDeleteProduct = async (id: number) => {
-    if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
       try {
         setLoading(true);
         await ProductApi.delete(id);
@@ -218,7 +217,6 @@ const fetchProducts = useCallback(
       } finally {
         setLoading(false);
       }
-    }
   };
 
 
@@ -322,13 +320,17 @@ const fetchProducts = useCallback(
           >
             Update
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDeleteProduct(record.product_id as number)}
+          <Popconfirm
+            title="Xác nhận xóa"
+            description="Bạn có chắc chắn muốn xóa sản phẩm này?"
+            onConfirm={() => handleDeleteProduct(record.product_id as number)}
+            okText="Đồng ý"
+            cancelText="Hủy"
           >
-            Delete
-          </Button>
+            <Button type="primary" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

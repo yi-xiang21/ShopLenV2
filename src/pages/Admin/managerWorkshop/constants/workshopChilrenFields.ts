@@ -1,7 +1,7 @@
 import { FormFieldType } from '@/share/types/type-form-field';
 import type { FormField } from '@/share/types/form-field';
-import type { WorkshopVariant } from '@/pages/Admin/managerWorkshop/types/workshop';
-export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
+import type { WorkshopVariant, Workshop } from '@/pages/Admin/managerWorkshop/types/workshop';
+export const getWorkshopChildrenFields = (initialValues?: Workshop | null): FormField<WorkshopVariant>[] => [
 {
     key: 'variant_id',
     label: 'ID biến thể',
@@ -45,6 +45,14 @@ export const workshopChildrenFields: FormField<WorkshopVariant>[] = [
             {
               validator: (formdata: WorkshopVariant) => {
               if (!formdata.start_date) return true;
+              
+              if (initialValues?.sessions) {
+                  const originalVariant = initialValues.sessions.find((s: any) => s.variant_id === formdata.variant_id);
+                  if (originalVariant && formdata.start_date === originalVariant.start_date) {
+                      return true;
+                  }
+              }
+
               const today = new Date();
               today.setHours(0, 0, 0, 0);
     

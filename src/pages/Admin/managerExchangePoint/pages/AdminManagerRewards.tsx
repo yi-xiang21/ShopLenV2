@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Popconfirm } from "antd";
 import type { TableProps } from "antd/es/table";
 
 import { useFormModal } from "@/share/hook/useFormModal";
@@ -203,13 +203,17 @@ const AdminManagerRewards = () => {
           >
             Cập nhật trạng thái
           </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDelete(record.reward_id as number)}
+          <Popconfirm
+            title="Xác nhận xóa"
+            description="Bạn có chắc chắn muốn xóa cấu hình đổi điểm này?"
+            onConfirm={() => handleDelete(record.reward_id as number)}
+            okText="Đồng ý"
+            cancelText="Hủy"
           >
-            Xóa
-          </Button>
+            <Button type="primary" danger>
+              Xóa
+            </Button>
+          </Popconfirm>
         </div>
       ),
     },

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import type { WishlistItem } from "../types/wishlist";
 import Lottie from "lottie-react";
 import catAnimation from '@/assets/animation/cat with letter.json';
+import { Popconfirm } from "antd";
 
 
 const Wishlist = () => {
@@ -115,13 +116,20 @@ const handleDetail = (item:WishlistItem) => {
                   {/* Actions */}
                   <div className="flex items-center gap-3 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-4 sm:pt-0 border-gray-50 mt-2 sm:mt-0">
                     {/* Nút Xóa */}
-                    <button
-                      onClick={() => removeFromWishlist(item.product_id)}
-                      className="group flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-400 hover:text-rose-500 hover:bg-rose-50 rounded-full transition-all duration-200 focus:outline-none"
+                    <Popconfirm
+                      title="Xác nhận xóa"
+                      description="Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?"
+                      onConfirm={() => removeFromWishlist(item.product_id)}
+                      okText="Đồng ý"
+                      cancelText="Hủy"
                     >
-                      <FaTrashAlt className="h-4 w-4 transition-transform group-hover:-rotate-12"/>
-                      <span className="hidden sm:inline">Xóa</span>
-                    </button>
+                      <button
+                        className="group flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-400 hover:text-rose-500 hover:bg-rose-50 rounded-full transition-all duration-200 focus:outline-none"
+                      >
+                        <FaTrashAlt className="h-4 w-4 transition-transform group-hover:-rotate-12"/>
+                        <span className="hidden sm:inline">Xóa</span>
+                      </button>
+                    </Popconfirm>
 
                     {/* Nút Xem chi tiết */}
                     <button 
