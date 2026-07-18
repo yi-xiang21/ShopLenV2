@@ -64,7 +64,7 @@ const Detail = () => {
     if (id) {
       void fetchProductData();
     }
-  }, [id]); // Giữ lại id, xóa stock và activeVariant khỏi deps để tránh loop
+  }, [id]); 
 
   useEffect(() => {
     if (wishlistItems && product?.product_id) {
@@ -78,7 +78,7 @@ const Detail = () => {
   const handleSelectVariant = (variant: Variant) => {
     setActiveVariant(variant);
     setStock(variant.stock_quantity || 0);
-    setQuantity(1); // Reset số lượng khi đổi biến thể
+    setQuantity(1); 
 
     if (variant.images && variant.images.length > 0) {
       const firstImageUrl = variant.images[0].image_url;
@@ -161,10 +161,10 @@ const Detail = () => {
         />
       )}
       
-      {/* Main Product Card */}
+      
       <div className="w-full max-w-7xl bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:flex-row">
         
-        {/* ================= LEFT COLUMN: IMAGES ================= */}
+        
         <div className="w-full lg:w-1/2 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col">
           {/* Main Image */}
           <div className="overflow-hidden rounded-2xl mb-4 relative aspect-square bg-slate-100 flex items-center justify-center">
@@ -178,7 +178,7 @@ const Detail = () => {
               <span className="text-slate-400">Chưa có hình ảnh</span>
             )}
             
-            {/* Discount Badge */}
+          
             {activeVariant?.discount && (
                <div className="absolute top-4 left-4 z-10 bg-rose-500 text-white font-bold px-3 py-1.5 rounded-full text-xs shadow-md">
                  Giảm {activeVariant.discount.type === 'percent' ? `${activeVariant.discount.value}%` : `${Number(activeVariant.discount.value).toLocaleString('vi-VN')}đ`}
@@ -186,7 +186,7 @@ const Detail = () => {
             )}
           </div>
 
-          {/* Thumbnail Slider */}
+        
           {images.length > 0 && (
             <div className="relative mt-auto">
               <button className="thumb-prev absolute left-0 top-1/2 z-10 -translate-y-1/2 -ml-3 rounded-full bg-white p-2 shadow-md border border-slate-100 hover:bg-slate-50 text-slate-600">
@@ -224,7 +224,7 @@ const Detail = () => {
         
         <div className="w-full lg:w-1/2 p-6 lg:p-10 relative flex flex-col">
           
-          {/* Nút Yêu thích */}
+        
           <button
             onClick={handleToggleWishlist}
             className="absolute top-6 right-6 lg:top-10 lg:right-10 z-20 w-12 h-12 rounded-full shadow-sm flex items-center justify-center transition-all cursor-pointer bg-slate-50 border border-slate-100 hover:bg-rose-50 hover:border-rose-100"
@@ -233,7 +233,7 @@ const Detail = () => {
             <FaHeart className={`transition-colors text-2xl ${isFavorite ? "text-rose-500" : "text-slate-300"}`} />
           </button>
 
-          {/* Tiêu đề & Danh mục */}
+      
           <div className="pr-16">
             <div className="flex items-center gap-2 mb-3">
               <span className="bg-violet-100 text-violet-700 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider">
@@ -248,7 +248,7 @@ const Detail = () => {
             </h1>
           </div>
 
-          {/* Giá tiền */}
+        
            <div className="mb-8 p-5 bg-slate-50 rounded-2xl border border-slate-100">
             <h3 className="text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wide">Chi phí tham gia</h3>
             {activeVariant?.discount ? (
@@ -274,7 +274,7 @@ const Detail = () => {
             )}
           </div>
 
-          {/* Phân loại sản phẩm (Màu sắc & Kích thước) */}
+         
           <div className="mb-8">
             <h3 className="mb-3 font-semibold text-slate-800 flex items-center gap-2">
               <Box size={18} className="text-violet-500"/>
@@ -305,7 +305,6 @@ const Detail = () => {
             </div>
           </div>
 
-          {/* Chọn số lượng & Hành động */}
           <div className="mt-auto border-t border-slate-100 pt-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-slate-800">Số lượng</h3>
@@ -315,7 +314,7 @@ const Detail = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              {/* Bộ đếm */}
+            
               <div className="flex items-center bg-slate-50 border border-slate-200 rounded-2xl h-14 w-full sm:w-auto p-1">
                 <button
                   onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
@@ -375,7 +374,7 @@ const Detail = () => {
           </div>
         </div>
 
-        {/* Related Products */}
+      
         {relatedProducts.length > 0 && (
           <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
             <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">

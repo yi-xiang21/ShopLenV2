@@ -86,60 +86,18 @@ const FormModal = <T extends object>({
     });
   };
 
-//   const handleSubmit = () => {
 
-//     let fieldsToValidate = fields;
-//     let childFieldsToValidate = activeChildFields;
-
-
-//     if (mode === FormModalMode.EDIT) {
-    
-//       const timeFieldTypes = ['time', 'date', 'datetime', 'datePicker', 'timePicker'];
-
-
-//       fieldsToValidate = fields.filter(
-//         (field) => !timeFieldTypes.includes(field.type as string)
-//       );
-
-
-//       if (hasChildren && activeChildFields) {
-//         childFieldsToValidate = activeChildFields.filter(
-//           (field) => !timeFieldTypes.includes(field.type as string)
-//         );
-//       }
-//     }
-
-
-//     const parentErrors = validateForm(formData, fieldsToValidate);
-
-//     const childErrors = hasChildren 
-//       ? validateChildren(formData[activeChildKey] || [], childFieldsToValidate, activeChildKey)
-//       : {};
-
-//     const validationErrors = {
-//       ...parentErrors,
-//       ...childErrors,
-//     };
-
-//     if (Object.keys(validationErrors).length > 0) {
-//       setError(validationErrors);
-//       return;
-//     }
-
-//     setError({});
-//     onSubmit?.(formData);
-// };
 
 const handleSubmit = () => {
-  // Validate toàn bộ Parent
+ 
   const parentErrors = validateForm(formData, fields);
 
-  // Validate toàn bộ Children
+  
   const childErrors = hasChildren 
     ? validateChildren(formData[activeChildKey] || [], activeChildFields, activeChildKey)
     : {};
 
-  // Gộp lỗi
+ 
   const validationErrors = {
     ...parentErrors,
     ...childErrors,

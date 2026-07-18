@@ -75,10 +75,7 @@ const Shop = () => {
           response = await ProductApi.filter(dataToSend);
 
         } else {
-          response = await ProductApi.getAll(page, limit);
-          response.data.data.products = response.data.data.products.filter(
-            (product: Product) => product.product_status === "active",
-          );
+          response = await ProductApi.filter({ status: "active", page, limit });
         }
         
         setProducts(response.data?.data?.products ?? []);
@@ -97,16 +94,16 @@ const Shop = () => {
   }, [currentPage, pageSize, filters, fetchProducts, categoryId]);
 
   const handleFilterSubmit = async (data: any) => {
-    // Tạo bản sao của URL hiện tại
+    
     const newParams = new URLSearchParams(searchParams);
 
     if (data.category_id) {
       newParams.set("categoryId", data.category_id);
     } else {
-      newParams.delete("categoryId"); // Chỉ xóa mỗi categoryId nếu user bấm Reset
+      newParams.delete("categoryId");
     }
     
-    setSearchParams(newParams); // Cập nhật URL một cách an toàn
+    setSearchParams(newParams); 
 
     setFilters({
       min_price: data.min_price,
@@ -191,9 +188,7 @@ const Shop = () => {
               </div>
             )}
           </div>
-          {/* Kết thúc Grid sản phẩm */}
-
-          {/* CHÚ Ý: Đã đưa khối Phân Trang ra ngoài Grid 3 cột */}
+         
           {products.length > 0 && (
             <div className="flex items-center justify-center w-full py-6">
               <button
