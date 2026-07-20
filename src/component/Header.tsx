@@ -39,7 +39,8 @@ const Header = () => {
         {
           keyword: keyword.trim(),
           page: 1,
-          limit: 20
+          limit: 20,
+          status: "active",
         }
         ProductApi.filter(res)
           .then((response) => {

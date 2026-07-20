@@ -38,8 +38,19 @@ const Detail = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
+        
         const response = await ProductApi.getById(id);
         const productData = response.data?.data.product || null;
+        console.log("Chi tiết sản phẩm:", productData);
+        if(productData.product_status !== "active"){
+          setNotifyData({
+            key: Date.now().toString(),
+            type: "warning",
+            title: "Cảnh báo",
+            message: "Sản phẩm này hiện không khả dụng.",
+          });
+          return;
+        }
         setProduct(productData);
 
         if (productData && productData.category_id) {
