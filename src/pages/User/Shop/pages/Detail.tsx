@@ -382,7 +382,7 @@ const Detail = () => {
             </h2>
             <div className="flex w-full items-stretch justify-start gap-6 overflow-x-auto pb-4 no-scrollbar snap-x">
               {relatedProducts.map((relatedProd) => (
-                <div key={relatedProd.product_id} className="shrink-0 w-[280px] snap-start">
+                <div key={relatedProd.product_id} className="shrink-0 w-70 snap-start">
                   <CardProducts data={relatedProd} />
                 </div>
               ))}

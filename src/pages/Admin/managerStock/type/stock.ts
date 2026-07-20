@@ -24,7 +24,6 @@ export interface StockHistoryItem {
   created_at : string;
   history_id : string;
   note : string;
-  performed_by : string;
   quantity_change :number;
   reference_code :string | null;
   new_stock : number;

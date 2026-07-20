@@ -130,9 +130,8 @@ const fetchStock = useCallback(
         setHistoryLoading(true);
         const response = await stockApi.getHistory(variantId, page, limit);
         const data = response.data?.data;
-
-
         setStockHistory(data?.history ?? []);
+        
         setHistoryTotal(data?.pagination?.total_items ?? 0);
       } catch (error) {
         console.error("Lỗi khi tải lịch sử tồn kho:", error);
@@ -220,7 +219,7 @@ const fetchStock = useCallback(
         });
       } finally {
         setLoading(false);
-        e.target.value = ''; // Đặt lại input để có thể upload lại cùng 1 file nếu cần
+        e.target.value = ''; 
       }
     }
   };
@@ -260,7 +259,6 @@ const fetchStock = useCallback(
     {title: 'Transaction Type', dataIndex: 'transaction_type', key: 'transaction_type'},
     {title: 'Quantity Changed', dataIndex: 'quantity_change', key: 'quantity_change'},
     {title: 'New Stock', dataIndex: 'new_stock', key: 'new_stock'},
-    {title: 'Performed By', dataIndex: 'performed_by', key: 'performed_by'},
     {title: 'Note', dataIndex: 'note', key: 'note'},
     {title: 'Reference Code', dataIndex: 'reference_code', key: 'reference_code'},
   ];
