@@ -140,7 +140,10 @@ const AdminManagerVoucher = () => {
       if (modalMode === FormModalMode.CREATE) {
         const payloadCreate = { ...values };
 
-        
+        if(payloadCreate.discount_type === 'free_ship') {
+          payloadCreate.value = 32000;
+          payloadCreate.max_discount = 0;
+        }
         await vouchersApi.create(payloadCreate);
         setNotifyData({
           key: Date.now().toString(),

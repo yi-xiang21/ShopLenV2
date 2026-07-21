@@ -3,7 +3,7 @@ import { BillingApi } from "@/pages/User/Billing/api/billing_api";
 import { useEffect, useState } from "react";
 import type { orderWorkShop, orderWorkShopitems } from "@/pages/User/Workshop/types/order_workshop";
 import { useAppSelector } from "@/app/redux/hooks";
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 import { CiShoppingBasket } from "react-icons/ci";
 import { vouchersApi } from "@/pages/Admin/managerVoucher/api/vouchers_api";
 import type { voucher } from "@/pages/Admin/managerVoucher/type/vouchers";
@@ -63,7 +63,10 @@ const BillingWorkShopPage = () => {
     const fetchVouchers = async () => {
       try {
         const response = await vouchersApi.getMyVouchers();
-        setDiscountCode(response.data.data.vouchers);
+        const voucher = response.data.data.vouchers.filter((voucher: voucher) => {
+          return voucher.discount_type !== "free_ship"
+        });
+        setDiscountCode(voucher);
       } catch (error) {
         console.error("Error fetching vouchers:", error);
       }
@@ -80,7 +83,7 @@ const BillingWorkShopPage = () => {
     };
   }, []);
 
-  // Tính toán dữ liệu đơn hàng dựa trên product thay vì cart
+ 
   const orderQty = Number(quantity) || 1;
   const firstSession = product?.sessions?.[0];
   const unitPrice = Number(firstSession?.final_price || firstSession?.price || 0);
@@ -202,8 +205,9 @@ const BillingWorkShopPage = () => {
   };
 
   const handleApply = async () => {
-    if (selectedVoucherId === null) {
-      console.warn("Chưa chọn voucher");
+     if (selectedVoucherId === null) {
+      setAppliedVoucher(null);
+      setIsModalVoucherOpen(false);
       return; 
     }
 
@@ -224,7 +228,8 @@ const BillingWorkShopPage = () => {
 
     const payload = { 
       code: selectedVoucher?.code || "", 
-      order_value: subtotal 
+      order_value: subtotal ,
+      shipping_method_id: null,
     };
 
     try {

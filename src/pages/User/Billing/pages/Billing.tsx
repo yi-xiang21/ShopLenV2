@@ -25,6 +25,7 @@ const BillingPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { items: cartItems } = useAppSelector((state) => state.Cart);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVoucherOpen, setIsModalVoucherOpen] = useState(false);
   const [selectedVoucherId, setSelectedVoucherId] = useState<number | null>(null);
@@ -42,11 +43,11 @@ const BillingPage = () => {
   const [methodPayment, setMethodPayment] = useState<string>("COD");
   const [discountCode, setDiscountCode] = useState<voucher[]>([]);
   const [notifyData, setNotifyData] = useState<{
-      key: string;
-      type: NotificationType;
-      title: string;
-      message: string;
-    } | null>(null);
+    key: string;
+    type: NotificationType;
+    title: string;
+    message: string;
+  } | null>(null);
   const [formData, setFormData] = useState<Billing>({
     phuong_xa_id: 0,
     dia_chi_giao_hang: "",
@@ -56,14 +57,13 @@ const BillingPage = () => {
     phuong_thuc_thanh_toan: "",
     shipping_method_id: "",
   });
+
   useEffect(() => {
     const fetchShippingMethods = async () => {
       try {
         const response = await BillingApi.getShippingMethods();
         const methods = response.data.data;
-
         setShippingMethods(methods);
-
         if (methods && methods.length > 0) {
           setSelectedMethod(methods[0]);
         }
@@ -82,7 +82,6 @@ const BillingPage = () => {
     const fetchVouchers = async () => {
       try {
         const response = await vouchersApi.getMyVouchers();
-        console.log(response.data.data.vouchers)
         setDiscountCode(response.data.data.vouchers);
       } catch (error) {
         console.error("Error fetching vouchers:", error);
@@ -91,6 +90,7 @@ const BillingPage = () => {
     fetchLocations();
     fetchVouchers();
     fetchShippingMethods();
+    
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
     };
@@ -100,6 +100,7 @@ const BillingPage = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
   useEffect(() => {
     const fetchWards = async () => {
       try {
@@ -113,12 +114,11 @@ const BillingPage = () => {
     };
     fetchWards();
   }, [selectedCity]);
-  const showModalUser = () => {
-    setIsModalOpen(true);
-  };
-  const showModalVoucher = () => {
-    setIsModalVoucherOpen(true);
-  };
+
+  const showModalUser = () => setIsModalOpen(true);
+  const showModalVoucher = () => setIsModalVoucherOpen(true);
+  const handleCancelUser = () => setIsModalOpen(false);
+  const handleCancelVoucher = () => setIsModalVoucherOpen(false);
 
   const handleOkUser = () => {
     if (!firstName || !lastName) {
@@ -141,14 +141,14 @@ const BillingPage = () => {
     }
     const phoneToTest = formData.sdt_nguoi_nhan.trim();
     if (phoneToTest && !/^\d{10,11}$/.test(phoneToTest)) {
-        setNotifyData({
-          key: Date.now().toString(),
-          type: "error",
-          title: "Sai định dạng",
-          message: "Vui lòng nhập số điện thoại hợp lệ!",
-        });
-        return;
-      }
+      setNotifyData({
+        key: Date.now().toString(),
+        type: "error",
+        title: "Sai định dạng",
+        message: "Vui lòng nhập số điện thoại hợp lệ!",
+      });
+      return;
+    }
     if (!selectedCity || !selectedWard) {
       setNotifyData({
         key: Date.now().toString(),
@@ -170,28 +170,16 @@ const BillingPage = () => {
     setIsModalOpen(false);
   };
 
-  const handleCancelUser = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancelVoucher = () => {
-    setIsModalVoucherOpen(false);
-  };
-
   const handSubmitOrder = async () => {
     try {
-      
-
       const finalPayload = {
-        ...formData, 
-
+        ...formData,
         ten_nguoi_nhan: formData.ten_nguoi_nhan || `${firstName || ""} ${lastName || ""}`.trim(),
         sdt_nguoi_nhan: formData.sdt_nguoi_nhan || user?.phone_number || "",
         phuong_xa_id: formData.phuong_xa_id || selectedWard,
-        dia_chi_giao_hang: formData.dia_chi_giao_hang || "", 
-
-        phuong_thuc_thanh_toan: methodPayment, 
+        dia_chi_giao_hang: formData.dia_chi_giao_hang || "",
+        phuong_thuc_thanh_toan: methodPayment,
         shipping_method_id: selectedMethod?.method_id || "",
-
         phieu_giam_gia_code: appliedVoucher?.code || "",
       };
 
@@ -202,17 +190,15 @@ const BillingPage = () => {
           title: "Thiếu thông tin",
           message: "Vui lòng nhập đầy đủ thông tin giao hàng!",
         });
-        return; 
+        return;
       }
-      
 
-      const respone = await BillingApi.createBilling(finalPayload);
+      const response = await BillingApi.createBilling(finalPayload);
       if (methodPayment === "MOMO") {
-        const paymentUrl = respone.data.data.payUrl; 
-
+        const paymentUrl = response.data.data.payUrl;
         window.open(paymentUrl, "_blank");
       }
-      
+
       setNotifyData({
         key: Date.now().toString(),
         type: "success",
@@ -221,7 +207,6 @@ const BillingPage = () => {
       });
 
       navigate("/billing-success");
-      
     } catch (error: any) {
       setNotifyData({
         key: Date.now().toString(),
@@ -231,14 +216,13 @@ const BillingPage = () => {
       });
     }
   };
+
   const handleUpdateQuantity = async (
     variantId: number,
     newQuantity: number,
     stockQuantity: number,
   ) => {
-    if (newQuantity > stockQuantity) {
-      return;
-    }
+    if (newQuantity > stockQuantity) return;
     if (newQuantity < 1) {
       dispatch(deleteCartItem(variantId));
       return;
@@ -252,52 +236,50 @@ const BillingPage = () => {
     }
   };
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + Number(item.price) * item.quantity,
-    0,
-  );
-
-  const handleSelect = (id:number) => {
-    
+  const handleSelect = (id: number) => {
     setSelectedVoucherId((prevId) => (prevId === id ? null : id));
   };
 
   const handleApply = async () => {
-    
     if (selectedVoucherId === null) {
       setAppliedVoucher(null);
       setIsModalVoucherOpen(false);
-      return; 
+      return;
     }
 
     const selectedVoucher = discountCode.find(
       (v) => v.voucher_id === selectedVoucherId
     );
     const minOrderValue = Number(selectedVoucher?.minimum_value || 0);
-    
-    if (subtotal < minOrderValue) { 
+
+    // Tính toán Tạm tính để kiểm tra điều kiện
+    const currentSubtotal = cartItems.reduce(
+      (sum, item) => sum + Number(item.price) * item.quantity,
+      0,
+    );
+
+    if (currentSubtotal < minOrderValue) {
       setNotifyData({
         key: Date.now().toString(),
         type: "error",
         title: "Lỗi",
         message: `Đơn hàng chưa đạt mức tối thiểu ${minOrderValue.toLocaleString("vi-VN")}₫ để sử dụng voucher này!`,
       });
-      return; 
+      return;
     }
-    const payload = { 
-      code: selectedVoucher?.code || "", 
-      order_value: subtotal ,
-      shipping_method_id: selectedMethod.method_id
-    };
-    console.log(payload)
 
+    const payload = {
+      code: selectedVoucher?.code || "",
+      order_value: currentSubtotal,
+      shipping_method_id: selectedMethod?.method_id,
+    };
 
     try {
       await vouchersApi.applyVoucher(payload);
       setAppliedVoucher(selectedVoucher || null);
-      setIsModalVoucherOpen(false); 
-    } catch (error :any) {
-     setNotifyData({
+      setIsModalVoucherOpen(false);
+    } catch (error: any) {
+      setNotifyData({
         key: Date.now().toString(),
         type: "error",
         title: "Lỗi",
@@ -305,6 +287,26 @@ const BillingPage = () => {
       });
     }
   };
+
+
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + Number(item.price) * item.quantity,
+    0,
+  );
+
+  const shippingFee = Number(selectedMethod?.fee || 0);
+
+  
+  const discountAmount = appliedVoucher
+    ? appliedVoucher.discount_type === "free_ship"? shippingFee 
+      : appliedVoucher.discount_type === "percent"
+        ? (subtotal * Number(appliedVoucher.value)) / 100
+        : Number(appliedVoucher.value)
+    : 0;
+
+  
+  const totalAmount = Math.max(0, subtotal + shippingFee - discountAmount);
+
 
   return (
     <div className="p-4">
@@ -316,6 +318,8 @@ const BillingPage = () => {
           message={notifyData.message}
         />
       )}
+
+      {/* Modal Thay đổi địa chỉ */}
       <Modal
         title="Thay đổi thông tin giao hàng"
         closable={{ "aria-label": "Custom Close Button" }}
@@ -329,27 +333,27 @@ const BillingPage = () => {
             type="text"
             placeholder="Enter your first name"
             className="border border-gray-300 rounded p-2"
-            value={firstName ? firstName : " "}
+            value={firstName ? firstName : ""}
             onChange={(e) => setFirstName(e.target.value)}
-          ></input>
+          />
           <label htmlFor="name">Tên:</label>
           <input
             type="text"
             placeholder="Enter your last name"
             className="border border-gray-300 rounded p-2"
-            value={lastName ? lastName : " "}
+            value={lastName ? lastName : ""}
             onChange={(e) => setLastName(e.target.value)}
-          ></input>
+          />
           <label htmlFor="name"> Số Điện Thoại:</label>
           <input
             type="text"
             placeholder="Enter your phone number"
             className="border border-gray-300 rounded p-2"
-            value={formData.sdt_nguoi_nhan? formData.sdt_nguoi_nhan :" "}
+            value={formData.sdt_nguoi_nhan ? formData.sdt_nguoi_nhan : ""}
             onChange={(e) =>
               setFormData({ ...formData, sdt_nguoi_nhan: e.target.value })
             }
-          ></input>
+          />
           <label htmlFor="name">Thành phố:</label>
           <select
             className="border border-gray-300 rounded p-2"
@@ -389,6 +393,7 @@ const BillingPage = () => {
         </div>
       </Modal>
 
+      {/* Modal Chọn Voucher */}
       <Modal
         title="Chọn Voucher"
         closable={{ "aria-label": "Custom Close Button" }}
@@ -396,72 +401,69 @@ const BillingPage = () => {
         onOk={handleApply}
         onCancel={handleCancelVoucher}
       >
-        <div className="flex flex-col gap-4 w-full max-w-md mx-auto overflow-auto max-h-[300px]">
-      {discountCode.length > 0 ? (
-        discountCode.map((voucher) => {
-          const isSelected = selectedVoucherId === voucher.voucher_id;
+        <div className="flex flex-col gap-4 w-full max-w-md mx-auto overflow-auto max-h-[300px] p-2">
+          {discountCode.length > 0 ? (
+            discountCode.map((voucher) => {
+              const isSelected = selectedVoucherId === voucher.voucher_id;
 
-          return (
-            <div
-              key={voucher.voucher_id}
-              onClick={() => handleSelect(voucher.voucher_id || 0)}
-              className={`flex items-center justify-between gap-4 shadow rounded-2xl p-4 cursor-pointer transition-all duration-300 ease-out border-2 ${
-                isSelected
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-transparent hover:shadow-md bg-white" 
-              }`}
-            >
-              <div className="flex flex-col flex-1">
-                <span className="text-[16px] font-medium text-gray-800">
-                  {voucher.voucher_name}
-                </span>
-                <span className="mt-0.5 text-[13px] font-light text-gray-500">
-                  Mã: <span className="font-semibold text-gray-700">{voucher.code}</span>
-                </span>
-                
-                
-                <span className="mt-1.5 text-[12px] text-gray-500 bg-gray-100 w-fit px-2 py-0.5 rounded-md">
-                  Đơn tối thiểu {Number(voucher.minimum_value).toLocaleString("vi-VN")}₫
-                  {voucher.max_discount && ` - Giảm tối đa ${Number(voucher.max_discount).toLocaleString("vi-VN")}₫`}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-[15px] font-bold text-red-600">
-                 
-                  {voucher.discount_type === "percent"
-                    ? `${Number(voucher.value)}%`
-                    : `${Number(voucher.value).toLocaleString("vi-VN")}₫`}
-                </span>
-                
-                
+              return (
                 <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                  key={voucher.voucher_id}
+                  onClick={() => handleSelect(voucher.voucher_id || 0)}
+                  className={`flex items-center justify-between gap-4 shadow rounded-2xl p-4 cursor-pointer transition-all duration-300 ease-out border-2 ${
                     isSelected
-                      ? "border-blue-500 bg-blue-500"
-                      : "border-gray-300"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-transparent hover:shadow-md bg-white"
                   }`}
                 >
-                  {isSelected && (
-                    <FaCheck />
-                  )}
+                  <div className="flex flex-col flex-1">
+                    <span className="text-[16px] font-medium text-gray-800">
+                      {voucher.voucher_name}
+                    </span>
+                    <span className="mt-0.5 text-[13px] font-light text-gray-500">
+                      Mã: <span className="font-semibold text-gray-700">{voucher.code}</span>
+                    </span>
+                    <span className="mt-1.5 text-[12px] text-gray-500 bg-gray-100 w-fit px-2 py-0.5 rounded-md">
+                      Đơn tối thiểu {Number(voucher.minimum_value).toLocaleString("vi-VN")}₫
+                      {voucher.max_discount && ` - Giảm tối đa ${Number(voucher.max_discount).toLocaleString("vi-VN")}₫`}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <span className="text-[15px] font-bold text-red-600">
+                      {voucher.discount_type === "percent"
+                        ? `${Number(voucher.value)}%`
+                        : voucher.discount_type === "free_ship" 
+                        ? "Free Ship" 
+                        : `${Number(voucher.value).toLocaleString("vi-VN")}₫`}
+                    </span>
+                    <div
+                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
+                        isSelected
+                          ? "border-blue-500 bg-blue-500"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      {isSelected && <FaCheck className="text-white text-xs" />}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          );
-        })
-      ) : (
-        <p className="text-gray-500 text-center py-4">Không có voucher khả dụng cho đơn hàng này.</p>
-      )}
-    </div>
+              );
+            })
+          ) : (
+            <p className="text-gray-500 text-center py-4">Không có voucher khả dụng cho đơn hàng này.</p>
+          )}
+        </div>
       </Modal>
+
+      {/* Main Layout */}
       <div className="mb-8 text-center">
         <h1>Hóa Đơn Thanh Toán</h1>
         <p className="text-gray-500 mt-2 text-sm md:text-base">Kiểm tra thông tin và hoàn tất đơn hàng của bạn</p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-8 h-full w-full max-w-7xl mx-auto justify-center gap-6 pb-12">
         <div className="lg:col-span-5 flex flex-col gap-6">
-          {/* thong tin giao hang */}
+          {/* Thông tin giao hàng */}
           <div className="flex flex-col gap-6 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center gap-4 pb-4 border-b border-gray-50">
               <div className="rounded-full bg-blue-50 p-3 w-fit text-blue-600">
@@ -506,15 +508,13 @@ const BillingPage = () => {
               </div>
             </div>
             <div className="mt-2 flex justify-center">
-              <button
-                className="button_user px-6 w-fit"
-                onClick={showModalUser}
-              >
+              <button className="button_user px-6 w-fit" onClick={showModalUser}>
                 Thay đổi địa chỉ
               </button>
             </div>
           </div>
-          {/*  phuong thuc van chuyen */}
+          
+          {/* Phương thức vận chuyển */}
           <div className="flex flex-col gap-6 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center gap-4 pb-4 border-b border-gray-50">
               <div className="rounded-full bg-orange-50 p-3 w-fit text-orange-500">
@@ -524,61 +524,49 @@ const BillingPage = () => {
             </div>
             <div className="flex flex-col gap-4 px-2">
               <div className="flex flex-col gap-3">
-                {shippingMethods.map((option) => {
-                  return (
-                    <div
-                      key={option.method_id}
-                      onClick={() => setSelectedMethod(option)}
-                      className={`
-              group relative flex cursor-pointer items-center justify-between rounded-3xl p-4 
-              transition-all duration-300 ease-out border
-              hover:-translate-y-0.5 hover:shadow-md
-              ${
-                selectedMethod?.method_id === option.method_id
-                  ? "bg-orange-50/60 border-orange-200 shadow-sm"
-                  : "bg-white border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-orange-200"
-              }
-            `}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`h-2.5 w-2.5 rounded-full transition-colors duration-300 ${
-                            selectedMethod?.method_id === option.method_id
-                              ? "bg-[#fb923c]"
-                              : "bg-transparent"
-                          }`}
-                        ></div>
-
-                        <div className="flex flex-col">
-                          <span className="text-[15px] text-gray-700 transition-colors group-hover:text-gray-900">
-                            {option.name}
-                          </span>
-                          <span className="mt-0.5 text-[13px] font-light text-gray-400">
-                            {option.estimated_time}
-                          </span>
-                        </div>
-                      </div>
-
+                {shippingMethods.map((option) => (
+                  <div
+                    key={option.method_id}
+                    onClick={() => setSelectedMethod(option)}
+                    className={`group relative flex cursor-pointer items-center justify-between rounded-3xl p-4 transition-all duration-300 ease-out border hover:-translate-y-0.5 hover:shadow-md ${
+                      selectedMethod?.method_id === option.method_id
+                        ? "bg-orange-50/60 border-orange-200 shadow-sm"
+                        : "bg-white border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-orange-200"
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
                       <div
-                        className={`flex items-center gap-1.5 text-[14px] font-medium transition-colors ${
-                          option.fee
-                            ? "text-red-600 group-hover:text-red-700"
-                            : "text-gray-700 group-hover:text-orange-500"
+                        className={`h-2.5 w-2.5 rounded-full transition-colors duration-300 ${
+                          selectedMethod?.method_id === option.method_id
+                            ? "bg-[#fb923c]"
+                            : "bg-transparent"
                         }`}
-                      >
-                        <span>
-                          {option.fee
-                            ? `${Number(option.fee).toLocaleString("vi-VN")}₫`
-                            : "Miễn phí"}
+                      ></div>
+                      <div className="flex flex-col">
+                        <span className="text-[15px] text-gray-700 transition-colors group-hover:text-gray-900">
+                          {option.name}
+                        </span>
+                        <span className="mt-0.5 text-[13px] font-light text-gray-400">
+                          {option.estimated_time}
                         </span>
                       </div>
                     </div>
-                  );
-                })}
+                    <div
+                      className={`flex items-center gap-1.5 text-[14px] font-medium transition-colors ${
+                        option.fee ? "text-red-600 group-hover:text-red-700" : "text-gray-700 group-hover:text-orange-500"
+                      }`}
+                    >
+                      <span>
+                        {option.fee ? `${Number(option.fee).toLocaleString("vi-VN")}₫` : "Miễn phí"}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-          {/* phuong thuc thanh toan */}
+
+          {/* Phương thức thanh toán */}
           <div className="flex flex-col gap-6 bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
             <div className="flex items-center gap-4 pb-4 border-b border-gray-50">
               <div className="rounded-full bg-purple-50 p-3 w-fit text-purple-600">
@@ -590,22 +578,14 @@ const BillingPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div
                   onClick={() => setMethodPayment("COD")}
-                  className={`group relative flex cursor-pointer items-center justify-between rounded-3xl p-4 
-              transition-all duration-300 ease-out border
-              hover:-translate-y-0.5 hover:shadow-md ${
-                methodPayment == "COD"
-                  ? "bg-orange-50/60 border-orange-200 shadow-sm"
-                  : "bg-white border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-orange-200"
-              } `}
+                  className={`group relative flex cursor-pointer items-center justify-between rounded-3xl p-4 transition-all duration-300 ease-out border hover:-translate-y-0.5 hover:shadow-md ${
+                    methodPayment === "COD"
+                      ? "bg-orange-50/60 border-orange-200 shadow-sm"
+                      : "bg-white border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-orange-200"
+                  }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div
-                      className={`h-2.5 w-2.5 rounded-full transition-colors duration-300 ${
-                        methodPayment === "COD"
-                          ? "bg-[#fb923c]"
-                          : "bg-transparent"
-                      }`}
-                    ></div>
+                    <div className={`h-2.5 w-2.5 rounded-full transition-colors duration-300 ${methodPayment === "COD" ? "bg-[#fb923c]" : "bg-transparent"}`}></div>
                     <div className="flex flex-col">
                       <span className="text-[15px] text-gray-700 transition-colors group-hover:text-gray-900">
                         Thanh toán khi nhận hàng (COD)
@@ -615,22 +595,14 @@ const BillingPage = () => {
                 </div>
                 <div
                   onClick={() => setMethodPayment("MOMO")}
-                  className={`group relative flex cursor-pointer items-center justify-between rounded-3xl p-4 
-              transition-all duration-300 ease-out border
-              hover:-translate-y-0.5 hover:shadow-md ${
-                methodPayment == "MOMO"
-                  ? "bg-orange-50/60 border-orange-200 shadow-sm"
-                  : "bg-white border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-orange-200"
-              } `}
+                  className={`group relative flex cursor-pointer items-center justify-between rounded-3xl p-4 transition-all duration-300 ease-out border hover:-translate-y-0.5 hover:shadow-md ${
+                    methodPayment === "MOMO"
+                      ? "bg-orange-50/60 border-orange-200 shadow-sm"
+                      : "bg-white border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:border-orange-200"
+                  }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div
-                      className={`h-2.5 w-2.5 rounded-full transition-colors duration-300 ${
-                        methodPayment === "MOMO"
-                          ? "bg-[#fb923c]"
-                          : "bg-transparent"
-                      }`}
-                    ></div>
+                    <div className={`h-2.5 w-2.5 rounded-full transition-colors duration-300 ${methodPayment === "MOMO" ? "bg-[#fb923c]" : "bg-transparent"}`}></div>
                     <div className="flex flex-col">
                       <span className="text-[15px] text-gray-700 transition-colors group-hover:text-gray-900">
                         Momo
@@ -651,15 +623,16 @@ const BillingPage = () => {
               </div>
               <h2 className="text-xl font-semibold text-gray-800 tracking-tight">Tóm tắt đơn hàng</h2>
             </div>
-            {/* danh sach san pham */}
+            
+            {/* Danh sách sản phẩm */}
             <div className="mt-2">
               {cartItems.length > 0 ? (
-                <div className="flex flex-col gap-3 overflow-auto max-h-150 pr-2 no-scrollbar">
+                <div className="flex flex-col gap-3 overflow-auto max-h-[400px] pr-2 no-scrollbar">
                   {cartItems.map((item) => (
-                    <CardItemOrder 
-                      key={item.cart_id} 
-                      item={item} 
-                      onUpdateQuantity={handleUpdateQuantity} 
+                    <CardItemOrder
+                      key={item.cart_id}
+                      item={item}
+                      onUpdateQuantity={handleUpdateQuantity}
                     />
                   ))}
                 </div>
@@ -669,7 +642,7 @@ const BillingPage = () => {
             </div>
             <div className="h-px bg-gray-100 my-2"></div>
 
-            {/* ap dung khuyen mai */}
+            {/* Áp dụng khuyến mãi */}
             <div className="flex items-center justify-between gap-4 py-2">
               <span className="text-[15px] font-medium text-gray-700">Mã khuyến mãi</span>
               <button
@@ -679,56 +652,39 @@ const BillingPage = () => {
                 {appliedVoucher ? "Đổi mã khác" : "Chọn mã"}
               </button>
             </div>
-            
+
             <div className="flex flex-col gap-3 py-2">
-              {/* tong ket gia  */}
               <div className="flex items-center justify-between gap-4">
                 <span className="text-[15px] text-gray-500">Tạm tính</span>
                 <span className="text-[15px] font-medium text-gray-900">
-                  {Number(subtotal).toLocaleString("vi-VN")}₫
+                  {subtotal.toLocaleString("vi-VN")}₫
                 </span>
               </div>
               <div className="flex items-center justify-between gap-4">
                 <span className="text-[15px] text-gray-500">Phí vận chuyển</span>
                 <span className="text-[15px] font-medium text-gray-900">
-                  {Number(selectedMethod?.fee || 0).toLocaleString("vi-VN")}₫
+                  {shippingFee.toLocaleString("vi-VN")}₫
                 </span>
               </div>
               <div className="flex items-center justify-between gap-4">
                 <span className="text-[15px] text-gray-500">Giảm giá</span>
                 <span className="text-[15px] font-medium text-emerald-600">
-                  -{appliedVoucher
-                    ? appliedVoucher.discount_type === "percent"
-                      ? `${appliedVoucher.value}%`
-                      : `${Number(appliedVoucher.value).toLocaleString("vi-VN")}₫`
-                    : "0₫"}
+                  -{discountAmount.toLocaleString("vi-VN")}₫
                 </span>
               </div>
             </div>
-            
+
             <div className="h-px bg-gray-100 my-2"></div>
 
-            {/* tong cong */}
+            {/* Tổng cộng */}
             <div className="flex items-center justify-between gap-4 py-2">
               <span className="text-lg font-semibold text-gray-900">Tổng tiền</span>
               <span className="text-2xl font-bold text-rose-600">
-                {Number(
-                  subtotal +
-                    Number(selectedMethod?.fee || 0) -
-                    (appliedVoucher
-                      ? appliedVoucher.discount_type === "percent"
-                        ? (subtotal * appliedVoucher.value) / 100
-                        : appliedVoucher.value
-                      : 0),
-                ).toLocaleString("vi-VN")}
-                ₫
+                {totalAmount.toLocaleString("vi-VN")}₫
               </span>
             </div>
-            <div className="mt-4 flex flex-col gap-3"> 
-              <button
-                className="button_checkout"
-                onClick={handSubmitOrder}
-              >
+            <div className="mt-4 flex flex-col gap-3">
+              <button className="button_checkout" onClick={handSubmitOrder}>
                 Đặt hàng
               </button>
             </div>

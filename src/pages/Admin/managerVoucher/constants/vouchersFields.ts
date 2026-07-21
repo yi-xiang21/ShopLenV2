@@ -46,8 +46,9 @@ export const getVoucherFields = (initialValues?: voucher | null): FormField<vouc
     label: 'Loại giảm giá',
     type: FormFieldType.Select,
     options: [
-      { value: 'percent', label: 'percent' },
-      { value: 'fixed', label: 'fixed' }
+      { value: 'percent', label: 'Phần trăm' },
+      { value: 'fixed', label: 'Cố định' },
+      { value: 'free_ship', label: 'Miễn phí vận chuyển' },
     ],
     rules: [
       {
@@ -65,26 +66,31 @@ export const getVoucherFields = (initialValues?: voucher | null): FormField<vouc
       {
         required: true,
         validator: (formdata:voucher) => {
+          if (formdata.discount_type === 'percent') {
+            return formdata.value >= 1 && formdata.value <= 100;
+          }
           return !!formdata.value;
         },
-        message: 'Giá trị giảm giá không được để trống.',
+        message: 'Giá trị giảm giá phải là từ 1 đến 100.',
+        disabled: (formdata:voucher) => formdata.discount_type !== 'percent',
       },
       {
         pattern: /^\d+(\.\d{1,2})?$/,
         message: 'Giá trị giảm giá phải là một số hợp lệ, có thể có tối đa 2 chữ số thập phân.',
       }
-    ]
+    ],
+    disabled: (formdata:voucher) => formdata.discount_type === 'free_ship',
   },
   {
     key: 'minimum_value',
-    label: 'Giá trị tối thiểu',
+    label: 'Giá trị đơn hàng tối thiểu',
     type: FormFieldType.Input,
     placeholder: 'Nhập giá trị tối thiểu',
     rules: [  
       {
         required: true,
         validator: (formdata:voucher) => {
-          return !!formdata.minimum_value;  
+          return !!formdata.minimum_value;    
         },
         message: 'Giá trị tối thiểu không được để trống.',
       },
@@ -92,7 +98,8 @@ export const getVoucherFields = (initialValues?: voucher | null): FormField<vouc
         pattern: /^\d+(\.\d{1,2})?$/,
         message: 'Giá trị tối thiểu phải là một số hợp lệ, có thể có tối đa 2 chữ số thập phân.',
       }
-    ]
+    ],
+
   },
   {
     key: 'max_discount',
@@ -108,13 +115,18 @@ export const getVoucherFields = (initialValues?: voucher | null): FormField<vouc
           }
           return true;
         },
-        message: 'Giá trị giảm tối đa không được để trống.',
+        message: 'Giá trị giảm tối đa không được để trống.',disabled: (formdata:voucher) => {
+          return formdata.discount_type === 'fixed' || formdata.discount_type === 'free_ship';
+        }
       },
       {
         pattern: /^\d+(\.\d{1,2})?$/,
         message: 'Giá trị giảm tối đa phải là một số hợp lệ, có thể có tối đa 2 chữ số thập phân.',
       }
-    ]
+    ],
+    disabled: (formdata:voucher) => {
+      return formdata.discount_type === 'fixed' || formdata.discount_type === 'free_ship';
+    },
   },
   {
     key: 'quantity',

@@ -105,7 +105,7 @@ export const downloadProductTemplate = async () => {
         {
             "type_id": 1,
             "category_id": 2,
-            "product_name": "Cuộn len Cotton Milk 50g",
+            "product_name": "Cuộn len Cotton Milk ",
             "description": "Len sợi mềm mại, an toàn cho da em bé.",
             "product_status": "active",
             "image_url": "https://example.com/images/len-red.jpg, https://example.com/images/len-red-2.jpg",
@@ -114,10 +114,10 @@ export const downloadProductTemplate = async () => {
             "size": "50g"
         },
         {
-            "type_id": 1,
-            "category_id": 2,
-            "product_name": "Cuộn len Cotton Milk 50g",
-            "description": "Len sợi mềm mại, an toàn cho da em bé.",
+            "type_id": 2,
+            "category_id": 3,
+            "product_name": "Cuộn len Acrylic Soft",
+            "description": "Len sợi nhân tạo mềm mại .",
             "product_status": "active",
             "image_url": "https://example.com/images/len-blue.jpg",
             "price": 15000,

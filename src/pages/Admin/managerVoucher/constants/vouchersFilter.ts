@@ -15,8 +15,8 @@ export const filterVouchers: FilterField[] = [
     placeholder: 'Chọn loại giảm giá',
     width: 200,
     options: [
-      { label: 'percent', value: 'percent' },
-      { label: 'fixed', value: 'fixed' },
+      { label: 'Phần trăm', value: 'percent' },
+      { label: 'Cố định', value: 'fixed' },
     ],
     mode: 'multiple',
   },
