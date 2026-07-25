@@ -6,7 +6,6 @@ import type { Category } from "@/pages/Admin/managerCatelogy/type/catelogy";
 import { ProductApi } from "@/pages/Admin/managerProducts/api/products_api";
 import type { Product } from "@/pages/Admin/managerProducts/type/products";
 import { useFormModal } from "@/share/hook/useFormModal";
-import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import catSliderAnimation from '@/assets/animation/Cat playing animation.json';
@@ -177,7 +176,7 @@ const Shop = () => {
           </div>
 
           {/* CHÚ Ý: Bắt đầu khu vực Grid 3 cột chứa Sản phẩm */}
-          <div className="w-full h-auto p-5 grid grid-cols-3 gap-3 flex-grow">
+          <div className="w-full h-auto p-5 grid grid-cols-3 gap-3 grow">
             {products.length > 0 ? (
               products.map((product) => (
                 <CardProducts key={product.product_id} data={product} />

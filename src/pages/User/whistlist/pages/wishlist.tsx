@@ -53,7 +53,7 @@ const handleDetail = (item:WishlistItem) => {
           <img
             src={banner}
             alt="Wishlist Banner"
-            className="w-full h-40 md:h-100 object-cover rounded-3xl shadow-sm"
+            className="w-full h-30 md:h-120  rounded-3xl shadow-sm"
           />
         </div>
 

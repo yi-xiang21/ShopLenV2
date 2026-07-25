@@ -83,11 +83,11 @@ callAPI.interceptors.response.use(
           throw new Error('Refresh token not found');
         }
 
-        // Use plain axios instance to avoid adding expired Authorization header
+       
         const response = await axios.post(
           `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.REFRESH_TOKEN}`,
           {
-            // backend expects snake_case field name
+         
             refresh_token: refreshToken,
           },
         );

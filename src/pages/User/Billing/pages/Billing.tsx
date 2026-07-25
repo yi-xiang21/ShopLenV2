@@ -401,7 +401,7 @@ const BillingPage = () => {
         onOk={handleApply}
         onCancel={handleCancelVoucher}
       >
-        <div className="flex flex-col gap-4 w-full max-w-md mx-auto overflow-auto max-h-[300px] p-2">
+        <div className="flex flex-col gap-4 w-full max-w-md mx-auto overflow-auto max-h-75 p-2">
           {discountCode.length > 0 ? (
             discountCode.map((voucher) => {
               const isSelected = selectedVoucherId === voucher.voucher_id;
@@ -627,7 +627,7 @@ const BillingPage = () => {
             {/* Danh sách sản phẩm */}
             <div className="mt-2">
               {cartItems.length > 0 ? (
-                <div className="flex flex-col gap-3 overflow-auto max-h-[400px] pr-2 no-scrollbar">
+                <div className="flex flex-col gap-3 overflow-auto max-h-100 pr-2 no-scrollbar">
                   {cartItems.map((item) => (
                     <CardItemOrder
                       key={item.cart_id}
