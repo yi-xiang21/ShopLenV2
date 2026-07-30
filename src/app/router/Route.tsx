@@ -23,7 +23,7 @@ import ShopPage from "@/pages/User/Shop/pages/Shop";
 import WhistlistPage from "@/pages/User/whistlist/pages/wishlist";
 import Detail from "@/pages/User/Shop/pages/Detail";
 import { AdminSetting } from "@/pages/Admin/AdminSetting";
-import CartPage from "@/pages/User/Cart/page/cart";
+import CartPage from "@/pages/User/cart/page/cart";
 import AdminManagerOrder from "@/pages/Admin/managerOrder/pages/AdminManagerOrder";
 import Order from "@/pages/User/Billing/pages/Billing";
 import BillingSuccess from "@/pages/User/Billing/pages/BillingSucces";
