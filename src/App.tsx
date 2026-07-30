@@ -2,7 +2,7 @@
 import './App.css'
 import AppInit from './app/init/AppInit'
 import { RouterProvider } from 'react-router-dom';
-import { routes } from '@/app/router/Route';
+import { routes } from './app/router/Route';
 import { store } from './app/redux/store';
 import { Provider } from 'react-redux';
 function App() {
