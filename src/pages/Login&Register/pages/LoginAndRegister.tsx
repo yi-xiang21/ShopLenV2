@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AuthLayout, { type AuthMode } from "../../../layout/AuthLayout.tsx";
 import AuthForm, { type AuthFormData } from "../../../component/AuthForm.tsx";
 import type { LoginPayload, RegisterPayload } from "../types/auth-type.ts";
-import {authApi} from "../api/auth-api.ts";
+import { authApi } from "../api/auth-api.ts";
 import { useAppDispatch, useAppSelector } from '@/app/redux/hooks';
 import { loginThunk, registerThunk, getMeThunk } from "../store/auth-thunk.ts";
 import AuthMessage from "@/component/AuthMessage.tsx";
@@ -23,7 +23,7 @@ const createRegisterPayload = (formData: AuthFormData): RegisterPayload => ({
 });
 
 const LoginAndRegister = () => {
-  
+
   const authError = useAppSelector((state) => state.auth.error);
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,7 +33,7 @@ const LoginAndRegister = () => {
     password: "",
     username: "",
     phone_number: "",
-    role: "customer", 
+    role: "customer",
   });
   const [googleAuthMessage, setGoogleAuthMessage] = useState<string>("");
 
@@ -46,7 +46,7 @@ const LoginAndRegister = () => {
       const token = searchParams.get("access_token");
       const refreshToken = searchParams.get("refresh_token");
       const role = searchParams.get("role") || undefined;
-      const userId = searchParams.get("user_id") || undefined;
+
       const error = searchParams.get("error");
       const message = searchParams.get("message");
 
@@ -100,10 +100,10 @@ const LoginAndRegister = () => {
     try {
       await dispatch(loginThunk({ ...loginPayload })).unwrap();
 
-      return true; 
+      return true;
     } catch (error) {
       console.error("Login failed:", error);
-      return false; 
+      return false;
     }
   };
 
@@ -163,12 +163,12 @@ const LoginAndRegister = () => {
 
     window.addEventListener('message', messageHandler);
   };
-  
+
   const handleRegister = async (): Promise<boolean> => {
     setGoogleAuthMessage("");
     try {
       await dispatch(registerThunk({ ...createRegisterPayload(formData) })).unwrap();
-      
+
       // Delay 1.2s để xem thỏ vui, sau đó tự động chuyển form qua Login
       setTimeout(() => {
         setMode("login");
@@ -183,8 +183,8 @@ const LoginAndRegister = () => {
 
   return (
     <AuthLayout mode={mode}>
-      
-      <AuthMessage message={message}    />
+
+      <AuthMessage message={message} />
       <AuthForm
         mode={mode}
         formData={formData}
@@ -192,7 +192,7 @@ const LoginAndRegister = () => {
         onSubmit={mode === "login" ? handleLogin : handleRegister}
         onGoogleLogin={mode === "login" ? handleGoogleLogin : undefined}
         onSwitch={() => setMode(mode === "login" ? "register" : "login")}
-              />
+      />
     </AuthLayout>
   );
 };

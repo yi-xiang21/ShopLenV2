@@ -175,8 +175,8 @@ const Shop = () => {
             </button>
           </div>
 
-          {/* CHÚ Ý: Bắt đầu khu vực Grid 3 cột chứa Sản phẩm */}
-          <div className="w-full h-auto p-5 grid grid-cols-3 gap-3 grow">
+  
+          <div className="w-full h-auto p-5 grid grid-cols-3  gap-3 grow">
             {products.length > 0 ? (
               products.map((product) => (
                 <CardProducts key={product.product_id} data={product} />

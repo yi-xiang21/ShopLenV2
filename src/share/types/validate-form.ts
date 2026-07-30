@@ -6,5 +6,5 @@ export interface ValidationRule {
   formData?: any
 ) => boolean;
   message: string;     
-  disabled?: boolean| ((values) => boolean)   
+  disabled?: boolean| ((values: any) => boolean)   
 }
