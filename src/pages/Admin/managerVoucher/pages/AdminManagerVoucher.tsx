@@ -114,13 +114,19 @@ const AdminManagerVoucher = () => {
         const data = response.data.data?.voucher;
 
         setEditingId(data.voucher_id);
+        const dataFormatPrice = {
+          ...data,
+          value: data.discount_type === 'percent' ? data.value + "%" : Number(data.value).toLocaleString('vi-VN') + 'đ',
+          max_discount: data.max_discount ? Number(data.max_discount).toLocaleString('vi-VN') + "đ": undefined,
+          minimum_value: data.minimum_value ? Number(data.minimum_value).toLocaleString('vi-VN') + "đ" : undefined,
+        };
         
 
 
         if (mode === FormModalMode.EDIT) {
           openEdit(data);
         } else {
-          openView(data);
+          openView(dataFormatPrice);
         }
       } catch (error) {
         console.error("Error fetching account details:", error);
@@ -226,7 +232,17 @@ const AdminManagerVoucher = () => {
     {title: "Mã voucher", dataIndex: "code", key: "code" },
     { title: "Tên voucher", dataIndex: "voucher_name", key: "voucher_name" },
     { title: "Loại giảm giá", dataIndex: "discount_type", key: "discount_type" },
-    { title: "Giá trị giảm giá", dataIndex: "value", key: "value" },
+    { title: "Giá trị giảm giá", dataIndex: "value", key: "value" , render: (value, record) => {
+      if(record.discount_type === 'percent') {
+        return value + '%';
+      } else if(record.discount_type === 'fixed') {
+        return Number(value).toLocaleString('vi-VN') + 'đ';
+      } else if(record.discount_type === 'free_ship') {
+        return 'Miễn phí vận chuyển';
+      } else {
+        return value;
+      }
+    }},
     { title: "Số lượng", dataIndex: "quantity", key: "quantity" },
     { title: "Ngày bắt đầu", dataIndex: "start_date", key: "start_date" , render: (text) => parseToDayjs(text, "YYYY-MM-DD") || text },
     { title: "Ngày kết thúc", dataIndex: "end_date", key: "end_date" , render: (text) => parseToDayjs(text, "YYYY-MM-DD") || text },

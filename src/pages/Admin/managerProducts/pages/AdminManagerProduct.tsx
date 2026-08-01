@@ -117,12 +117,20 @@ const fetchProducts = useCallback(
 
         setEditingId(data.product_id);
 
+        const dataFormatPrice = {
+          ...data,
+          variants: data.variants.map((variant: any) => ({
+            ...variant,
+            price: Number(variant.price).toLocaleString("vi-VN") + "đ",
+          })),
+        };
+
 
 
         if (mode === FormModalMode.EDIT) {
           openEdit(data);
         } else {
-          openView(data);
+          openView(dataFormatPrice);
         }
       } catch (error) {
         console.error("Error fetching product details:", error);

@@ -47,4 +47,5 @@ export interface Order {
   shipping_fee?: string;
   items?: OrderItem[];
   payment?: OrderPayment;
+  payment_method?: string;
 }

@@ -81,10 +81,15 @@ const AdminManagerRewards = () => {
 
     if (record) {
       setEditingId(record.reward_id as number);
+
+      const dataFormatPrice = {
+        ...record,
+        discount_value: record.discount_type === 'percent' ? record.discount_value + "%" : Number(record.discount_value).toLocaleString('vi-VN') + 'đ',
+      };
       if (mode === FormModalMode.EDIT) {
-        openEdit(record);
+        openEdit(dataFormatPrice);
       } else {
-        openView(record);
+        openView(dataFormatPrice);
       }
     }
   };

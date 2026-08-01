@@ -119,12 +119,18 @@ const fetchWorkshops = useCallback(
 
         setEditingId(data.workshop_id);
 
-
+        const dataFormatPrice = {
+          ...data,
+          sessions: data.sessions.map((session: any) => ({
+            ...session,
+            price: session.price ? Number(session.price).toLocaleString('vi-VN') + 'đ' : undefined,
+          })),
+        };
 
         if (mode === FormModalMode.EDIT) {
           openEdit(data);
         } else {
-          openView(data);
+          openView(dataFormatPrice);
         }
       } catch (error) {
         console.error("Error fetching workshop details:", error);

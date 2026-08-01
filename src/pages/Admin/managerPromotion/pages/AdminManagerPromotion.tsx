@@ -110,12 +110,15 @@ const AdminManagerPromotion = () => {
         const data = response.data.data?.promotion;
         setEditingId(data.promotion_id);
         
-
+        const dataFormatPrice = {
+          ...data,
+          value: data.discount_type === 'percent' ? data.value + "%" : Number(data.value).toLocaleString('vi-VN') + 'đ',
+        };
 
         if (mode === FormModalMode.EDIT) {
           openEdit(data);
         } else {
-          openView(data);
+          openView(dataFormatPrice);
         }
       } catch (error) {
         console.error("Error fetching account details:", error);
@@ -215,7 +218,13 @@ const AdminManagerPromotion = () => {
     { title: "ID", dataIndex: "promotion_id", key: "promotion_id" },
     { title: "Tiêu đề", dataIndex: "title", key: "title" },
     { title: "Loại giảm giá", dataIndex: "discount_type", key: "discount_type" },
-    { title: "Giá trị", dataIndex: "value", key: "value" },
+    { title: "Giá trị", dataIndex: "value", key: "value" , render: (text, record) => {
+      if (record.discount_type === 'percent') {
+        return `${text}%`;
+      } else {
+        return Number(text).toLocaleString('vi-VN') + 'đ';
+      }
+    }},
      {title: 'Trạng thái', dataIndex: 'status', key: 'status',width: 170 ,render: (status) => (
       <span
         className={`px-2 py-1 rounded ${status === "active" ? "bg-green-200 text-green-800" : "bg-red-200 text-red-800"}`}

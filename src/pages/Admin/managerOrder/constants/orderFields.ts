@@ -19,6 +19,5 @@ export const orderFields: FormField<Order>[] = [
     label: 'Trạng thái đơn hàng',
     type: FormFieldType.Select,
     options: [...ORDER_STATUS_OPTIONS],
-    rules: [{ required: true, message: 'Vui lòng chọn trạng thái' }]
   }
 ];

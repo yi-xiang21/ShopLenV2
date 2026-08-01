@@ -10,7 +10,10 @@ import { getOrderFieldsByMode } from "@/pages/Admin/managerOrder/constants/sortF
 
 import { useFormModal } from "@/share/hook/useFormModal";
 import Notification from "@/share/ComponentCustom/Notification/Notification";
-import { FormModalMode, type FormModalModeType } from "@/share/types/type-form-mode";
+import {
+  FormModalMode,
+  type FormModalModeType,
+} from "@/share/types/type-form-mode";
 import FormModal from "@/share/ComponentCustom/ModelForm";
 import { OrderApi } from "@/pages/Admin/managerOrder/api/order_api";
 import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
@@ -21,11 +24,12 @@ import FilterHeader from "@/share/ComponentCustom/FilterTableCustom";
 
 const defaultFormValues: Partial<Order> = {
   status: "pending",
-  items: []
+  items: [],
 };
 
 const AdminManagerOrder = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+  console.log("orders:", orders);
   const [editingId, setEditingId] = useState<string | "">("");
   const [filters, setFilters] = useState<Record<string, any>>({});
   const [notifyData, setNotifyData] = useState<{
@@ -53,7 +57,11 @@ const AdminManagerOrder = () => {
   } = useFormModal<Order>();
 
   const fetchOrders = useCallback(
-    async (page: number, limit: number, currentFilters: Record<string, any>) => {
+    async (
+      page: number,
+      limit: number,
+      currentFilters: Record<string, any>,
+    ) => {
       try {
         setLoading(true);
         let response;
@@ -62,7 +70,6 @@ const AdminManagerOrder = () => {
           response = await OrderApi.filter({ ...currentFilters, page, limit });
         } else {
           response = await OrderApi.getAll(page, limit);
-
         }
 
         setOrders(response.data?.data.orders ?? []);
@@ -73,20 +80,19 @@ const AdminManagerOrder = () => {
         setLoading(false);
       }
     },
-    [setTotal, setLoading]
+    [setTotal, setLoading],
   );
 
   useEffect(() => {
     void fetchOrders(currentPage, pageSize, filters);
   }, [currentPage, pageSize, filters, fetchOrders]);
 
-  const handleAction = async (mode: FormModalModeType, record?: Order) => { 
+  const handleAction = async (mode: FormModalModeType, record?: Order) => {
     if (record) {
       try {
         const response = await OrderApi.getById(record.order_id);
 
         const data = response.data?.data.order;
-
 
         if (data.payment) {
           data.payment_method = data.payment.payment_method;
@@ -96,10 +102,25 @@ const AdminManagerOrder = () => {
 
         setEditingId(data.order_id);
 
+        const dataFormatPrice = {
+          ...data,
+          total_amount: Number(data.total_amount).toLocaleString("vi-VN") + "đ",
+          shipping_fee: data.shipping_fee
+            ? Number(data.shipping_fee).toLocaleString("vi-VN") + "đ"
+            : undefined,
+          discount_amount: data.discount_amount
+            ? Number(data.discount_amount).toLocaleString("vi-VN") + "đ"
+            : undefined,
+            items: data.items?.map((item :any ) => ({
+              ...item,
+              price: Number(item.price).toLocaleString("vi-VN") + "đ",
+            })),
+        };
+
         if (mode === FormModalMode.EDIT) {
-          openEdit(data);
+          openEdit(dataFormatPrice);
         } else {
-          openView(data);
+          openView( dataFormatPrice);
         }
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -120,7 +141,7 @@ const AdminManagerOrder = () => {
       if (modalMode === FormModalMode.EDIT) {
         const payloadUpdate = { status: values.status };
         await OrderApi.updateStatus(editingId, payloadUpdate);
-        
+
         setNotifyData({
           key: Date.now().toString(),
           type: "success",
@@ -151,17 +172,22 @@ const AdminManagerOrder = () => {
     { title: "Mã Đơn", dataIndex: "order_id", key: "order_id" },
     { title: "Khách Hàng", dataIndex: "customer_name", key: "customer_name" },
     { title: "SĐT", dataIndex: "phone_number", key: "phone_number" },
-    { title: "Tổng Tiền", dataIndex: "total_amount", key: "total_amount" },
-    { 
-      title: "Trạng Thái", 
-      dataIndex: "status", 
+    { title: "Tổng Tiền", dataIndex: "total_amount", key: "total_amount" , render: (total_amount: string) => {return Number(total_amount).toLocaleString('vi-VN') + 'đ';}},
+    {title: "Phương Thức Thanh Toán", dataIndex: "payment_method", key: "payment_method"},
+    {
+      title: "Trạng Thái",
+      dataIndex: "status",
       key: "status",
       render: (status: string) => {
-        const statusObj = ORDER_STATUS_OPTIONS.find(opt => opt.value === status);
+        const statusObj = ORDER_STATUS_OPTIONS.find(
+          (opt) => opt.value === status,
+        );
         const displayText = statusObj ? statusObj.label : status;
 
         return (
-          <span className={`px-2 py-1 rounded ${status === "completed" ? "bg-green-100 text-green-800" : status === "cancelled" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}`}>
+          <span
+            className={`px-2 py-1 rounded ${status === "completed" ? "bg-green-100 text-green-800" : status === "cancelled" ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}`}
+          >
             {displayText}
           </span>
         );
@@ -171,6 +197,22 @@ const AdminManagerOrder = () => {
       title: "Action",
       key: "action",
       render: (_, record) => (
+        record.payment_method === "COD" ? (
+          <div className="flex gap-2">
+            <Button
+              type="default"
+              onClick={() => handleAction(FormModalMode.VIEW, record)}
+            >
+              View
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => handleAction(FormModalMode.EDIT, record)}
+            >
+              Update
+            </Button>
+          </div>
+        ) : (
         <div className="flex gap-2">
           <Button
             type="default"
@@ -178,13 +220,8 @@ const AdminManagerOrder = () => {
           >
             View
           </Button>
-          <Button
-            type="primary"
-            onClick={() => handleAction(FormModalMode.EDIT, record)}
-          >
-            Update
-          </Button>
         </div>
+        )
       ),
     },
   ];
@@ -219,23 +256,21 @@ const AdminManagerOrder = () => {
           onSearch={handleFilter}
           loading={loading}
         />
-        
-        <Table 
-          columns={columns} 
-          dataSource={orders} 
-          rowKey="order_id" 
-          pagination={
-            {
-              current: currentPage,
-              pageSize: pageSize,
-              total: total,
-              showSizeChanger: true,
-              onChange: (page, pageSize) => {
-                setCurrentPage(page);
-                setPageSize(pageSize);
-              },
-            }
-          } 
+
+        <Table
+          columns={columns}
+          dataSource={orders}
+          rowKey="order_id"
+          pagination={{
+            current: currentPage,
+            pageSize: pageSize,
+            total: total,
+            showSizeChanger: true,
+            onChange: (page, pageSize) => {
+              setCurrentPage(page);
+              setPageSize(pageSize);
+            },
+          }}
         />
       </div>
 
@@ -245,11 +280,9 @@ const AdminManagerOrder = () => {
         loading={loading}
         mode={modalMode}
         title={modalTitle}
-
         fields={getOrderFieldsByMode(orderFields, modalMode)}
-        initialValues={selectedOrder || defaultFormValues as any}
+        initialValues={selectedOrder || (defaultFormValues as any)}
         onSubmit={handleSubmitForm}
-
         hasChildren={modalMode === FormModalMode.VIEW}
         childFields={orderChildrenFields}
         childKey="items"
