@@ -214,6 +214,7 @@ const BillingPage = () => {
         title: "Lỗi",
         message: `Lỗi khi tạo đơn hàng: ${error.response?.data?.message || "Vui lòng thử lại!"}`,
       });
+      navigate("/billing-fail");
     }
   };
 

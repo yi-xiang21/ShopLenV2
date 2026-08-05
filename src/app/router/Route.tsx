@@ -46,6 +46,7 @@ import AdminManagerShipper from "@/pages/Admin/managerShipper/pages/AdminManager
 import AdminManagerRewards from "@/pages/Admin/managerExchangePoint/pages/AdminManagerRewards"
 import UserHistoryRedeemVoucher from "@/pages/User/UserProfile/UserHistoryRedeemVoucher";
 import UserMyVoucher from "@/pages/User/UserProfile/UserMyVoucher";
+import FailPayment from "@/pages/User/Billing/pages/BillingFail";
 export const routes = createBrowserRouter([
   {
     element: <UserLayout />,
@@ -182,6 +183,10 @@ export const routes = createBrowserRouter([
           {
             path: "billing-success",
             element: <BillingSuccess />,
+          },
+          {
+            path: "billing-fail",
+            element: <FailPayment />,
           },
           {
             path: "workshop-billing/:id?/:quantity?",
