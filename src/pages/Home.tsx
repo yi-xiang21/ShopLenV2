@@ -226,11 +226,10 @@ const HomePage = () => {
                           autoplay
                         />
         </div>
-      {/* Niềm tin chất lượng */}
       <ParallaxSection image={section1}>
-        <div className="text-center px-4">
-          <h1 className="text-white text-4xl font-bold mb-4 drop-shadow-lg">Cam Kết Chất Lượng & Uy Tín</h1>
-          <p className="text-white text-lg max-w-2xl mx-auto drop-shadow-md">
+        <div className="text-center flex flex-col justify-center items-center shadow-2xl rounded-lg p-10 md:p-20 bg-white/5 backdrop-blur-md">
+          <h1 className="text-4xl! md:text-5xl! ">Cam Kết Chất Lượng & Uy Tín</h1>
+          <p className="mt-5 text-xl text-white/95 leading-9 ">
             Mỗi sản phẩm tại Shop Len đều được tuyển chọn kỹ lưỡng từ những chất liệu cao cấp nhất, mang đến sự an tâm tuyệt đối và trải nghiệm đan len tuyệt vời cho mọi khách hàng.
           </p>
         </div>

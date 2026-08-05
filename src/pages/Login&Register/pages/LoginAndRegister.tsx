@@ -169,7 +169,7 @@ const LoginAndRegister = () => {
     try {
       await dispatch(registerThunk({ ...createRegisterPayload(formData) })).unwrap();
 
-      // Delay 1.2s để xem thỏ vui, sau đó tự động chuyển form qua Login
+      
       setTimeout(() => {
         setMode("login");
       }, 1200);
