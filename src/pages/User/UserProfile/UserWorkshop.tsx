@@ -4,6 +4,9 @@ import type { historyWorkshop } from "@/pages/User/UserProfile/types/history_wor
 import { Pagination, Spin } from "antd";
 import CardHistoryWorkshop from "@/component/CardHistoryWorkshop";
 import { useFormModal } from "@/share/hook/useFormModal";
+import { BillingApi } from "../Billing/api/billing_api";
+import type { NotificationType } from "@/share/ComponentCustom/Notification/Notification";
+import Notification from '@/share/ComponentCustom/Notification/Notification';
 
 const UserWorkshop = () => {
   const [ongoingWorkshops, setOngoingWorkshops] = useState<historyWorkshop[]>([]);
@@ -18,6 +21,13 @@ const UserWorkshop = () => {
     setTotal ,
     setLoading: setPastLoading,
   } = useFormModal<historyWorkshop>();
+
+    const [notifyData, setNotifyData] = useState<{
+          key: string;
+          type: NotificationType;
+          title: string;
+          message: string;
+        } | null>(null);
 
   const [initLoading, setInitLoading] = useState(true);
 
@@ -73,15 +83,47 @@ const UserWorkshop = () => {
       </div>
     );
   }
+  const handleCancel = async (orderId: string) => {
+    console.log("Hủy đơn hàng với orderId:", orderId);
+        try {
+        
+          const response = await BillingApi.postOrderCancel(orderId);
+          
+          if (response.data?.success) {
+            setNotifyData({
+              key: Date.now().toString(),
+              type: 'success',
+              title: 'Thành công',
+              message: 'Đã hủy đơn hàng thành công!',
+            }); 
+          }
+          await fetchUpcoming();
+        } catch (error: any) {
+          console.error("Lỗi khi hủy đơn hàng:", error);
+          setNotifyData({
+            key: Date.now().toString(),
+            type: 'error',
+            title: 'Lỗi hủy đơn hàng',
+            message: error.response?.data?.message || 'Có lỗi xảy ra, không thể hủy đơn hàng này.',
+          });
+        }
+      };
 
   return (
     <section className="space-y-8 pb-10">
+       {notifyData && (
+          <Notification
+            key={notifyData.key}
+            type={notifyData.type}
+            title={notifyData.title}
+            message={notifyData.message}
+          />
+        )}
       <div>
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#b95b2d]">Workshop</p>
         <h2 className="mt-2 text-3xl font-semibold text-[#1f1935]">Các khóa học của bạn</h2>
       </div>
       
-
       {/* Đang diễn ra */}
       <div className="space-y-4">
         <h3 className="text-xl font-semibold text-[#1f1935] flex items-center gap-2">
@@ -110,7 +152,7 @@ const UserWorkshop = () => {
         ) : (
           <div className="flex flex-col gap-4 max-h-90 overflow-y-auto pr-2 custom-scrollbar">
             {upcomingWorkshops.map((workshop, index) => (
-              <CardHistoryWorkshop key={`upcoming-${workshop.order_id}-${index}`} workshop={workshop} />
+              <CardHistoryWorkshop key={`upcoming-${workshop.order_id}-${index}`} workshop={workshop} handleCancel={handleCancel} />
             ))}
           </div>
         )}

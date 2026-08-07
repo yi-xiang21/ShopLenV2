@@ -5,9 +5,10 @@ import type { historyWorkshop } from "@/pages/User/UserProfile/types/history_wor
 interface Props {
   workshop: historyWorkshop;
   isPast?: boolean;
+  handleCancel?: (orderId: string) => void;
 }
 
-const CardHistoryWorkshop = ({ workshop, isPast = false }: Props) => {
+const CardHistoryWorkshop = ({ workshop, isPast = false, handleCancel }: Props) => {
   const navigate = useNavigate();
   
   return (
@@ -21,11 +22,26 @@ const CardHistoryWorkshop = ({ workshop, isPast = false }: Props) => {
         className={`w-full sm:w-48 h-40 sm:h-32 object-cover rounded-xl bg-gray-50 shrink-0 ${isPast ? 'grayscale-[30%]' : ''}`}
       />
       <div className="flex flex-col w-full justify-between">
-        <div>
+        <div className="flex justify-between items-start">
+          <div>
           <h3 className="font-semibold text-lg text-[#1f1935] line-clamp-2" title={workshop.title}>
             {workshop.title}
           </h3>
           <p className="text-sm font-medium text-rose-500 mt-1 line-clamp-1">{workshop.session_name}</p>
+          </div>
+          <div>
+            {handleCancel && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); 
+                  handleCancel(workshop.order_id);
+                }}
+                className="px-3 py-1 bg-rose-500 text-white text-sm font-semibold rounded-lg hover:bg-rose-600 transition-colors"
+              >
+                Hủy đơn
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-2 mt-3 text-sm text-[#675f80]">
           <div className="flex items-center gap-2">

@@ -100,7 +100,7 @@ const UserOrderTracking = () => {
                 order={order} 
                 actionButtons={
                   <>
-                    {order.status.toLowerCase() === 'pending' && (
+                    {(order.status.toLowerCase() === 'pending' || (order.status.toLowerCase() === 'processing' && order.payment_method === 'MOMO' && order.payment_status === 'paid')) && (
                       <button
                         onClick={() => handleCancel(order.order_id)}
                         className='flex items-center justify-center gap-1.5 px-4 py-2 bg-rose-500 text-white font-semibold text-sm rounded-lg hover:bg-rose-600 transition-colors w-full sm:w-auto'
@@ -108,6 +108,7 @@ const UserOrderTracking = () => {
                         <ShoppingCart size={16} /> {order.payment_method === 'COD' ? 'Hủy đơn' : 'Hủy đơn và yêu cầu hoàn tiền '}
                       </button>
                     )}
+                    
                    
                     <Link 
                       to={`/profile/order-tracking/order-detail/${order.order_id}`} 
