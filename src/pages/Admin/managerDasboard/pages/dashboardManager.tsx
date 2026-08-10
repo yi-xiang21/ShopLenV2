@@ -186,7 +186,7 @@ const DashboardManager = () => {
           <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
             <div className="text-sm text-slate-500 mb-2">Tổng chi phí</div>
             <div className="text-2xl font-extrabold text-slate-800">
-              {formatCurrency(dashboardData.financial.profit_margin)}
+              {dashboardData.financial.profit_margin}%
             </div>
             <div className="mt-3 text-xs text-slate-500">
               Chi phí gốc để tạo ra doanh thu hiện tại
@@ -234,7 +234,7 @@ const DashboardManager = () => {
                   tickLine={false}
                   tick={{ fontSize: 12, fill: '#64748b' }}
                   tickFormatter={(val) => {
-                    // Cắt chỉ lấy ngày tháng (VD: 2026-07-06 -> 06/07)
+                    
                     const dateObj = new Date(val);
                     return `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
 
