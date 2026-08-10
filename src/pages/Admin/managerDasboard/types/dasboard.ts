@@ -47,7 +47,7 @@ export interface top_order {
 
 export interface financial {
     total_revenue: number;
-    total_cost: number;
+    profit_margin: number;
     total_profit: number;
 }
 

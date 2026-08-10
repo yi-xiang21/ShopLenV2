@@ -15,7 +15,7 @@ const defaultDashboardData: DashboardOverview = {
 
   financial: {
     total_revenue: 0,
-    total_cost: 0,
+    profit_margin: 0,
     total_profit: 0,
   },
   revenue: {
@@ -186,7 +186,7 @@ const DashboardManager = () => {
           <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
             <div className="text-sm text-slate-500 mb-2">Tổng chi phí</div>
             <div className="text-2xl font-extrabold text-slate-800">
-              {formatCurrency(dashboardData.financial.total_cost)}
+              {formatCurrency(dashboardData.financial.profit_margin)}
             </div>
             <div className="mt-3 text-xs text-slate-500">
               Chi phí gốc để tạo ra doanh thu hiện tại
@@ -204,9 +204,9 @@ const DashboardManager = () => {
               ) : (
                 <TrendingDown size={12} className="text-rose-600" />
               )}
-              {dashboardData.financial.total_cost > 0
-                ? `${((dashboardData.financial.total_profit / dashboardData.financial.total_cost) * 100).toFixed(1)}% so với chi phí`
-                : 'Chưa có dữ liệu chi phí'}
+              {dashboardData.financial.profit_margin > 0
+                ? `${((dashboardData.financial.total_profit / dashboardData.financial.profit_margin) * 100).toFixed(1)}% so với margin`
+                : 'Chưa có dữ liệu margin'}
             </div>
           </div>
         </div>
@@ -345,7 +345,7 @@ const DashboardManager = () => {
         {/* Có thể thêm Top Workshop hoặc Đơn hàng gần đây vào cột 2 này (Tùy chỉnh sau) */}
         <div className="rounded-2xl flex flex-col gap-4  justify-center text-center">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-            <h3 className="text-lg font-bold text-slate-800 mb-4 text-start">  Top đơn hàng trong tuần</h3>
+            <h3 className="text-lg font-bold text-slate-800 mb-4 text-start">  Top đơn hàng trong ngày</h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
