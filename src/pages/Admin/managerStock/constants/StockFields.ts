@@ -17,7 +17,7 @@ export const stockFields: FormField<stock>[] = [
   
   {
     key: 'transaction_type',
-    label: 'Transaction Type',
+    label: 'Loại giao dịch',
     type: FormFieldType.Select,
     options: [
       
@@ -29,8 +29,18 @@ export const stockFields: FormField<stock>[] = [
     rules: [{ required: true, message: 'Bắt buộc chọn loại giao dịch' }],
   },
   {
+    key:'unit_cost',
+    label: 'Giá Nhập',
+    type: FormFieldType.Input,
+    rules: [
+      { required: true, message: 'Bắt buộc nhập giá nhập' ,disabled: (values) => values?.transaction_type !== 'nhap_kho'},
+      { pattern: /^[0-9]+$/, message: 'Giá nhập phải là số nguyên dương' },
+    ],
+    disabled: (values) => values?.transaction_type !== 'nhap_kho',
+  },
+  {
     key: 'quantity_change',
-    label: 'Quantity Change',
+    label: 'số lượng thay đổi',
     type: FormFieldType.Input,
     rules: [
         { required: true, message: 'Bắt buộc nhập số lượng thay đổi' ,disabled: (values) => values?.transaction_type === 'kiem_kho'},
@@ -40,7 +50,7 @@ export const stockFields: FormField<stock>[] = [
   },
   {
     key: 'physical_quantity',
-    label: 'Physical Quantity',
+    label: 'số lượng vật lý',
     type: FormFieldType.Input,
     rules: [
         { required: true, message: 'Bắt buộc nhập số lượng vật lý' , disabled: (values) => values?.transaction_type !== 'kiem_kho'},

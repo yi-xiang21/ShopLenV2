@@ -183,7 +183,7 @@ const HomePage = () => {
          <h1>Các Sản Phẩm Nổi bật</h1>
         <p className="pb-10">Các dòng sản phẩm đa dạng với nhu cầu của bạn</p>
         <div className="flex flex-col justify-center items-center md:h-180">
-          <div className="h-auto w-full overflow-x-auto overflow-y-hidden  flex items-center p-10 justify-start gap-8 md:w-full md:h-170 no-scrollbar">
+          <div className="h-auto w-full overflow-x-auto overflow-y-hidden  flex items-center p-10 justify-start gap-8 md:w-full md:h-170 ">
             {loading ? (
               <Skeleton active paragraph={{ rows: 4 }} />
             ) : (

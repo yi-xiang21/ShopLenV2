@@ -12,6 +12,12 @@ import {
 
 // Khởi tạo data mặc định
 const defaultDashboardData: DashboardOverview = {
+
+  financial: {
+    total_revenue: 0,
+    total_cost: 0,
+    total_profit: 0,
+  },
   revenue: {
     today: 0,
     this_week: 0,
@@ -150,6 +156,58 @@ const DashboardManager = () => {
           <h2 className="text-3xl font-extrabold text-slate-800">{dashboardData.workshop_stats.upcoming_count}</h2>
           <div className="text-xs text-slate-500">
             Hôm nay có: <span className="font-semibold text-orange-600">{dashboardData.workshop_stats.bookings_today}</span> lượt đặt
+          </div>
+        </div>
+      </div>
+
+      {/* ================= 1.1. FINANCIAL OVERVIEW ================= */}
+      <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+        <div className="flex items-start justify-between gap-4 mb-5">
+          <div>
+            <h3 className="text-lg font-bold text-slate-800">Tổng quan doanh thu từ đơn hàng</h3>
+            <p className="text-sm text-slate-500">Tổng hợp doanh thu, chi phí và lợi nhuận để nhìn nhanh hiệu quả kinh doanh.</p>
+          </div>
+          <div className="w-11 h-11 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+            <DollarSign size={20} />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+            <div className="text-sm text-slate-500 mb-2">Tổng doanh thu</div>
+            <div className="text-2xl font-extrabold text-slate-800">
+              {formatCurrency(dashboardData.financial.total_revenue)}
+            </div>
+            <div className="mt-3 text-xs text-slate-500">
+              Doanh thu tích lũy từ các đơn hoàn tất
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+            <div className="text-sm text-slate-500 mb-2">Tổng chi phí</div>
+            <div className="text-2xl font-extrabold text-slate-800">
+              {formatCurrency(dashboardData.financial.total_cost)}
+            </div>
+            <div className="mt-3 text-xs text-slate-500">
+              Chi phí gốc để tạo ra doanh thu hiện tại
+            </div>
+          </div>
+
+          <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+            <div className="text-sm text-slate-500 mb-2">Lợi nhuận</div>
+            <div className="text-2xl font-extrabold text-emerald-600">
+              {formatCurrency(dashboardData.financial.total_profit)}
+            </div>
+            <div className="mt-3 text-xs text-slate-500 flex items-center gap-1">
+              {dashboardData.financial.total_profit >= 0 ? (
+                <TrendingUp size={12} className="text-emerald-600" />
+              ) : (
+                <TrendingDown size={12} className="text-rose-600" />
+              )}
+              {dashboardData.financial.total_cost > 0
+                ? `${((dashboardData.financial.total_profit / dashboardData.financial.total_cost) * 100).toFixed(1)}% so với chi phí`
+                : 'Chưa có dữ liệu chi phí'}
+            </div>
           </div>
         </div>
       </div>

@@ -44,8 +44,16 @@ export interface top_order {
     customer_name:string;
     total_amount:number;
 }
+
+export interface financial {
+    total_revenue: number;
+    total_cost: number;
+    total_profit: number;
+}
+
 export interface DashboardOverview {
     revenue: revenue,
+    financial : financial,
     revenue_chart : chartData[],
     top_orders_today : top_order[],
     orders_count: order_count,

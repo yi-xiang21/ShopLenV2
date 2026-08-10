@@ -114,6 +114,7 @@ const AdminManagerPromotion = () => {
           ...data,
           value: data.discount_type === 'percent' ? data.value + "%" : Number(data.value).toLocaleString('vi-VN') + 'đ',
         };
+        console.log("Fetched promotion details:", dataFormatPrice);
 
         if (mode === FormModalMode.EDIT) {
           openEdit(data);
@@ -149,7 +150,8 @@ const AdminManagerPromotion = () => {
       } else {
         const payloadUpdate = { ...values };
 
-        await promotionApi.update(editingId, payloadUpdate);
+        const res = await promotionApi.update(editingId, payloadUpdate);
+        console.log("Update response:", res.data);
         setNotifyData({
           key: Date.now().toString(),
           type: "success",

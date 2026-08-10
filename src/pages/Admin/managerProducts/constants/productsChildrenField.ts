@@ -49,5 +49,17 @@ export const childrenProductsFields: FormField<Variant>[] = [
       message: 'Hình ảnh là bắt buộc.',
     }
   ]},
+  {
+    key: 'latest_unit_cost',
+    label: 'Chi phí nhập',
+    type: FormFieldType.Input,
+    disabled: true,
+  },
+  {
+    key: 'average_cost',
+    label: 'Chi phí trung bình',
+    type: FormFieldType.Input,
+    disabled:true,
+  }
 
 ];

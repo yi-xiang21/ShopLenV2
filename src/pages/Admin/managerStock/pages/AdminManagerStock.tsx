@@ -255,10 +255,12 @@ const fetchStock = useCallback(
   ];
 
   const columnsHistory: TableProps<StockHistoryItem>["columns"] = [
-    {title: 'History ID', dataIndex: 'history_id', key: 'history_id'},
-    {title: 'Transaction Type', dataIndex: 'transaction_type', key: 'transaction_type'},
-    {title: 'Quantity Changed', dataIndex: 'quantity_change', key: 'quantity_change'},
-    {title: 'New Stock', dataIndex: 'new_stock', key: 'new_stock'},
+    {title: 'id lịch sử', dataIndex: 'history_id', key: 'history_id'},
+    {title: 'Loại giao dịch', dataIndex: 'transaction_type', key: 'transaction_type'},
+    {title: 'Số lượng thay đổi', dataIndex: 'quantity_change', key: 'quantity_change'},
+    {title: 'Tồn kho mới', dataIndex: 'new_stock', key: 'new_stock' },
+    {title: 'Giá đơn vị', dataIndex: 'unit_cost', key: 'unit_cost' , render: (value) => Number(value).toLocaleString('vi-VN') + 'đ'},
+    {title: 'Tổng giá', dataIndex: 'total_cost', key: 'total_cost' , render: (value) => Number(value).toLocaleString('vi-VN') + 'đ'},
     {title: 'Note', dataIndex: 'note', key: 'note'},
     {title: 'Reference Code', dataIndex: 'reference_code', key: 'reference_code'},
   ];

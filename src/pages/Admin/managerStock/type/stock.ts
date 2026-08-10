@@ -14,6 +14,7 @@ export interface stock {
   quantity_change?: number;
   physical_quantity?: number;
   transaction_type?: transaction_type;
+  unit_cost?: number;
   note?: string;
   sku?: string;
   reference_code?: string;
@@ -27,6 +28,8 @@ export interface StockHistoryItem {
   quantity_change :number;
   reference_code :string | null;
   new_stock : number;
+  unit_cost : number;
+  total_cost : number;
   transaction_type : transaction_type;
 }
 

@@ -19,7 +19,9 @@ export interface Variant {
     discount?:voucher,
     images: image[],
     final_price?: string,
-    stock_quantity?: number
+    stock_quantity?: number,
+    latest_unit_cost?: number,
+    average_cost?: number,
 }
 export interface Product {
     product_id?: number,

@@ -38,15 +38,6 @@ export const getPromotionFields = (initialValues?: promotion | null): FormField<
     ],
   },
   {
-    key: 'min_order_value',
-    label: 'Giá trị đơn hàng tối thiểu',
-    type: FormFieldType.Input,
-    placeholder: 'Nhập giá trị đơn hàng tối thiểu',
-    rules: [
-      { required: true , pattern: /^\d+(\.\d{1,2})?$/, message: 'Giá trị phải là số hợp lệ' }
-    ],
-  },
-  {
       key: 'start_date',
       label: 'Ngày bắt đầu',
       type: FormFieldType.DatePicker,

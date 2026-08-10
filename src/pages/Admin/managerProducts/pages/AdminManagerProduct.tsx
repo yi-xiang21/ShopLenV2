@@ -124,6 +124,7 @@ const fetchProducts = useCallback(
             price: Number(variant.price).toLocaleString("vi-VN") + "đ",
           })),
         };
+        console.log("dataFormatPrice", dataFormatPrice);
 
 
 
