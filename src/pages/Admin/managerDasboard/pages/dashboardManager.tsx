@@ -198,15 +198,8 @@ const DashboardManager = () => {
             <div className="text-2xl font-extrabold text-emerald-600">
               {formatCurrency(dashboardData.financial.total_profit)}
             </div>
-            <div className="mt-3 text-xs text-slate-500 flex items-center gap-1">
-              {dashboardData.financial.total_profit >= 0 ? (
-                <TrendingUp size={12} className="text-emerald-600" />
-              ) : (
-                <TrendingDown size={12} className="text-rose-600" />
-              )}
-              {dashboardData.financial.profit_margin > 0
-                ? `${((dashboardData.financial.total_profit / dashboardData.financial.profit_margin) * 100).toFixed(1)}% so với margin`
-                : 'Chưa có dữ liệu margin'}
+            <div className="mt-3 text-xs text-slate-500">
+              Lợi nhuận ròng sau khi trừ chi phí
             </div>
           </div>
         </div>
