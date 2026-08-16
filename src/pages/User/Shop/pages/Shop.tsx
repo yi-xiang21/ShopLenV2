@@ -136,8 +136,8 @@ const Shop = () => {
 
   return (
     <>
-      <div className="w-full h-100 flex items-center justify-center p-4">
-        <div className="absolute left-10 top-107 w-50 mt-10 z-20">
+      <div className="w-full h-60 sm:h-80 md:h-100 flex items-center justify-center p-3 sm:p-4 relative">
+        <div className="absolute left-2 sm:left-10 top-16 sm:top-107 w-28 sm:w-50 z-20 hidden md:block">
           <LottieComponent.default
             animationData={catSliderAnimation}
             loop
@@ -151,16 +151,18 @@ const Shop = () => {
         />
       </div>
       
-      <div className="w-full h-auto grid grid-cols-4 gap-2 p-4">
-        <FilterShop
-          onSubmit={handleFilterSubmit}
-          loading={loading}
-          categories={categories}
-          initialCategoryId={categoryId}
-        />
+      <div className="w-full h-auto grid grid-cols-1 lg:grid-cols-4 gap-4 p-3 sm:p-4">
+        <div className="w-full lg:col-span-1">
+          <FilterShop
+            onSubmit={handleFilterSubmit}
+            loading={loading}
+            categories={categories}
+            initialCategoryId={categoryId}
+          />
+        </div>
 
-        <div className="w-full h-full bg-white col-span-3 rounded-xl shadow-sm border border-gray-100 flex flex-col">
-          <div className="w-full h-auto p-4 flex items-center gap-2 border-b border-gray-50">
+        <div className="w-full h-full bg-white lg:col-span-3 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+          <div className="w-full h-auto p-3 sm:p-4 flex flex-wrap items-center gap-2 border-b border-gray-50">
             <button
               className="button_user hover:text-red-500!"
               onClick={sortByPriceAsc}
@@ -176,20 +178,20 @@ const Shop = () => {
           </div>
 
   
-          <div className="w-full h-auto p-5 grid grid-cols-3  gap-3 grow">
+          <div className="w-full h-auto p-3 sm:p-5 grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4 grow place-items-center sm:place-items-stretch">
             {products.length > 0 ? (
               products.map((product) => (
-                <CardProducts key={product.product_id} data={product} />
+                <CardProducts key={product.product_id} data={product} compactMobile />
               ))
             ) : (
-              <div className="col-span-3 text-center text-gray-500 py-10">
+              <div className="col-span-full text-center text-gray-500 py-10">
                 Không tìm thấy sản phẩm nào phù hợp.
               </div>
             )}
           </div>
          
           {products.length > 0 && (
-            <div className="flex items-center justify-center w-full py-6">
+            <div className="flex flex-wrap items-center justify-center w-full gap-3 sm:gap-4 py-5 sm:py-6 px-3">
               <button
                 className={`px-5 py-2.5 rounded-full font-medium transition-all ${
                   currentPage <= 1 
@@ -202,7 +204,7 @@ const Shop = () => {
                 Trang trước
               </button>
 
-              <span className="mx-6 font-medium text-slate-600">
+              <span className="font-medium text-slate-600 text-sm sm:text-base">
                 Trang {currentPage} / {totalPages}
               </span>
 

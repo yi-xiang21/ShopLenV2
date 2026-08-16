@@ -20,8 +20,12 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
         hover:shadow-2xl
         transition-all
         duration-500
-        w-72
-        h-96
+        w-60
+        sm:w-64
+        md:w-72
+        h-80
+        sm:h-88
+        md:h-96
         shrink-0
         bg-white
         cursor-pointer
@@ -57,7 +61,9 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
           bottom-0
           left-0
           right-0
-          p-5
+          p-3
+          sm:p-4
+          md:p-5
           text-white
           transition-all
           duration-500
@@ -65,9 +71,12 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
       >
         <h3
           className="
-            text-xl
+            text-base
+            sm:text-lg
+            md:text-xl
             font-bold
-            mb-2
+            mb-1
+            sm:mb-2
           "
         >
           {Data.category_name}
@@ -75,13 +84,16 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
 
         <p
           className="
-            text-sm
+            text-xs
+            sm:text-sm
             text-gray-200
             line-clamp-3
-            opacity-0
-            translate-y-4
-            group-hover:opacity-100
-            group-hover:translate-y-0
+            opacity-100
+            translate-y-0
+            md:opacity-0
+            md:translate-y-4
+            md:group-hover:opacity-100
+            md:group-hover:translate-y-0
             transition-all
             duration-500
           "
@@ -91,16 +103,21 @@ const CardCatelogy = ({ Data }: CardCatelogyProps) => {
 
         <div
           className="
-            mt-4
+            mt-2
+            sm:mt-3
+            md:mt-4
             inline-flex
             items-center
             gap-2
-            text-sm
+            text-xs
+            sm:text-sm
             font-medium
-            opacity-0
-            translate-y-4
-            group-hover:opacity-100
-            group-hover:translate-y-0
+            opacity-100
+            translate-y-0
+            md:opacity-0
+            md:translate-y-4
+            md:group-hover:opacity-100
+            md:group-hover:translate-y-0
             transition-all
             duration-700
           "

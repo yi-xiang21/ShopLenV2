@@ -162,7 +162,7 @@ const Detail = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-50 py-8 px-4 flex flex-col items-center">
+    <div className="w-full min-h-screen bg-slate-50 py-4 sm:py-6 lg:py-8 px-3 sm:px-4 flex flex-col items-center">
       {notifyData && (
         <Notification
           key={notifyData.key}
@@ -173,10 +173,10 @@ const Detail = () => {
       )}
       
       
-      <div className="w-full max-w-7xl bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:flex-row">
+      <div className="w-full max-w-7xl bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:flex-row">
         
         
-        <div className="w-full lg:w-1/2 p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col">
+        <div className="w-full lg:w-1/2 p-4 sm:p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-slate-100 flex flex-col">
           {/* Main Image */}
           <div className="overflow-hidden rounded-2xl mb-4 relative aspect-square bg-slate-100 flex items-center justify-center">
             {images[activeImage]?.image_url ? (
@@ -191,7 +191,7 @@ const Detail = () => {
             
           
             {activeVariant?.discount && (
-               <div className="absolute top-4 left-4 z-10 bg-rose-500 text-white font-bold px-3 py-1.5 rounded-full text-xs shadow-md">
+               <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 bg-rose-500 text-white font-bold px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs shadow-md">
                  Giảm {activeVariant.discount.type === 'percent' ? `${activeVariant.discount.value}%` : `${Number(activeVariant.discount.value).toLocaleString('vi-VN')}đ`}
                </div>
             )}
@@ -200,19 +200,22 @@ const Detail = () => {
         
           {images.length > 0 && (
             <div className="relative mt-auto">
-              <button className="thumb-prev absolute left-0 top-1/2 z-10 -translate-y-1/2 -ml-3 rounded-full bg-white p-2 shadow-md border border-slate-100 hover:bg-slate-50 text-slate-600">
+              <button className="thumb-prev absolute left-0 top-1/2 z-10 -translate-y-1/2 -ml-3 rounded-full bg-white p-2 shadow-md border border-slate-100 hover:bg-slate-50 text-slate-600 hidden sm:block">
                 ←
               </button>
-              <button className="thumb-next absolute right-0 top-1/2 z-10 -translate-y-1/2 -mr-3 rounded-full bg-white p-2 shadow-md border border-slate-100 hover:bg-slate-50 text-slate-600">
+              <button className="thumb-next absolute right-0 top-1/2 z-10 -translate-y-1/2 -mr-3 rounded-full bg-white p-2 shadow-md border border-slate-100 hover:bg-slate-50 text-slate-600 hidden sm:block">
                 →
               </button>
 
               <Swiper
                 modules={[Navigation]}
                 navigation={{ prevEl: ".thumb-prev", nextEl: ".thumb-next" }}
-                slidesPerView={5}
-                spaceBetween={12}
-                className="px-4 py-1"
+                slidesPerView={4}
+                breakpoints={{
+                  640: { slidesPerView: 5 },
+                }}
+                spaceBetween={10}
+                className="px-2 sm:px-4 py-1"
               >
                 {images.map((img, index) => (
                   <SwiperSlide key={index}>
@@ -233,20 +236,20 @@ const Detail = () => {
         </div>
 
         
-        <div className="w-full lg:w-1/2 p-6 lg:p-10 relative flex flex-col">
+        <div className="w-full lg:w-1/2 p-4 sm:p-6 lg:p-10 relative flex flex-col">
           
         
           <button
             onClick={handleToggleWishlist}
-            className="absolute top-6 right-6 lg:top-10 lg:right-10 z-20 w-12 h-12 rounded-full shadow-sm flex items-center justify-center transition-all cursor-pointer bg-slate-50 border border-slate-100 hover:bg-rose-50 hover:border-rose-100"
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-10 lg:right-10 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-sm flex items-center justify-center transition-all cursor-pointer bg-slate-50 border border-slate-100 hover:bg-rose-50 hover:border-rose-100"
             title="Thêm vào yêu thích"
           >
-            <FaHeart className={`transition-colors text-2xl ${isFavorite ? "text-rose-500" : "text-slate-300"}`} />
+            <FaHeart className={`transition-colors text-xl sm:text-2xl ${isFavorite ? "text-rose-500" : "text-slate-300"}`} />
           </button>
 
       
-          <div className="pr-16">
-            <div className="flex items-center gap-2 mb-3">
+          <div className="pr-12 sm:pr-16">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="bg-violet-100 text-violet-700 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider">
                 {product?.category_name || "Sản phẩm"}
               </span>
@@ -254,21 +257,21 @@ const Detail = () => {
                 <Tag size={14} /> ID: {product?.product_id}
               </span>
             </div>
-            <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-800 leading-tight mb-6">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-800 leading-tight mb-5 sm:mb-6">
               {product?.product_name}
             </h1>
           </div>
 
         
-           <div className="mb-8 p-5 bg-slate-50 rounded-2xl border border-slate-100">
+           <div className="mb-6 sm:mb-8 p-4 sm:p-5 bg-slate-50 rounded-2xl border border-slate-100">
             <h3 className="text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wide">Chi phí tham gia</h3>
             {activeVariant?.discount ? (
               <div>
                 <div className="flex flex-wrap items-end gap-3 mb-2">
-                  <span className="text-4xl font-black text-rose-600 tracking-tight">
+                  <span className="text-3xl sm:text-4xl font-black text-rose-600 tracking-tight">
                     {Number(activeVariant.final_price).toLocaleString("vi-VN")}₫
                   </span>
-                  <span className="text-lg font-semibold text-slate-400 line-through decoration-slate-300 mb-1">
+                  <span className="text-base sm:text-lg font-semibold text-slate-400 line-through decoration-slate-300 mb-1">
                     {Number(activeVariant.price).toLocaleString("vi-VN")}₫
                   </span>
                 </div>
@@ -279,19 +282,19 @@ const Detail = () => {
                 </div>
               </div>
             ) : (
-              <span className="text-4xl font-black text-slate-800 tracking-tight">
+              <span className="text-3xl sm:text-4xl font-black text-slate-800 tracking-tight">
                 {Number(activeVariant?.price || 0).toLocaleString("vi-VN")}₫
               </span>
             )}
           </div>
 
          
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <h3 className="mb-3 font-semibold text-slate-800 flex items-center gap-2">
               <Box size={18} className="text-violet-500"/>
               Màu sắc & Kích thước
             </h3>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {product?.variants?.map((variant) => {
                 const isSelected = activeVariant?.variant_id === variant.variant_id;
                 const isOutOfStock = variant.stock_quantity === 0;
@@ -302,7 +305,7 @@ const Detail = () => {
                     onClick={() => !isOutOfStock && handleSelectVariant(variant)}
                     disabled={isOutOfStock}
                     className={`
-                      rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-all
+                      rounded-xl border-2 px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold transition-all
                       ${isOutOfStock ? "opacity-50 bg-slate-100 border-slate-200 cursor-not-allowed line-through" : "cursor-pointer"}
                       ${isSelected && !isOutOfStock
                         ? "border-violet-500 bg-violet-50 text-violet-700 shadow-sm" 
@@ -316,15 +319,15 @@ const Detail = () => {
             </div>
           </div>
 
-          <div className="mt-auto border-t border-slate-100 pt-6">
-            <div className="flex items-center justify-between mb-4">
+          <div className="mt-auto border-t border-slate-100 pt-5 sm:pt-6">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
               <h3 className="font-semibold text-slate-800">Số lượng</h3>
               <span className={`text-sm font-medium ${stock > 0 ? "text-green-600" : "text-rose-500"}`}>
                 {stock > 0 ? `Trong kho: ${stock}` : "Hết hàng"}
               </span>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
             
               <div className="flex items-center bg-slate-50 border border-slate-200 rounded-2xl h-14 w-full sm:w-auto p-1">
                 <button
@@ -373,27 +376,27 @@ const Detail = () => {
         </div>
       </div>
 
-      <div className="w-full max-w-7xl mt-6 flex flex-col gap-6">
+      <div className="w-full max-w-7xl mt-5 sm:mt-6 flex flex-col gap-4 sm:gap-6">
         
         {/* Description */}
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4 pb-4 border-b border-slate-100 flex items-center gap-2">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 p-4 sm:p-6 lg:p-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4 pb-4 border-b border-slate-100 flex items-center gap-2">
             <Info className="text-violet-500" /> Mô tả sản phẩm
           </h2>
-          <div className="prose prose-slate max-w-none prose-p:leading-relaxed prose-p:text-slate-600 whitespace-pre-wrap">
+          <div className="prose prose-slate max-w-none prose-sm sm:prose-base prose-p:leading-relaxed prose-p:text-slate-600 whitespace-pre-wrap">
             {product?.description || "Sản phẩm chưa có mô tả."}
           </div>
         </div>
 
       
         {relatedProducts.length > 0 && (
-          <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6 flex items-center gap-2">
+          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-sm border border-slate-200 p-4 sm:p-6 lg:p-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-4 sm:mb-6 flex items-center gap-2">
               Sản phẩm liên quan
             </h2>
-            <div className="flex w-full items-stretch justify-start gap-6 overflow-x-auto pb-4 no-scrollbar snap-x">
+            <div className="flex w-full items-stretch justify-start gap-4 sm:gap-6 overflow-x-auto pb-2 sm:pb-4 no-scrollbar snap-x">
               {relatedProducts.map((relatedProd) => (
-                <div key={relatedProd.product_id} className="shrink-0 w-70 snap-start">
+                <div key={relatedProd.product_id} className="shrink-0 w-64 sm:w-70 snap-start">
                   <CardProducts data={relatedProd} />
                 </div>
               ))}

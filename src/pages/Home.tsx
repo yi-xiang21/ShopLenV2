@@ -100,9 +100,9 @@ const HomePage = () => {
 
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       {/* Banner */}
-      <div className="w-full h-65 overflow-hidden snap-start snap-always md:h-full">
+      <div className="w-full h-65 overflow-hidden snap-start snap-always sm:h-85 md:h-full">
         <Swiper
           modules={[Navigation, Pagination, Autoplay, EffectFade]}
           autoplay={{
@@ -121,7 +121,7 @@ const HomePage = () => {
           }}
           spaceBetween={0}
           slidesPerView={1}
-          className="homepage-swiper h-65 w-full overflow-hidden md:h-screen"
+          className="homepage-swiper h-65 w-full overflow-hidden sm:h-85 md:h-screen"
         >
           {bannerImages.map((image, index) => (
             <SwiperSlide key={index}>
@@ -135,81 +135,81 @@ const HomePage = () => {
         </Swiper>
       </div>
       {/* sp deal */}
-      <div className="text-center h-full mt-10">
-        <h1>Sản Phẩm Bán Chạy</h1>
-        <p>Khám phá những sản phẩm được yêu thích nhất của chúng tôi.</p>
-        <div className="flex flex-col justify-center items-center md:h-180">
-          <div className="h-auto w-full overflow-x-auto overflow-y-hidden  flex items-center p-10 justify-start gap-8 md:w-full md:h-170 no-scrollbar">
+      <section className="text-center h-full mt-8 px-4 sm:px-6 md:mt-10 md:px-0">
+        <h1 className="text-2xl md:text-4xl">Sản Phẩm Bán Chạy</h1>
+        <p className="mt-2 text-sm leading-6 text-gray-700 md:text-base">Khám phá những sản phẩm được yêu thích nhất của chúng tôi.</p>
+        <div className="mt-4 flex flex-col justify-center items-center md:h-180">
+          <div className="h-auto w-full overflow-x-auto overflow-y-hidden flex items-center p-4 justify-start gap-4 sm:p-6 md:w-full md:h-170 md:p-10 md:gap-8 no-scrollbar">
             {loading ? (
               <Skeleton active paragraph={{ rows: 4 }} />
             ) : (
               productTop.map((product) => (
-                <div key={product.product_id} className="shrink-0">
-                  <CardProducts data={product} />
+                <div key={product.product_id} className="shrink-0 w-42 sm:w-52 md:w-64 lg:w-72">
+                  <CardProducts data={product} compactMobile />
                 </div>
               ))
             )}
           </div>
           
         </div>
-        <div className="absolute top-250 w-50 mt-10 z-20">
+        <div className="absolute top-250 w-50 mt-10 z-20 hidden md:block">
           <LottieComponent.default
                           animationData={dogAnimation}
                           loop
                           autoplay
                         />
         </div>
-          
-      </div>
+      </section>
 
       {/* workshop */}
-      <div className="text-center h-full mt-20">
-        <h1>Chương Trình Workshop Hấp Dẫn</h1>
-        <p className="pb-10">
+      <section className="text-center h-full mt-14 px-4 sm:px-6 md:mt-20 md:px-0">
+        <h1 className="text-2xl leading-tight md:text-4xl">Chương Trình Workshop Hấp Dẫn</h1>
+        <p className="pb-6 pt-2 text-sm leading-6 text-gray-700 sm:text-base md:pb-10">
           trải nghiệm tự tay tạo ra các sản phẩm xinh xắn với đội ngũ nhân viên
           hướng dẫn chuyên nghiệp của chúng mình
         </p>
         <ParallaxSection image={WokShopHome}>
-          <div className="flex justify-center items-end h-full mt-50">
+          <div className="flex justify-center items-end h-full mt-28 md:mt-50 px-4">
             <button className="button_user" onClick={() => navigate('/workshop')}>
               Tham Gia Workshop Ngay
             </button>
           </div>
         </ParallaxSection>
-      </div>
+      </section>
 
       {/* san pham ban chay */}
-      <section className="text-center h-full mt-20">
-         <h1>Các Sản Phẩm Nổi bật</h1>
-        <p className="pb-10">Các dòng sản phẩm đa dạng với nhu cầu của bạn</p>
-        <div className="flex flex-col justify-center items-center md:h-180">
-          <div className="h-auto w-full overflow-x-auto overflow-y-hidden  flex items-center p-10 justify-start gap-8 md:w-full md:h-170 ">
+      <section className="text-center h-full mt-14 px-4 sm:px-6 md:mt-20 md:px-0">
+         <h1 className="text-2xl md:text-4xl">Các Sản Phẩm Nổi bật</h1>
+        <p className="pb-6 pt-2 text-sm leading-6 text-gray-700 sm:text-base md:pb-10">Các dòng sản phẩm đa dạng với nhu cầu của bạn</p>
+        <div className="flex flex-col gap-10 justify-center items-center md:h-180">
+          <div className="h-auto w-full overflow-x-auto overflow-y-hidden flex items-center p-2 justify-start gap-4 sm:p-6 md:w-full md:h-170 md:p-10 md:gap-8">
             {loading ? (
               <Skeleton active paragraph={{ rows: 4 }} />
             ) : (
               products.map((product) => (
-                <div key={product.product_id} className="shrink-0">
-                  <CardProducts data={product} />
+                <div key={product.product_id} className="shrink-0 w-42 sm:w-52 md:w-64 lg:w-72">
+                  <CardProducts data={product} compactMobile />
                 </div>
               ))
             )}
           </div>
-          <button className="button_user" onClick={() => navigate('/shop')}>
+          <button className="button_user mt-2 md:mt-0" onClick={() => navigate('/shop')}>
             Xem Sản Phẩm
           </button>
         </div>
       </section>
 
       {/* danh muc san pham */}
-      <section className="h-140 flex flex-col justify-center items-center md:h-180">
-        <h1>Các Danh Mục Của Chúng Tôi</h1>
-        <p>khám phá các sản phẩm với cách danh mục bạn muốn.</p>
-        <div className="h-100 w-full overflow-x-auto overflow-y-hidden flex items-center p-10 justify-start gap-8 md:w-full md:h-120 no-scrollbar">
+      <section className="min-h-130 py-10 px-4 flex flex-col justify-center items-center sm:px-6 md:h-180 md:px-0">
+        <h1 className="text-2xl md:text-4xl">Các Danh Mục Của Chúng Tôi</h1>
+        <p className="mt-2 text-sm leading-6 text-gray-700 sm:text-base">Khám phá các sản phẩm với danh mục bạn muốn.</p>
+        <div className="h-100 w-full overflow-x-auto overflow-y-hidden flex items-center p-4 justify-start gap-4 sm:p-6 md:w-full md:h-120 md:p-10 md:gap-8 no-scrollbar">
           {loading ? (
             <Skeleton active paragraph={{ rows: 4 }} />
           ) : (
             categories.map((category) => (
               <Catelogy  
+                key={category.id}
                 Data={category} 
                 
                />
@@ -219,7 +219,7 @@ const HomePage = () => {
       </section>
 
       
-      <div className="absolute right-10 top-720 w-50 mt-10 z-20">
+      <div className="absolute right-10 top-720 w-50 mt-10 z-20 hidden md:block">
           <LottieComponent.default
                           animationData={catYarnAnimation}
                           loop
@@ -227,9 +227,9 @@ const HomePage = () => {
                         />
         </div>
       <ParallaxSection image={section1}>
-        <div className="text-center flex flex-col justify-center items-center shadow-2xl rounded-lg p-10 md:p-20 bg-white/5 backdrop-blur-md">
-          <h1 className="text-4xl! md:text-5xl! ">Cam Kết Chất Lượng & Uy Tín</h1>
-          <p className="mt-5 text-xl text-white/95 leading-9 ">
+        <div className="mx-4 text-center flex flex-col justify-center items-center shadow-2xl rounded-lg p-6 sm:p-8 md:mx-0 md:p-20 bg-white/5 backdrop-blur-md">
+          <h1 className="text-2xl! leading-tight md:text-5xl! ">Cam Kết Chất Lượng & Uy Tín</h1>
+          <p className="mt-4 text-base text-white/95 leading-7 sm:text-lg md:mt-5 md:text-2xl md:leading-10">
             Mỗi sản phẩm tại Shop Len đều được tuyển chọn kỹ lưỡng từ những chất liệu cao cấp nhất, mang đến sự an tâm tuyệt đối và trải nghiệm đan len tuyệt vời cho mọi khách hàng.
           </p>
         </div>
@@ -238,7 +238,7 @@ const HomePage = () => {
       {/* Nút cuộn lên đầu trang */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-8 right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-rose-300 text-white shadow-lg shadow-rose-200 hover:bg-rose-400 hover:cursor-pointer hover:-translate-y-1 transition-all duration-300 ${
+        className={`fixed bottom-5 right-5 md:bottom-8 md:right-8 z-50 flex items-center justify-center p-3 md:p-4 rounded-full bg-rose-300 text-white shadow-lg shadow-rose-200 hover:bg-rose-400 hover:cursor-pointer hover:-translate-y-1 transition-all duration-300 ${
           showScrollTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
         }`}
         aria-label="Scroll to top"
