@@ -112,6 +112,11 @@ export const importStockFromExcel = (file: File): Promise<stock[]> => {
             transaction_type: transactionType as stock["transaction_type"],
           };
 
+          const unitCost = row['unit_cost'] !== undefined && row['unit_cost'] !== "" 
+            ? Number(row['unit_cost']) 
+            : undefined;
+          if (unitCost !== undefined && !isNaN(unitCost)) stockItem.unit_cost = unitCost;
+
           const quantityChange = row['quantity_change'] !== undefined && row['quantity_change'] !== "" 
             ? Number(row['quantity_change']) 
             : undefined;
