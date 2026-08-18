@@ -21,6 +21,7 @@ export const downloadStockTemplate = async () => {
         "Tồn kho đang giữ (Reserved)": item.reserved_stock || 0,
         "Tồn kho thực tế (Physical)": item.physical_stock || 0,
         "transaction_type": "nhap_kho", 
+        "unit_cost": 0,
         "quantity_change": 0,
         "physical_quantity": "",
         "note": ""
@@ -39,6 +40,7 @@ export const downloadStockTemplate = async () => {
         "transaction_type": "nhap_kho",
         "quantity_change": 10,
         "physical_quantity": "",
+        "unit_cost": 0,
         "note": "Nhập kho đợt 1"
       });
     }
